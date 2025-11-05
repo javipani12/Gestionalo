@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;700&display=swap');
+
+/* Variables de color */
+:root {
+    --color-primario: #FF8A30;
+    --color-hover: #FFA55C;
+    --color-secundario: #FFCF4D;
+    --color-apoyo: #30A5FF;
+    --color-oscuro: #010A12;
+    --color-fondo: #F6FBFF;
+    --color-deshabilitado: #D6E8FF;
+}
+
+/* Estilos globales */
+body {
+    font-family: 'Mukta', sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--texto-principal);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+hr {
+    background-color: red/*var(--color-fondo)*/;
+}
+
+/* Contenedor principal */
+#contenedor_sesion {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 320px;
+}
+
+/* Etiquetas */
+label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 6px;
+    text-align: left;
+}
+
+/* Inputs */
+input[type="email"],
+input[type="password"] {
+    margin-right: 10px;
+    width: 93%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid var(--color-secundario);
+    font-family: inherit;
+    font-size: 15px;
+    background-color: #fff8e5;
+    transition: all 0.2s ease-in-out;
+}
+
+input:focus {
+    border-color: var(--color-apoyo);
+    outline: none;
+    background-color: var(--color-fondo);
+    box-shadow: 0 0 6px rgba(48, 165, 255, 0.3);
+}
+
+/* Botones */
+input[type="button"],
+button {
+    width: 100%;
+    background-color: var(--color-primario);
+    color: #fff;
+    border: none;
+    padding: 12px 0;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    font-size: 16px;
+    margin-top: 8px;
+}
+
+input[type="button"]:hover,
+button:hover {
+    background-color: var(--color-hover);
+    color: var(--color-oscuro);
+}
+
+/* Sombras y efectos */
+#contenedor_sesion:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
