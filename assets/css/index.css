@@ -34,7 +34,8 @@ hr {
     border-radius: 16px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 320px;
+    width: 50vw;
+    height: 90vh;
 }
 
 /* Etiquetas */
@@ -71,7 +72,7 @@ input:focus {
 
 /* Botones */
 input[type="button"],
-button {
+input[type="submit"] {
     width: 100%;
     background-color: var(--color-primario);
     color: #fff;

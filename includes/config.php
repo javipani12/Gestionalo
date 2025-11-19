@@ -7,6 +7,6 @@
         'host' => 'localhost',              // Nombre del servidor de la BBDD
         'dbname' => 'gestionalo',           // Nombre de la BBDD
         'user' => 'root',                   // Usuario de mysql
-        'password' => 'usuario',            // Clave de acceso a mysql
+        'password' => '',                   // Clave de acceso a mysql
     );
 ?>

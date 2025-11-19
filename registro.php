@@ -1,3 +1,9 @@
+<?php
+    // Visualización de errores
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,22 +13,18 @@
     <title>Gestionalo</title>
 </head>
 <body>
-    <?php 
-        require_once("config.php");
-        require_once("DBConnection.php");
-        require_once("User.php");
+    <?php
+        require_once("includes/config.php");
+        require_once("includes/DBConnection.php");
+        require_once("includes/User.php");
 
         $hoy = date('Y-m-d');
 	    $hora = date('H:i');
 
         // Comprobamos si se ha enviado el formulario
 	    if( isset ( $_POST['submit'] ) ) {
-		    // Convertimos la fecha y hora del form a formato americano que el que admite MySQL
-            $myDate = new DateTime( $hoy . " " . $hora );
-		    $fecha_registro = $myDate->format( 'Y-m-d H:i' );
-
             if( empty( $_POST[ 'email' ] ) 
-                || empty( $_POST[ 'contrasenna' ] ) 
+                || empty( $_POST[ 'password' ] ) 
                 || empty( $_POST[ 'nombre' ] ) 
                 || empty( $_POST[ 'apellido1' ] ) 
                 || empty( $_POST[ 'apellido2' ] ) 
@@ -41,24 +43,22 @@
 					$errormsg = "Error connecting DataBase...";
 				} else {
 					$my_fields = $my_user->getFields();
-					$sql = "SELECT * FROM usuarios WHERE
-                           `nombre` = " . $my_fields['nombre'] . "
-                            AND `apellido1` = " . $my_fields['apellido1'] ."
-                            AND `apellido2` = " . $my_fields['apellido2']."
-                            AND `email` = " . $my_fields['email'];
+					$sql = "SELECT * FROM usuarios WHERE `email` = " . $my_fields['email'];
 
                     $resulset = $dbc->getQuery($sql);
 					if( $resulset->rowCount() == 0 ) {
+                        echo implode( ",", $my_user->getFields() );
+
                         $sql = "INSERT INTO usuarios VALUES ( NULL, " . 
-                                implode( ",", $my_user->getFields() ) . " NULL, NULL, NULL)";
-                        $numTuplas = $dbc->runQuery($sql);
+                                implode( ",", $my_user->getFields() ) . ", NULL, NULL, NULL )";
                         
+                        $numTuplas = $dbc->runQuery($sql);                        
                         if( $numTuplas == 1 ) {
                             $error = 0;
-                            $errormsg = "Se ha registrado con éxito tu récord";
+                            $errormsg = "Se ha registrado con éxito";
                         } else {
                             $error = 2;
-                            $errormsg = "Ha habido un error al registrar tu récord";
+                            $errormsg = "Ha habido un error al registrarse";
                         }
                     }
                 }
@@ -66,12 +66,12 @@
         }
     ?>
     <div id="contenedor_sesion">
-        <form id="inicio_sesion" method="post">
+        <form id="inicio_sesion" method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>">
             <label for="email">Correo electrónico</label>
             <input type="email" id="email" name="email">
             <br><br>
-            <label for="contrasenna">Contraseña</label>
-            <input type="password" id="contrasenna" name="contrasenna">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="password">
             <br><br>
             <label for="nombre">Nombre</label>
             <input type="text" id="nombre" name="nombre">
@@ -91,8 +91,13 @@
             <label for="edad">Edad</label>
             <input type="number" id="edad" name="edad">
             <br><br>
-            <input type="button" value="Registrarse">
+            <input type="submit" name="submit" value="Registrarse">
         </form>
+        <?php 
+            if(isset($error)) {
+                echo '<div class="error' . $error . '">' . $errormsg . '</div>';
+            }
+        ?>
     </div>
 </body>
 </html>
