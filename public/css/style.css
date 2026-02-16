@@ -1,67 +1,307 @@
-:root{
-  --color-primary:#FF8A30;
-  --color-primary-75:rgba(255,138,48,0.75);
-  --color-primary-50:rgba(255,138,48,0.5);
-  --color-primary-25:rgba(255,138,48,0.25);
-  --color-secondary:#FFCF4D;
-  --color-aux:#30A5FF;
-  --bg:#F6FBFF;
-  --text:#010A12;
-  --disabled-bg:#F6FBFF;
+/* -----------------------------------------
+   VARIABLES GLOBALES
+   Colores y ajustes reutilizables para todo
+   ----------------------------------------- */
+:root {
+  --color-primary: #FF8A30;
+  --color-primary-75: rgba(255, 138, 48, 0.75);
+  --color-primary-50: rgba(255, 138, 48, 0.5);
+  --color-primary-25: rgba(255, 138, 48, 0.25);
+  --color-secondary: #FFCF4D;
+  --color-aux: #30A5FF;
+
+  --bg-gradient-start: var(--color-primary);
+  --bg-gradient-end: var(--color-aux);
+
+  --bg: #F6FBFF; /* color de fondo base */
+  --text: #010A12; /* color principal del texto */
+  --disabled-bg: #F6FBFF;
 }
 
-/* Base */
-*{box-sizing:border-box}
-body{
-  margin:0;
-  padding:20px;
+
+/* -----------------------------------------
+   ESTILOS BASE
+   Reseteo ligero y tipografía
+   ----------------------------------------- */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background:var(--bg);
-  color:var(--text);
-  -webkit-font-smoothing:antialiased;
+  background: linear-gradient(120deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 15s linear infinite;
+  will-change: background-position;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
 }
 
-h1{color:var(--color-primary);}
-
-/* Form */
-form{max-width:720px;background:#fff;padding:16px;border-radius:10px;box-shadow:0 4px 12px rgba(1,10,18,0.04)}
-label{display:block;margin:8px 0;font-size:14px}
-input[type=text],input[type=number],select,textarea{
-  width:100%;padding:8px;border:1px solid rgba(1,10,18,0.08);border-radius:6px;background:transparent;color:var(--text)
+/* Animación sutil del gradiente de fondo */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-.actions{margin-top:12px}
-.btn{display:inline-block;padding:8px 14px;border-radius:8px;border:0;background:var(--color-primary);color:#fff;cursor:pointer;font-weight:600}
-.btn:hover{background:var(--color-primary-75)}
-.btn:disabled{background:var(--color-primary-25);color:rgba(1,10,18,0.6);cursor:not-allowed}
+h1 {
+  color: var(--color-primary);
+}
 
-.link{color:var(--color-aux);text-decoration:none}
 
-pre{white-space:pre-wrap;word-break:break-word}
+/* -----------------------------------------
+   FORMULARIOS
+   Estilos para formularios y campos
+   ----------------------------------------- */
+form {
+  max-width: 720px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(1, 10, 18, 0.04);
+}
 
-/* Helpers */
-.muted{color:rgba(1,10,18,0.5);font-size:13px}
+label {
+  display: block;
+  margin: 8px 0;
+  font-size: 14px;
+}
 
-/* Split layout (left: branding, right: actions/forms) */
-.split{display:flex;min-height:100vh}
-.left{flex:1;padding:4rem;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;background:linear-gradient(180deg,rgba(255,255,255,0.6),transparent)}
-.right{flex:1;padding:3rem;display:flex;flex-direction:column;justify-content:flex-start;align-items:center}
-.logo{width:120px;margin-bottom:1rem}
-.lead{font-size:1.1rem;margin:8px 0 12px;color:rgba(1,10,18,0.85)}
-.card{width:100%;max-width:520px;background:#fff;padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(1,10,18,0.04);margin-bottom:10px}
-.tx-form label{display:block;margin:8px 0}
-.result{background:#f6f8fa;border:1px solid #ddd;padding:10px;margin-top:12px;white-space:pre-wrap;word-break:break-word;border-radius:8px;min-height:48px}
-.result.error{border-color:#f2a4a4;background:#fff2f2}
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid rgba(1, 10, 18, 0.08);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+}
 
-/* Buttons */
-.btn{display:inline-block;padding:10px 16px;border-radius:10px;border:0;background:var(--color-primary);color:#fff;cursor:pointer;font-weight:600}
-.btn.primary{background:var(--color-aux);box-shadow:0 6px 18px rgba(48,165,255,0.12)}
-.btn.outline{background:#fff;color:var(--color-primary);border:1px solid rgba(1,10,18,0.06)}
-.btn:focus{outline:3px solid rgba(43,120,246,0.12)}
+.actions {
+  margin-top: 12px;
+}
 
-@media (max-width:900px){
-  .split{flex-direction:column}
-  .left,.right{padding:2rem;align-items:center;text-align:center}
-  .card{max-width:720px}
-  .logo{margin:0 auto 12px}
+
+/* -----------------------------------------
+   ENLACES Y BOTONES BÁSICOS
+   Reglas reutilizables para botones/links
+   ----------------------------------------- */
+.btn {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 0;
+  background: var(--color-primary);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn:hover {
+  background: var(--color-primary-75);
+}
+
+.btn:disabled {
+  background: var(--color-primary-25);
+  color: rgba(1, 10, 18, 0.6);
+  cursor: not-allowed;
+}
+
+.link {
+  color: var(--color-aux);
+  text-decoration: none;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+
+/* -----------------------------------------
+   AYUDAS / UTILIDADES
+   Clases pequeñas de ayuda
+   ----------------------------------------- */
+.muted {
+  color: rgba(1, 10, 18, 0.5);
+  font-size: 13px;
+}
+
+
+/* -----------------------------------------
+   LAYOUT SPLIT
+   Diseño de dos columnas (izquierda/derecha)
+   ----------------------------------------- */
+.split {
+  display: flex;
+  min-height: calc(100vh - 40px);
+  flex-wrap: wrap;
+}
+
+.left {
+  flex: 1;
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-width: 0;
+}
+
+.right {
+  flex: 1;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+}
+
+.logo {
+  width: min(700px, 48vw);
+  max-width: 700px;
+  height: auto;
+  display: block;
+}
+
+img {
+  max-width: 100%;
+  height: auto; 
+  display: block; 
+}
+
+.lead {
+  font-size: 1.1rem;
+  margin: 8px 0 12px;
+  color: rgba(1, 10, 18, 0.85);
+}
+
+.card {
+  width: 100%;
+  max-width: 520px;
+  background: #fff;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(1, 10, 18, 0.04);
+  margin-bottom: 10px;
+}
+
+.tx-form label {
+  display: block;
+  margin: 8px 0;
+}
+
+.result {
+  background: #f6f8fa;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-top: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border-radius: 8px;
+  min-height: 48px;
+}
+
+.result.error {
+  border-color: #f2a4a4;
+  background: #fff2f2;
+}
+
+
+/* -----------------------------------------
+   BOTONES (variantes)
+   Estilos para botones con variantes auxiliares
+   ----------------------------------------- */
+.btn {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 0;
+  background: var(--color-primary);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn.primary {
+  background: var(--color-aux);
+  box-shadow: 0 6px 18px rgba(48, 165, 255, 0.12);
+}
+
+.btn.outline {
+  background: #fff;
+  color: var(--color-primary);
+  border: 1px solid rgba(1, 10, 18, 0.06);
+}
+
+.btn:focus {
+  outline: 3px solid rgba(43, 120, 246, 0.12);
+}
+
+
+/* -----------------------------------------
+   CTA (landing): botones grandes rectangulares
+   ----------------------------------------- */
+.cta-box {
+  display: block;
+  padding: 14px 18px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 700;
+  font-size: .95rem;
+  margin: 12px 0;
+  border-radius: 8px;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.cta-box[role="button"] {
+  cursor: pointer;
+}
+
+.cta-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(1, 10, 18, 0.06);
+}
+
+.cta-primary {
+  background: var(--color-primary);
+  color: #fff;
+  border: 2px solid rgba(0,0,0, 0.25);
+  box-shadow: 0 6px 18px rgba(255,138,48,0.08);
+}
+
+.cta-primary:hover {
+  filter: brightness(.98);
+}
+
+
+/* -----------------------------------------
+   ADAPTACIÓN A PANTALLAS PEQUEÑAS
+   ----------------------------------------- */
+@media (max-width: 900px) {
+  .split {
+    flex-direction: column;
+  }
+
+  .left,
+  .right {
+    padding: 2rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  .card {
+    max-width: 720px;
+  }
+
+  .logo {
+    margin: 0 auto 12px;
+  }
 }
