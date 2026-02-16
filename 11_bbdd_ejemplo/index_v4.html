@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario con AJAX</title>
+    <script>
+        function enviarFormulario(event) {
+            event.preventDefault(); // Evitar el envío tradicional del formulario
+
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const telefono = document.getElementById('telefono').value;
+
+            const datos = new FormData();
+            datos.append('nombre', nombre);
+            datos.append('email', email);
+            datos.append('telefono', telefono);
+
+            fetch('insertar_mysqli.php', {
+                method: 'POST',
+                body: datos
+            })
+                .then(response => response.text())
+                .then(data => {
+                    alert('Datos enviados correctamente: ' + data);
+                    cargarListado(); // Recargar el listado después de enviar
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Hubo un error al enviar los datos.');
+                });
+        }
+
+        function cargarListado() {
+            fetch('listado_mysqli.php')
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    var tabla = document.getElementById('tablaListado');
+                    tabla.innerHTML = ''; // Limpiar contenido previo
+
+                    // Crear encabezados de la tabla
+                    var encabezado = tabla.insertRow();
+                    var thId = document.createElement('th');
+                    thId.textContent = 'id';
+                    encabezado.appendChild(thId);
+
+                    var thNombre = document.createElement('th');
+                    thNombre.textContent = 'nombre';
+                    encabezado.appendChild(thNombre);
+
+                    var thEmail = document.createElement('th');
+                    thEmail.textContent = 'email';
+                    encabezado.appendChild(thEmail);
+
+                    var thTelefono = document.createElement('th');
+                    thTelefono.textContent = 'telefono';
+                    encabezado.appendChild(thTelefono);
+
+                    var thAcciones = document.createElement('th');
+                    thAcciones.textContent = 'Acciones';
+                    encabezado.appendChild(thAcciones);
+
+                    // Crear filas de la tabla
+                    for (let i = 0; i < data.length; i++) {
+                        let item = data[i]; // Cada iteración tiene su propio 'item'
+                        let idActual = item['id']; // Capturamos el ID en una variable independiente
+
+                        let fila = tabla.insertRow();
+
+                        let celdaId = fila.insertCell();
+                        celdaId.textContent = item['id'] || '';
+
+                        let celdaNombre = fila.insertCell();
+                        celdaNombre.textContent = item['nombre'] || '';
+
+                        let celdaEmail = fila.insertCell();
+                        celdaEmail.textContent = item['email'] || '';
+
+                        let celdaTelefono = fila.insertCell();
+                        celdaTelefono.textContent = item['telefono'] || '';
+
+                        let celdaAcciones = fila.insertCell();
+                        let botonBorrar = document.createElement('button');
+                        botonBorrar.textContent = 'Borrar';
+
+                        // Aquí capturamos idActual en el cierre
+                        botonBorrar.onclick = function () {
+                            borrarRegistro(idActual);
+                        };
+
+                        celdaAcciones.appendChild(botonBorrar);
+
+                        let botonEditar = document.createElement('button');
+                        botonEditar.textContent = 'Editar';
+
+                        botonEditar.onclick = function () {
+                            actualizarRegistro(idActual, item['nombre'], item['email'], item['telefono']);
+                        };
+
+                        celdaAcciones.appendChild(botonEditar);
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                    alert('Hubo un error al cargar el listado.');
+                });
+        }
+
+        function borrarRegistro(id) {
+            if (confirm('¿Estás seguro de que deseas borrar este registro con id:' + id + '?')) {
+                /*
+                const datos = new FormData();
+                datos.append('id', id);
+                fetch('borrar_mysqli.php', {
+                    method: 'POST',
+                    body: datos
+                })
+                */
+                
+                // Enviar la solicitud de borrado al servidor
+                fetch('borrar_mysqli.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'id=' + encodeURIComponent(id)
+                })
+                    .then(response => response.text())
+                    .then(data => {
+                        alert('Registro borrado correctamente: ' + data);
+                        cargarListado(); // Recargar el listado después de borrar
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Hubo un error al borrar el registro.');
+                    });
+            }
+        }
+
+        function actualizarRegistro(id, nombre_usuario, email_usuario, telefono_usuario) {
+            if(document.getElementById('nombre').value  == "" &&
+                document.getElementById('email').value  == "" &&
+                document.getElementById('telefono').value  == "") {
+                alert('Debes rellenar al menos un campo para actualizar.');
+                return; // Salir de la función si no hay datos para actualizar
+            } else {
+                if (confirm('¿Estás seguro de que deseas actualizar este usuario con nombre:' + nombre_usuario + '?')) {
+                    const nombre = (document.getElementById('nombre').value  == "") ? nombre_usuario : document.getElementById('nombre').value;
+                    const email = (document.getElementById('email').value  == "") ? email_usuario : document.getElementById('email').value;
+                    const telefono = (document.getElementById('telefono').value  == "") ? telefono_usuario : document.getElementById('telefono').value;
+
+                    const datos = new FormData();
+                    datos.append('nombre', nombre);
+                    datos.append('email', email);
+                    datos.append('telefono', telefono);
+                    datos.append('id', id);
+
+                    fetch('update_mysqli.php', {
+                        method: 'POST',
+                        body: datos
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        alert('Datos actualizados correctamente: ' + data);
+                        cargarListado(); // Recargar el listado después de enviar
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Hubo un error al enviar los datos.');
+                    });
+                }
+            }                
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Formulario</h1>
+    <form id="formulario" onsubmit="enviarFormulario(event)">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" name="telefono" required><br><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <h2>Listado</h2>
+    <button onclick="cargarListado()">Cargar Listado</button>
+    <table border="1" id="tablaListado"></table>
+</body>
+
+</html>

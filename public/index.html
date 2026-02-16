@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Gestionalo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="split">
+    <aside class="left">
+      <img src="logo.png" alt="Gestionalo" class="logo">
+      <h1>Gestionalo</h1>
+      <p class="lead">Organiza tus finanzas y transacciones en un solo lugar. Rápido, sencillo y seguro.</p>
+      <p class="muted">Inicia sesión para acceder a tu panel o crea una cuenta para empezar a usar Gestionalo.</p>
+    </aside>
+
+    <main class="right">
+      <section class="card">
+        <h2>Enviar transacción (form)</h2>
+        <form action="../api/transactions.php" method="post" class="tx-form">
+          <label>Usuario ID: <input name="id_usuario" required type="number" value="1"></label>
+          <label>Tipo (id_tipo): <input name="id_tipo" required type="number" value="2"></label>
+          <label>Importe: <input name="importe" required type="number" step="0.01" value="10.00"></label>
+          <label>Fecha (YYYY-MM-DD hh:mm:ss): <input name="fecha_movimiento" required type="text" value="2026-02-13 12:00:00"></label>
+          <label>Concepto: <input name="concepto" type="text"></label>
+          <div class="actions"><button class="btn" type="submit">Enviar transacción</button></div>
+        </form>
+      </section>
+
+      <section class="card" style="margin-top:18px">
+        <h2>Enviar transacción (fetch JSON)</h2>
+        <form id="txForm" class="tx-form">
+          <label>Usuario ID: <input name="id_usuario" required type="number" value="1"></label>
+          <label>Tipo (id_tipo): <input name="id_tipo" required type="number" value="2"></label>
+          <label>Importe: <input name="importe" required type="number" step="0.01" value="10.00"></label>
+          <label>Fecha (YYYY-MM-DD hh:mm:ss): <input name="fecha_movimiento" required type="text" value="2026-02-13 12:00:00"></label>
+          <label>Concepto: <input name="concepto" type="text"></label>
+          <div class="actions">
+            <button class="btn primary" type="submit" aria-label="Enviar con fetch">Enviar (fetch)</button>
+            <button type="button" class="btn outline" id="resetFetch">Limpiar</button>
+          </div>
+        </form>
+        <pre id="result" class="result"></pre>
+      </section>
+
+      <nav class="links" aria-label="Enlaces útiles" style="margin-top:14px">
+        <a class="link" href="../api/transactions.php?user_id=1">Listar transacciones (user_id=1)</a> ·
+        <a class="link" href="../api/export.php?user_id=1&format=csv">Exportar CSV</a> ·
+        <a class="link" href="../api/export.php?user_id=1&format=json">Exportar JSON</a>
+      </nav>
+    </main>
+  </div>
+
+  <script>
+    const form = document.getElementById('txForm');
+    const result = document.getElementById('result');
+    const resetBtn = document.getElementById('resetFetch');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+      data.id_usuario = Number(data.id_usuario);
+      data.id_tipo = Number(data.id_tipo);
+      data.importe = parseFloat(data.importe);
+
+      try {
+        const resp = await fetch('../api/transactions.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const json = await resp.json();
+        if (!resp.ok) {
+          result.textContent = 'Error: ' + JSON.stringify(json);
+          result.classList.add('error');
+        } else {
+          result.textContent = 'OK: ' + JSON.stringify(json);
+          result.classList.remove('error');
+          form.reset();
+        }
+      } catch (err) {
+        result.textContent = 'Request failed: ' + err;
+        result.classList.add('error');
+      }
+    });
+
+    resetBtn.addEventListener('click', () => { form.reset(); result.textContent = ''; result.classList.remove('error'); });
+  </script>
+</body>
+</html>
