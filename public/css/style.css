@@ -66,11 +66,11 @@ h2, h3, .lead {
    Estilos para formularios y campos
    ----------------------------------------- */
 form {
-  max-width: 720px;
-  background: #fff;
-  padding: 16px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(1, 10, 18, 0.04);
+  width: 100%;
+  background: transparent; /* sin capa blanca interior, hereda de .card */
+  padding: 0; /* el espacio lo gestiona .card */
+  border-radius: 0;
+  box-shadow: none;
 }
 
 label {
@@ -79,16 +79,39 @@ label {
   font-size: 14px;
 }
 
-input[type="text"],
-input[type="number"],
+input,
 select,
 textarea {
   width: 100%;
-  padding: 8px;
+  padding: 12px;
   border: 1px solid rgba(1, 10, 18, 0.08);
-  border-radius: 6px;
-  background: transparent;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
   color: var(--text);
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(1, 10, 18, 0.45);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background: #fff;
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+  background: var(--disabled-bg);
+  color: rgba(1, 10, 18, 0.5);
+  border-color: rgba(1, 10, 18, 0.04);
+  cursor: not-allowed;
+  opacity: 1;
 }
 
 .actions {
@@ -194,12 +217,22 @@ img {
 
 .card {
   width: 100%;
-  max-width: 520px;
-  background: #fff;
-  padding: 18px;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(1, 10, 18, 0.04);
+  max-width: 720px;
+  background: rgba(255,255,255,0.86); /* translúcido para dejar ver el gradiente */
+  backdrop-filter: blur(6px);
+  padding: 60px 40px; /* menos espacio arriba/abajo */
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(1, 10, 18, 0.06);
   margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Alinear contenido del card al inicio para controlar espaciado superior/inferior */
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .tx-form label {
@@ -207,20 +240,18 @@ img {
   margin: 8px 0;
 }
 
-.result {
-  background: #f6f8fa;
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin-top: 12px;
-  white-space: pre-wrap;
-  word-break: break-word;
-  border-radius: 8px;
-  min-height: 48px;
+/* Más espacio entre labels y entradas para legibilidad */
+label {
+  display: block;
+  margin: 14px 0;
 }
 
-.result.error {
-  border-color: #f2a4a4;
-  background: #fff2f2;
+/* Encabezados casuales por paso */
+.step h3 {
+  margin: 0 0 30px 0;
+  font-size: 1.05rem;
+  color: rgba(1,10,18,0.9);
+  font-weight: 600;
 }
 
 
@@ -340,16 +371,65 @@ img {
 
 .register-page .card {
   width: 100%;
-  max-width: 520px;
+  max-width: 720px;
 }
 
-/* -----------------------------------------
-   Multi-step form: pasos y navegación
-   ----------------------------------------- */
-.step { display: none; }
-.step.active { display: block; }
-.form-nav { display:flex; gap:12px; justify-content:flex-end; margin-top:12px; }
-.btn-submit { background: var(--color-aux); }
+/* Contenedor para pasos: se adapta al contenido y evita huecos grandes */
+.steps-wrap { position: relative; padding-top: 6px; min-height: 260px; }
 
-/* Resultado del registro */
-#reg-result { margin-top:12px; display:block; }
+/* Pasos: se apilan y se muestran con opacity/transform para evitar saltos de layout */
+.step {
+  position: absolute;
+  inset: 0 0 0 0;
+  opacity: 0;
+  transform: translateX(12px);
+  transition: opacity 320ms ease, transform 320ms ease, visibility 320ms ease;
+  visibility: hidden;
+  pointer-events: none;
+}
+.step.active {
+  opacity: 1;
+  transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Clases auxiliares para animaciones de entrada/salida */
+.step.turn-in-forward { animation: fadeInForward 420ms both; }
+.step.turn-out-forward { animation: fadeOutForward 420ms both; }
+.step.turn-in-back { animation: fadeInBack 420ms both; }
+.step.turn-out-back { animation: fadeOutBack 420ms both; }
+
+@keyframes fadeInForward {
+  from { transform: translateX(24px); opacity: 0 }
+  to { transform: translateX(0); opacity: 1 }
+}
+@keyframes fadeOutForward {
+  from { transform: translateX(0); opacity: 1 }
+  to { transform: translateX(-24px); opacity: 0 }
+}
+@keyframes fadeInBack {
+  from { transform: translateX(-24px); opacity: 0 }
+  to { transform: translateX(0); opacity: 1 }
+}
+@keyframes fadeOutBack {
+  from { transform: translateX(0); opacity: 1 }
+  to { transform: translateX(24px); opacity: 0 }
+}
+
+/* Multi-step form: pasos y navegación */
+.form-nav { 
+  display: flex; 
+  gap: 12px; 
+  justify-content: flex-end; 
+  margin-top: 20px; 
+}
+.btn-submit { 
+  background: var(--color-aux); 
+}
+
+/* Centrar h1 dentro del card */
+.card > h1 { 
+  align-self: center; 
+  margin-bottom: 40px; 
+}

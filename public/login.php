@@ -1,4 +1,5 @@
 <?php
+  $titulo = "Gestionalo — Iniciar sesión";
   require_once __DIR__ . '/header_landing_register_login.php';
 ?>
   <div class="split">
@@ -16,7 +17,7 @@
           <label>Contraseña: <input name="password" required type="password" placeholder="••••••••"></label>
           <div class="actions">
             <button class="btn primary" type="submit">Entrar</button>
-            <a class="link" href="index.html" style="margin-left:12px">Volver</a>
+            <a class="link" href="index.php" style="margin-left:12px">Volver</a>
           </div>
         </form>
       </section>
