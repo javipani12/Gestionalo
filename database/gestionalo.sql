@@ -102,6 +102,8 @@ CREATE TABLE `usuarios` (
   `email` VARCHAR(150) NOT NULL,
   `localidad` VARCHAR(100) DEFAULT NULL,
   `fecha_nacimiento` DATE DEFAULT NULL,
+  `politica_privacidad` TINYINT(1) NOT NULL DEFAULT 0,
+  `consentimiento_datos` TINYINT(1) NOT NULL DEFAULT 0,
   `fecha_registro` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `rol_id` INT UNSIGNED NOT NULL DEFAULT 1,
   `eliminado` TINYINT(1) NOT NULL DEFAULT 0,

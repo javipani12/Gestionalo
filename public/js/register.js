@@ -9,7 +9,6 @@
   const btnEnviar = formulario.querySelector('.btn-enviar');
   const cajaResultado = document.getElementById('resultado-registro');
   let actual = 0;
-  const datos = {};
 
   function animarCambio(desde, hacia, direccion) {
     if (desde === hacia) return Promise.resolve();
@@ -17,7 +16,6 @@
     const entrada = pasos[hacia];
 
     return new Promise(resolve => {
-      // preparar clases
       if (direccion === 'forward') {
         salida.classList.add('turn-out-forward');
         entrada.classList.add('turn-in-forward');
@@ -25,11 +23,7 @@
         salida.classList.add('turn-out-back');
         entrada.classList.add('turn-in-back');
       }
-
-      // asegurar que la entrada es visible para la animación
       entrada.classList.add('active');
-
-      // después de la animación, limpiar y establecer estado
       setTimeout(() => {
         salida.classList.remove('active', 'turn-out-forward', 'turn-out-back');
         entrada.classList.remove('turn-in-forward', 'turn-in-back');
@@ -41,17 +35,38 @@
   function mostrarPaso(indice, direccion) {
     const anterior = actual;
     const ultimo = indice === pasos.length - 1;
-    // No deshabilitar el botón "Volver" en el primer paso — lo usaremos para volver a index.php
     btnSiguiente.style.display = ultimo ? 'none' : '';
     btnEnviar.style.display = ultimo ? '' : 'none';
+    const card = document.querySelector('.card');
+    function _updateVolver(idx) {
+      if (!btnVolver) return;
+      if (idx === 0) {
+        btnVolver.textContent = 'Volver a inicio';
+        btnVolver.setAttribute('aria-label', 'Volver a inicio');
+      } else {
+        btnVolver.textContent = 'Volver';
+        btnVolver.setAttribute('aria-label', 'Volver');
+      }
+    }
 
     if (direccion) {
       animarCambio(anterior, indice, direccion).then(() => {
         actual = indice;
+        // Asegurar que sólo el paso actual tiene la clase active
+        pasos.forEach((s, i) => s.classList.toggle('active', i === indice));
+        // aplicar/remover .shrink solo después de la animación para evitar mostrar todos los pasos
+        if (card) {
+          if (ultimo) card.classList.add('shrink'); else card.classList.remove('shrink');
+        }
+        _updateVolver(indice);
       });
     } else {
       pasos.forEach((s, i) => s.classList.toggle('active', i === indice));
       actual = indice;
+      if (card) {
+        if (ultimo) card.classList.add('shrink'); else card.classList.remove('shrink');
+      }
+      _updateVolver(indice);
     }
   }
 
@@ -59,14 +74,21 @@
     const paso = pasos[indice];
     const entradas = Array.from(paso.querySelectorAll('input[required]'));
     for (const entrada of entradas) {
+      if (entrada.type === 'checkbox') {
+        if (!entrada.checked) {
+          entrada.reportValidity();
+          return false;
+        }
+        continue;
+      }
       if (!entrada.checkValidity()) {
         entrada.reportValidity();
         return false;
       }
     }
-    // validación personalizada: comprobar que las contraseñas coinciden
-    const pw = paso.querySelector('input[name="contrasena"]');
-    const pw2 = paso.querySelector('input[name="contrasena2"]');
+    // Solo en el paso de contraseñas comprobar coincidencia
+    const pw = formulario.querySelector('input[name="contrasena"]');
+    const pw2 = formulario.querySelector('input[name="contrasena2"]');
     if (pw && pw2 && pw.value !== pw2.value) {
       pw2.setCustomValidity('Las contraseñas no coinciden.');
       pw2.reportValidity();
@@ -76,24 +98,14 @@
     return true;
   }
 
-  function recopilarPaso(indice) {
-    const paso = pasos[indice];
-    const entradas = Array.from(paso.querySelectorAll('input'));
-    entradas.forEach(i => {
-      datos[i.name] = i.value;
-    });
-  }
-
   btnSiguiente.addEventListener('click', () => {
     if (!validarPaso(actual)) return;
-    recopilarPaso(actual);
     const siguiente = Math.min(actual + 1, pasos.length - 1);
     mostrarPaso(siguiente, 'forward');
   });
 
   btnVolver.addEventListener('click', () => {
     if (actual === 0) {
-      // Si estamos en el primer paso, volver a la página principal
       window.location.href = 'index.php';
       return;
     }
@@ -104,20 +116,47 @@
   formulario.addEventListener('submit', (ev) => {
     ev.preventDefault();
     if (!validarPaso(actual)) return;
-    recopilarPaso(actual);
-    // Aquí podrías enviar `datos` al servidor con fetch/XHR
-    // Para demo mostramos resumen en pantalla
-    cajaResultado.style.display = '';
-    cajaResultado.classList.remove('error');
-    cajaResultado.textContent = 'Registrando...';
-    // Simular envío
-    setTimeout(() => {
-      cajaResultado.textContent = 'Registro completado. Datos: ' + JSON.stringify(datos);
-      formulario.reset();
-      mostrarPaso(0);
-    }, 600);
+    // Validar todos los pasos antes de enviar
+    for (let i = 0; i < pasos.length - 1; i++) {
+      if (!validarPaso(i)) return;
+    }
+    const formData = new FormData(formulario);
+
+    if (cajaResultado) {
+      cajaResultado.style.display = '';
+      cajaResultado.classList.remove('error');
+      cajaResultado.textContent = 'Enviando...';
+    }
+
+    fetch('register_submit.php', { method: 'POST', body: formData })
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.success) {
+          // mostrar paso final inmediatamente (sin modal)
+          const mensaje = document.getElementById('mensaje-final');
+          if (mensaje) mensaje.textContent = data.message || 'Se ha enviado un correo para verificar la cuenta.';
+          if (cajaResultado) cajaResultado.style.display = 'none';
+          const nav = document.querySelector('.form-nav');
+          if (nav) nav.style.display = 'none';
+          mostrarPaso(pasos.length - 1, 'forward');
+          formulario.reset();
+        } else {
+          if (cajaResultado) {
+            cajaResultado.classList.add('error');
+            cajaResultado.textContent = (data && data.error) ? data.error : 'Error en el registro';
+          }
+        }
+      })
+      .catch(err => {
+        if (cajaResultado) {
+          cajaResultado.classList.add('error');
+          cajaResultado.textContent = 'Error de red. Inténtalo más tarde.';
+        }
+      });
   });
 
   // Inicializar
   mostrarPaso(0);
+
+  // Modal removed: funcionalidad eliminada intencionadamente
 })();

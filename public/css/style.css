@@ -1,3 +1,7 @@
+/* Importa Roboto (principal) e Inter (secundaria) desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+
+
 /* -----------------------------------------
    VARIABLES GLOBALES
    Colores y ajustes reutilizables para todo
@@ -17,9 +21,6 @@
   --text: #010A12; /* color principal del texto */
   --disabled-bg: #F6FBFF;
 }
-
-/* Importa Roboto (principal) e Inter (secundaria) desde Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap');
 
 
 /* -----------------------------------------
@@ -220,7 +221,7 @@ img {
   max-width: 720px;
   background: rgba(255,255,255,0.86); /* translúcido para dejar ver el gradiente */
   backdrop-filter: blur(6px);
-  padding: 60px 40px; /* menos espacio arriba/abajo */
+  padding: 60px 40px;
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(1, 10, 18, 0.06);
   margin-bottom: 10px;
@@ -228,7 +229,6 @@ img {
   overflow: hidden;
 }
 
-/* Alinear contenido del card al inicio para controlar espaciado superior/inferior */
 .card {
   display: flex;
   flex-direction: column;
@@ -240,18 +240,38 @@ img {
   margin: 8px 0;
 }
 
-/* Más espacio entre labels y entradas para legibilidad */
 label {
   display: block;
   margin: 14px 0;
 }
 
-/* Encabezados casuales por paso */
 .step h3 {
   margin: 0 0 30px 0;
   font-size: 1.05rem;
   color: rgba(1,10,18,0.9);
   font-weight: 600;
+}
+
+.checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.checkboxes label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin: 0;
+}
+
+.checkboxes input[type="checkbox"] {
+  width: auto;
+  display: inline-block;
+  margin: 0;
+  transform: translateY(0.5px);
 }
 
 
@@ -347,6 +367,32 @@ label {
   }
 }
 
+@media (max-width: 600px) {
+  .steps-wrap { min-height: auto; padding-top: 0; padding-bottom: 80px; }
+  .step {
+    position: static;
+    inset: auto;
+    opacity: 1;
+    transform: none;
+    transition: none;
+    visibility: visible;
+    pointer-events: auto;
+    display: none;
+  }
+  .step.active { display: block; }
+
+  .form-nav {
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .checkboxes {
+    margin-bottom: 10px;
+  }
+}
+
 /* -----------------------------------------
    Página de registro en columna única
    ----------------------------------------- */
@@ -354,8 +400,8 @@ label {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 18px;
-  padding: 3rem;
   min-height: calc(100vh - 40px);
 }
 
@@ -371,13 +417,14 @@ label {
 
 .register-page .card {
   width: 100%;
-  max-width: 720px;
 }
 
-/* Contenedor para pasos: se adapta al contenido y evita huecos grandes */
-.steps-wrap { position: relative; padding-top: 6px; min-height: 260px; }
+.steps-wrap { 
+  position: relative; 
+  padding-top: 6px; 
+  min-height: 260px; 
+}
 
-/* Pasos: se apilan y se muestran con opacity/transform para evitar saltos de layout */
 .step {
   position: absolute;
   inset: 0 0 0 0;
@@ -387,6 +434,7 @@ label {
   visibility: hidden;
   pointer-events: none;
 }
+
 .step.active {
   opacity: 1;
   transform: translateX(0);
@@ -419,16 +467,54 @@ label {
 
 /* Multi-step form: pasos y navegación */
 .form-nav { 
-  display: flex; 
-  gap: 12px; 
-  justify-content: flex-end; 
-  margin-top: 20px; 
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 15%;
 }
 .btn-submit { 
   background: var(--color-aux); 
 }
 
-/* Centrar h1 dentro del card */
+/* Cuando estamos en el paso final, reducir el alto de la card y ocultar la navegación */
+.card.shrink {
+  padding: 40px 40px;
+  align-items: flex-start;
+}
+.card.shrink .steps-wrap {
+  min-height: auto;
+}
+.card.shrink .form-nav {
+  display: none;
+}
+
+.card.shrink .step {
+  position: static;
+  inset: auto;
+  transform: none;
+  transition: none;
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.card.shrink .step.active {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.steps-wrap { 
+  position: relative; 
+  padding-top: 6px; 
+}
+
+.card:not(.shrink) .steps-wrap {
+  min-height: 360px;
+  padding-bottom: 20px;
+}
+
 .card > h1 { 
   align-self: center; 
   margin-bottom: 40px; 
