@@ -35,8 +35,10 @@
   function mostrarPaso(indice, direccion) {
     const anterior = actual;
     const ultimo = indice === pasos.length - 1;
-    btnSiguiente.style.display = ultimo ? 'none' : '';
-    btnEnviar.style.display = ultimo ? '' : 'none';
+    const penultimo = indice === pasos.length - 2; // el paso antes del mensaje final: mostrar "Crear cuenta"
+    // Si estamos en el penúltimo paso mostramos el botón de enviar y ocultamos siguiente
+    btnSiguiente.style.display = (ultimo || penultimo) ? 'none' : '';
+    btnEnviar.style.display = penultimo ? '' : 'none';
     const card = document.querySelector('.card');
     function _updateVolver(idx) {
       if (!btnVolver) return;
@@ -113,8 +115,20 @@
     mostrarPaso(anterior, 'back');
   });
 
+  // Asegurar que el botón de enviar siempre dispare el submit (compatibilidad)
+  if (btnEnviar) {
+    btnEnviar.addEventListener('click', (e) => {
+      // Si el botón está visible, forzamos el envío para evitar problemas de tipo
+      if (getComputedStyle(btnEnviar).display !== 'none') {
+        e.preventDefault();
+        formulario.requestSubmit();
+      }
+    });
+  }
+
   formulario.addEventListener('submit', (ev) => {
     ev.preventDefault();
+    console.log('Formulario: submit capturado, paso actual=', actual);
     if (!validarPaso(actual)) return;
     // Validar todos los pasos antes de enviar
     for (let i = 0; i < pasos.length - 1; i++) {
@@ -131,6 +145,7 @@
     fetch('register_submit.php', { method: 'POST', body: formData })
       .then(r => r.json())
       .then(data => {
+        console.log('Respuesta registro:', data);
         if (data && data.success) {
           // mostrar paso final inmediatamente (sin modal)
           const mensaje = document.getElementById('mensaje-final');
@@ -148,6 +163,7 @@
         }
       })
       .catch(err => {
+        console.error('Error fetch register_submit:', err);
         if (cajaResultado) {
           cajaResultado.classList.add('error');
           cajaResultado.textContent = 'Error de red. Inténtalo más tarde.';

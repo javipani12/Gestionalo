@@ -1,12 +1,13 @@
 <?php
+require_once 'clave.php';
 
 //////////Cambiar los siguientes para cada proyecto ///////////
-define('ROOT', $_SERVER['DOCUMENT_ROOT'] . "/huerto/");
+define('ROOT', __DIR__ . "/"); 
 
 ///////////CORREO/////////////////
-define("EMAIL_HOST", 'smtp.office365.com');         //SMTP server para enviar
-define("EMAIL_USER", 'agora@iesagora.es');          //SMTP Usuario
-define("EMAIL_PASS", 'clave');                      //SMTP password
+define("EMAIL_HOST", 'smtp.gmail.com');         	//SMTP server para enviar
+define("EMAIL_USER", 'gestionalo2026@gmail.com');   //SMTP Usuario
+define("EMAIL_PASS", "$clave");                     //SMTP password
 
 // Cargar clases del PHPMailer
 use PHPMailer\PHPMailer\PHPMailer;
@@ -37,7 +38,7 @@ function enviarCorreo($dest, $nombre, $asunto, $mensaje, $adjunto = "")
 		//if ($ical) $mail->Ical = $ical;
 		//if ($ical) $mail->addStringAttachment($ical, "anotacion.ics");
 		//Recipients
-		$mail->setFrom('agora@iesagora.es', 'El Huerto del IES Ágora');
+		$mail->setFrom(EMAIL_USER, 'Gestionalo');
 		$mail->addAddress($dest, $nombre);     //Add a recipien
 		//$mail->addReplyTo('info@example.com', 'Information');
 		//$mail->addCC('cc@example.com');
@@ -48,7 +49,7 @@ function enviarCorreo($dest, $nombre, $asunto, $mensaje, $adjunto = "")
 			$mail->addAttachment($adjunto);         //Add attachments
 			//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
 		}
-		$mail->AddEmbeddedImage(ROOT . "imagenes/logoAgorap.png", 'imagen'); //ruta de archivo de imagen
+		$mail->AddEmbeddedImage(ROOT . "imagenes/gestionalo.png", 'imagen'); //ruta de archivo de imagen
 		//Content
 		$mail->isHTML(true);
 		//Set email format to HTML

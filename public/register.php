@@ -45,13 +45,13 @@
 
             <div class="checkboxes">
               <label>
-                Acepto la política de privacidad
                 <input name="privacidad" type="checkbox" value="1" required>
+                Acepto la política de privacidad
               </label>
               
               <label>
-                Consiento el tratamiento de mis datos
                 <input name="consentimiento" type="checkbox" value="1" required>
+                Consiento el tratamiento de mis datos para la creación de mi cuenta y el envío de correos relacionados con el servicio.
               </label>
             </div>
           </div>

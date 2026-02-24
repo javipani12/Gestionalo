@@ -1,17 +1,22 @@
 <?php
+// Modo debug temporal para capturar errores y devolver JSON en lugar de HTML
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
 header('Content-Type: application/json; charset=utf-8');
-try {
-    $cfg = include __DIR__ . '/../config/config.php';
-    $dsn = "mysql:host={$cfg['db_host']};dbname={$cfg['db_name']};charset={$cfg['charset']}";
-    $pdo = new PDO($dsn, $cfg['db_user'], $cfg['db_pass'], [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    ]);
-} catch (Exception $e) {
+require_once __DIR__ . '/../database/conexion.php';
+
+set_error_handler(function($severity, $message, $file, $line) {
+    throw new ErrorException($message, 0, $severity, $file, $line);
+});
+
+set_exception_handler(function($e) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'Error de conexión a la base de datos']);
+    $msg = ['success' => false, 'error' => 'Server error', 'details' => $e->getMessage()];
+    error_log('register_submit exception: ' . $e->getMessage() . " in " . $e->getFile() . ':' . $e->getLine());
+    echo json_encode($msg);
     exit;
-}
+});
 
 // Recoger y validar inputs
 $nombre = trim($_POST['nombre'] ?? '');
@@ -81,9 +86,34 @@ try {
     $stmt->execute(['id_usuario' => $idUsuario, 'hash' => $hash]);
 
     $pdo->commit();
+    // Generar token de verificación y almacenarlo
+    $token = bin2hex(random_bytes(32));
+    $stmt = $pdo->prepare('UPDATE usuarios SET verification_token = :token, token_created = NOW() WHERE id_usuario = :id');
+    $stmt->execute(['token' => $token, 'id' => $idUsuario]);
 
-    // Aquí podríamos generar y enviar correo de verificación (se implementará más adelante)
-    echo json_encode(['success' => true, 'message' => 'Se ha creado la cuenta. Se ha enviado un correo para verificarla (simulado).']);
+    // Enviar correo de verificación
+    try {
+        require_once __DIR__ . '/../enviar_email/clave.php';
+        require_once __DIR__ . '/../enviar_email/correo.php';
+
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $basePath = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+        $verifyUrl = $protocol . '://' . $host . $basePath . '/verify.php?token=' . $token;
+        $nombre_completo = $nombre . ' ' . $apellido1 . ' ' . $apellido2;
+        $asunto = 'Verifica tu cuenta en Gestionalo';
+        $mensaje = "<p>Hola " . htmlspecialchars($nombre_completo, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ",</p>" .
+                   "<p>Gracias por registrarte en Gestionalo. Para activar tu cuenta, pulsa el siguiente enlace:</p>" .
+                   "<p><a href=\"$verifyUrl\">Verificar mi correo</a></p>" .
+                   "<p>El enlace expirará en 48 horas.</p>";
+
+        enviarCorreo($correo, $nombre_completo, $asunto, $mensaje);
+    } catch (Exception $e) {
+        // No bloquear el registro si falla el envío; sólo dejar registro del error
+        error_log('Error enviando correo verificación: ' . $e->getMessage());
+    }
+
+    echo json_encode(['success' => true, 'message' => 'Se ha creado la cuenta. Se ha enviado un correo para verificarla.']);
     exit;
 } catch (Exception $e) {
     if ($pdo->inTransaction()) $pdo->rollBack();
