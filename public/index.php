@@ -1,21 +1,31 @@
 <?php
-  $titulo = "Gestionalo — Organiza tus finanzas personales";
-  require_once __DIR__ . '/header_landing_register_login.php';
-?>
-  <div class="split">
-    <!-- Zona de presentación -->
-    <aside class="left">
-      <img src="./assets/img/gestionalo.png" alt="Gestionalo" class="logo">
-      <p class="lead">Organiza tus finanzas y transacciones en un solo lugar. Rápido, sencillo y seguro.</p>
-      <p class="muted">Gestiona gastos, ingresos y exporta reportes.</p>
-    </aside>
+    ini_set('display_errors',1);
+    error_reporting(E_ALL);
+    session_start();
 
-    <!-- Zona de acciones -->
-    <main class="right" aria-live="polite">
-        <p class="lead">Accede con tu cuenta o crea una nueva.</p>
-        <a class="card cta-box cta-primary" href="login.php" role="button" aria-label="Iniciar sesión">Iniciar sesión</a>
-        <a class="card cta-box cta-primary" href="register.php" role="button" aria-label="Registrarse">Registrarse</a>
-    </main>
-  </div>
-</body>
-</html>
+    require_once "./../vendor/autoload.php";
+
+    $controllerParam = strtolower($_GET['controller'] ?? 'home');
+    $action = strtolower($_GET['action'] ?? 'mostrarHome');
+
+    // Si no está autenticado y no pide 'auth', forzamos la landing pública
+    if(!isset($_SESSION['usuario']['id_usuario']) && $controllerParam !== 'auth') {
+        $controllerParam = 'home';
+        $action = 'mostrarHome';
+    }
+
+    $controllerClass = ucfirst($controllerParam) . "Controller";
+
+    if(class_exists($controllerClass)) {
+        $controller = new $controllerClass();
+        if(method_exists($controller, $action)) {
+            $controller->$action();
+        } else {
+            error_log("Acción no encontrada: " . $action);
+            die("Acción no encontrada: " . htmlspecialchars($action));
+        }
+    } else {
+        error_log("Controlador no encontrado: " . $controllerParam);
+        die("Controlador no encontrado: " . htmlspecialchars($controllerParam));
+    }
+?>

@@ -37,10 +37,16 @@ body {
   font-family: 'Roboto', system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   background: linear-gradient(120deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
   background-size: 200% 200%;
-  animation: gradientShift 15s linear infinite;
+  animation: gradientShift 15s linear infinite, pageFadeIn 160ms ease;
   will-change: background-position;
   color: var(--text);
   -webkit-font-smoothing: antialiased;
+}
+
+body.page-leaving {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 160ms ease, transform 160ms ease;
 }
 
 /* Animación sutil del gradiente de fondo */
@@ -48,6 +54,17 @@ body {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 h1 {
@@ -163,6 +180,28 @@ pre {
 .muted {
   color: rgba(1, 10, 18, 0.5);
   font-size: 13px;
+}
+
+.alert {
+  width: 100%;
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  border: 1px solid transparent;
+}
+
+.alert.success {
+  color: #0c5132;
+  background: rgba(44, 196, 134, 0.14);
+  border-color: rgba(44, 196, 134, 0.38);
+}
+
+.alert.error {
+  color: #8a1e2c;
+  background: rgba(239, 84, 93, 0.13);
+  border-color: rgba(239, 84, 93, 0.36);
 }
 
 
@@ -307,8 +346,8 @@ label {
 
 
 /* -----------------------------------------
-   CTA (landing): botones grandes rectangulares
-   ----------------------------------------- */
+  LANDING: botones grandes rectangulares
+----------------------------------------- */
 .cta-box {
   display: block;
   padding: 14px 18px;
@@ -333,7 +372,7 @@ label {
 
 .cta-primary {
   background: var(--color-primary);
-  color: #fff;
+  color: var(--bg);
   border: 2px solid rgba(0,0,0, 0.25);
   box-shadow: 0 6px 18px rgba(255,138,48,0.08);
 }
@@ -368,18 +407,7 @@ label {
 }
 
 @media (max-width: 600px) {
-  .steps-wrap { min-height: auto; padding-top: 0; padding-bottom: 80px; }
-  .step {
-    position: static;
-    inset: auto;
-    opacity: 1;
-    transform: none;
-    transition: none;
-    visibility: visible;
-    pointer-events: auto;
-    display: none;
-  }
-  .step.active { display: block; }
+  .steps-wrap { min-height: 320px; padding-top: 0; padding-bottom: 20px; }
 
   .form-nav {
     margin-top: 1rem;
@@ -394,8 +422,8 @@ label {
 }
 
 /* -----------------------------------------
-   Página de registro en columna única
-   ----------------------------------------- */
+  Página de registro en columna única
+----------------------------------------- */
 .register-page {
   display: flex;
   flex-direction: column;
@@ -423,6 +451,61 @@ label {
   position: relative; 
   padding-top: 6px; 
   min-height: 260px; 
+}
+
+.progress {
+  margin-bottom: 18px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(1, 10, 18, 0.12);
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-aux) 100%);
+  transition: width 320ms ease;
+}
+
+.progress-steps {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.progress-step {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(1, 10, 18, 0.2);
+  background: #fff;
+  color: rgba(1, 10, 18, 0.7);
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 220ms ease, border-color 220ms ease, background 220ms ease, color 220ms ease;
+}
+
+.progress-step.active {
+  transform: scale(1.08);
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.progress-step.done {
+  border-color: var(--color-aux);
+  background: var(--color-aux);
+  color: #fff;
 }
 
 .step {
@@ -470,7 +553,12 @@ label {
   display: flex;
   gap: 12px;
   justify-content: flex-end;
-  margin-top: 15%;
+  margin-top: 18px;
+}
+
+.btn-volver {
+  margin-right: auto;
+  text-decoration: none;
 }
 .btn-submit { 
   background: var(--color-aux); 
