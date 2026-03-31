@@ -42,7 +42,9 @@
                     $_SESSION['error'] = 'Los campos obligatorios no pueden estar vacíos.';
                     require_once './../app/views/auth/register.php';
                     return;
-                } elseif ($fecha_nacimiento) {
+                }
+
+                if($fecha_nacimiento) {
                     $fecha_nacimiento_obj = DateTimeImmutable::createFromFormat('Y-m-d', $fecha_nacimiento);
                     $fecha_valida = $fecha_nacimiento_obj
                         && $fecha_nacimiento_obj->format('Y-m-d') === $fecha_nacimiento;
@@ -59,38 +61,46 @@
                         require_once './../app/views/auth/register.php';
                         return;
                     }
-                } elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+                }
+
+                if(!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
                     $_SESSION['error'] = 'El correo electrónico no es válido.';
                     require_once './../app/views/auth/register.php';
                     return;
-                } elseif ($contrasena !== $contrasena2) {
+                }
+
+                if($contrasena !== $contrasena2) {
                     $_SESSION['error'] = 'Las contraseñas no coinciden.';
                     require_once './../app/views/auth/register.php';
                     return;
-                } elseif (!$privacidad) {
+                }
+
+                if(!$privacidad) {
                     $_SESSION['error'] = 'Debes aceptar la política de privacidad.';
                     require_once './../app/views/auth/register.php';
                     return;
-                } elseif (!$consentimiento) {
+                }
+
+                if(!$consentimiento) {
                     $_SESSION['error'] = 'Debes aceptar el consentimiento sobre el tratamiento de datos.';
                     require_once './../app/views/auth/register.php';
                     return;
-                } else {
-                    $userModel = new UserModel();
-                    if($userModel->validarSiUsuarioExiste($correo)) {
-                        $_SESSION['error'] = 'Ya existe un usuario registrado con ese correo electrónico.';
-                        require_once './../app/views/auth/register.php';
-                        return;
-                    } else {
-                        $hash_contrasena = password_hash($contrasena, PASSWORD_DEFAULT);
-                        $userModel->crearUsuario($nombre, $apellido1, $apellido2, $localidad, 
-                            $fecha_nacimiento, $correo, $privacidad ? 1 : 0, $consentimiento ? 1 : 0, 
-                            $hash_contrasena);
-                        $_SESSION['correcto'] = 'Registro exitoso. ¡Ya puedes iniciar sesión!';
-                        header("Location: ?controller=auth&action=mostrarLogin");
-                        exit();
-                    }
                 }
+
+                $userModel = new UserModel();
+                if($userModel->validarSiUsuarioExiste($correo)) {
+                    $_SESSION['error'] = 'Ya existe un usuario registrado con ese correo electrónico.';
+                    require_once './../app/views/auth/register.php';
+                    return;
+                }
+
+                $hash_contrasena = password_hash($contrasena, PASSWORD_DEFAULT);
+                $userModel->crearUsuario($nombre, $apellido1, $apellido2, $localidad, 
+                    $fecha_nacimiento, $correo, $privacidad ? 1 : 0, $consentimiento ? 1 : 0, 
+                    $hash_contrasena);
+                $_SESSION['correcto'] = 'Registro exitoso. ¡Ya puedes iniciar sesión!';
+                header("Location: ?controller=auth&action=mostrarLogin");
+                exit();
             }
         }
 

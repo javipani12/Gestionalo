@@ -27,7 +27,23 @@
 
             <ul class="navbar__menu">
                 <li><a href="?controller=dashboard&action=mostrarDashboard" class="navbar__link">Inicio</a></li>
-                <li><a href="#" class="navbar__link">Transacciones</a></li>
+                <li class="navbar__item navbar__item--dropdown">
+                    <a href="?controller=transaction&action=mostrarTransaccionesUsuario" class="navbar__link navbar__link--dropdown" aria-haspopup="true">
+                        Transacciones
+                    </a>
+                    <ul class="navbar__dropdown" aria-label="Submenú de transacciones">
+                        <li>
+                            <a href="?controller=transaction&action=mostrarTransaccionesUsuario" class="navbar__dropdown-link">
+                                Ver transacciones
+                            </a>
+                        </li>
+                        <li>
+                            <a href="?controller=transaction&action=mostrarFormularioCrearTransaccion" class="navbar__dropdown-link">
+                                Nueva transacción
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li><a href="#" class="navbar__link">Herramientas</a></li>
                 <li><a href="#" class="navbar__link">Agente IA</a></li>
                 <li><a href="#" class="navbar__link">Sobre nosotros</a></li>
