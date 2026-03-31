@@ -36,13 +36,13 @@
           <div class="step" data-step="0">
             <h3>Cuéntanos sobre ti, ¿cómo te llamas?</h3>
             <label for="nombre">Nombre:</label>
-            <input name="nombre" required type="text" placeholder="Alfonso">
+            <input name="nombre" required type="text" placeholder="Alfonso" tabindex="1">
 
             <label for="apellido1">Primer apellido:</label>
-            <input name="apellido1" required type="text" placeholder="García">
+            <input name="apellido1" required type="text" placeholder="García" tabindex="2">
 
             <label for="apellido2">Segundo apellido:</label>
-            <input name="apellido2" type="text" placeholder="López">
+            <input name="apellido2" type="text" placeholder="López" tabindex="3">
           </div>
           <!-- Fin paso 1 -->
 
@@ -50,10 +50,10 @@
           <div class="step" data-step="1">
             <h3>¡Háblanos más sobre ti!</h3>
             <label for="localidad">Localidad:</label>
-            <input name="localidad" type="text" placeholder="Sevilla">
+            <input name="localidad" type="text" placeholder="Sevilla" tabindex="4">
 
             <label for="fecha_nacimiento">Fecha de nacimiento:</label>
-            <input name="fecha_nacimiento" type="date" placeholder="AAAA-MM-DD">
+            <input name="fecha_nacimiento" type="date" placeholder="AAAA-MM-DD" tabindex="5">
           </div>
           <!-- Fin paso 2 -->
 
@@ -61,23 +61,23 @@
           <div class="step" data-step="2">
             <h3>Por último, introduce tus datos de acceso</h3>
             <label for="correo">Correo electrónico:</label>
-            <input name="correo" required type="email" placeholder="usuario@ejemplo.com">
+            <input name="correo" required type="email" placeholder="usuario@ejemplo.com" tabindex="6">
 
             <label for="contrasena">Contraseña:</label>
-            <input name="contrasena" required type="password" placeholder="••••••••">
+            <input name="contrasena" required type="password" placeholder="••••••••" tabindex="7">
 
             <label for="contrasena2">Confirmar contraseña:</label>
-            <input name="contrasena2" required type="password" placeholder="••••••••">
+            <input name="contrasena2" required type="password" placeholder="••••••••" tabindex="8">
 
             <div class="checkboxes">
               <label>
-                <input name="privacidad" type="checkbox" value="1" required>
-                Acepto la política de privacidad
+                <input name="privacidad" type="checkbox" value="1" required tabindex="9">
+                Acepto la <a href="?controller=legal&action=mostrarPrivacidad" target="_blank">política de privacidad</a>
               </label>
               
               <label>
-                <input name="consentimiento" type="checkbox" value="1" required>
-                Consiento el tratamiento de mis datos para la creación de mi cuenta y el envío de correos relacionados con el servicio.
+                <input name="consentimiento" type="checkbox" value="1" required tabindex="10">
+                <a href="?controller=legal&action=mostrarConsentimiento" target="_blank">Consiento</a> el tratamiento de mis datos para la creación de mi cuenta y el envío de correos relacionados con el servicio.
               </label>
             </div>
           </div>

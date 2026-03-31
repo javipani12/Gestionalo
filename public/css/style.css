@@ -31,14 +31,21 @@
   box-sizing: border-box;
 }
 
+html {
+  min-height: 100%;
+  background: linear-gradient(120deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 15s linear infinite;
+}
+
 body {
+  min-height: 100vh;
   margin: 0;
   padding: 20px;
   font-family: 'Roboto', system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  background: linear-gradient(120deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-  background-size: 200% 200%;
-  animation: gradientShift 15s linear infinite, pageFadeIn 160ms ease;
-  will-change: background-position;
+  background: transparent;
+  animation: pageFadeIn 160ms ease;
+  will-change: opacity, transform;
   color: var(--text);
   -webkit-font-smoothing: antialiased;
 }
@@ -313,6 +320,22 @@ label {
   transform: translateY(0.5px);
 }
 
+.checkboxes a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba(1, 10, 18, 0.55);
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+
+.checkboxes a:hover,
+.checkboxes a:focus-visible {
+  color: rgba(1, 10, 18, 0.88);
+  text-decoration-color: rgba(1, 10, 18, 0.88);
+}
+
 
 /* -----------------------------------------
    BOTONES (variantes)
@@ -525,6 +548,23 @@ label {
   pointer-events: auto;
 }
 
+/* -----------------------------------------
+  Apartado legal
+----------------------------------------- */
+.legal-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  width: 100%;
+  min-height: calc(100vh - 40px);
+}
+
+.legal-card {
+  max-width: min(1100px, 92vw);
+}
+
 /* Clases auxiliares para animaciones de entrada/salida */
 .step.turn-in-forward { animation: fadeInForward 420ms both; }
 .step.turn-out-forward { animation: fadeOutForward 420ms both; }
@@ -606,4 +646,206 @@ label {
 .card > h1 { 
   align-self: center; 
   margin-bottom: 40px; 
+}
+
+
+/* -----------------------------------------
+   HEADER Y NAVBAR
+   Estilos para la navegación principal
+   ----------------------------------------- */
+.header {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem 1.8rem;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(6px);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(1, 10, 18, 0.06);
+}
+
+.navbar__menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.navbar__link {
+  display: inline-block;
+  padding: 8px 16px;
+  text-decoration: none;
+  color: var(--color-aux);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  transition: background 220ms ease, color 220ms ease;
+}
+
+.navbar__link:hover,
+.navbar__link:focus {
+  background: var(--color-primary-25);
+  color: var(--color-primary);
+}
+
+
+/* -----------------------------------------
+   DASHBOARD
+   Maquetación principal con bloques tipo card
+   ----------------------------------------- */
+.dashboard-page {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(1, 10, 18, 0.06);
+  border: 1px solid rgba(1, 10, 18, 0.1);
+  padding: 24px;
+}
+
+.dashboard-page h1 {
+  margin: 0 0 18px;
+}
+
+.dashboard-lead {
+  margin: 0 0 20px;
+  font-size: 1.1rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.dashboard-col {
+  display: grid;
+  gap: 18px;
+}
+
+.dashboard-card {
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(6px);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(1, 10, 18, 0.06);
+  border: 2px solid rgba(1, 10, 18, 0.2);
+  padding: 22px;
+}
+
+.dashboard-card h2 {
+  margin: 0 0 12px;
+  color: var(--color-primary-75);
+}
+
+.dashboard-card--main {
+  min-height: 100%;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem 1.2rem;
+  }
+
+  .navbar__menu {
+    gap: 0.3rem;
+  }
+
+  .navbar__link {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-page {
+    padding: 18px;
+  }
+}
+
+
+/* -----------------------------------------
+   FOOTER
+   Estilos del pie con aspecto card
+   ----------------------------------------- */
+.footer {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.footer-inner {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 1rem 1.2rem;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(6px);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(1, 10, 18, 0.06);
+}
+
+.footer-text {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.98rem;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.footer-text a {
+  color: var(--color-aux);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer-text a:hover,
+.footer-text a:focus-visible {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.footer-license-icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.footer-license-icons img {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .footer-inner {
+    padding: 0.9rem 1rem;
+  }
+
+  .footer-text {
+    font-size: 0.92rem;
+    gap: 5px;
+  }
+
+  .footer-license-icons {
+    gap: 7px;
+  }
 }

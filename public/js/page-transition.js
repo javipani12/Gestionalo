@@ -23,6 +23,13 @@
     const target = event.target;
     if (!(target instanceof Element)) return;
 
+    const blankAnchor = target.closest('a[target="_blank"]');
+    if (blankAnchor instanceof HTMLAnchorElement) {
+      event.preventDefault();
+      window.open(blankAnchor.href, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
     const anchor = target.closest('a.js-page-transition');
     if (anchor && !shouldSkipLink(anchor)) {
       event.preventDefault();

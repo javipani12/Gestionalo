@@ -12,6 +12,7 @@ class ComposerStaticInitecd0d84d90339e11902c4ff0a8cb5d31
         'DashboardController' => __DIR__ . '/../..' . '/app/controllers/DashboardController.php',
         'Database' => __DIR__ . '/../..' . '/config/Database.php',
         'HomeController' => __DIR__ . '/../..' . '/app/controllers/HomeController.php',
+        'LegalController' => __DIR__ . '/../..' . '/app/controllers/LegalController.php',
         'TransactionController' => __DIR__ . '/../..' . '/app/controllers/TransactionController.php',
         'TranstactionModel' => __DIR__ . '/../..' . '/app/models/TranstactionModel.php',
         'UserModel' => __DIR__ . '/../..' . '/app/models/UserModel.php',

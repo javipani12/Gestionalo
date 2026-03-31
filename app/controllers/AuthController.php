@@ -42,6 +42,23 @@
                     $_SESSION['error'] = 'Los campos obligatorios no pueden estar vacíos.';
                     require_once './../app/views/auth/register.php';
                     return;
+                } elseif ($fecha_nacimiento) {
+                    $fecha_nacimiento_obj = DateTimeImmutable::createFromFormat('Y-m-d', $fecha_nacimiento);
+                    $fecha_valida = $fecha_nacimiento_obj
+                        && $fecha_nacimiento_obj->format('Y-m-d') === $fecha_nacimiento;
+
+                    if (!$fecha_valida) {
+                        $_SESSION['error'] = 'La fecha de nacimiento no es válida.';
+                        require_once './../app/views/auth/register.php';
+                        return;
+                    }
+
+                    $fecha_limite_mayoria_edad = (new DateTimeImmutable('today'))->modify('-18 years');
+                    if ($fecha_nacimiento_obj > $fecha_limite_mayoria_edad) {
+                        $_SESSION['error'] = 'Debes tener al menos 18 años para registrarte.';
+                        require_once './../app/views/auth/register.php';
+                        return;
+                    }
                 } elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
                     $_SESSION['error'] = 'El correo electrónico no es válido.';
                     require_once './../app/views/auth/register.php';
@@ -52,6 +69,10 @@
                     return;
                 } elseif (!$privacidad) {
                     $_SESSION['error'] = 'Debes aceptar la política de privacidad.';
+                    require_once './../app/views/auth/register.php';
+                    return;
+                } elseif (!$consentimiento) {
+                    $_SESSION['error'] = 'Debes aceptar el consentimiento sobre el tratamiento de datos.';
                     require_once './../app/views/auth/register.php';
                     return;
                 } else {
@@ -108,7 +129,9 @@
                             'nombre' => $usuario['nombre'],
                             'rol' => $usuario['nombre_rol']
                         ];
-                        header("Location: ?controller=dashboard&action=mostrarDashboard");
+                        ($_SESSION['usuario']['rol'] === 'admin') 
+                            ? header("Location: ?controller=admin&action=mostrarAdmin")
+                            : header("Location: ?controller=dashboard&action=mostrarDashboard");
                         exit();
                     }
                 }
