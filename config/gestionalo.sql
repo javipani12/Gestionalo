@@ -16,11 +16,11 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
--- Base de datos: `gestionalo` (esquema revisado)
+-- Base de datos: `gestionalo`
 CREATE DATABASE IF NOT EXISTS `gestionalo` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `gestionalo`;
 
--- Tablas lookup (valores en español)
+-- Tablas lookup
 CREATE TABLE IF NOT EXISTS `roles` (
   `id_rol` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(50) NOT NULL,

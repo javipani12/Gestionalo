@@ -45,15 +45,14 @@
 
             <div class="dashboard-col">
                 <section class="dashboard-card">
-                    <!-- Fila superior: Objetivos actuales -->
-                    <h2>Objetivos actuales</h2>
-                    <p class="muted">Cantidad ahorrada | Cantidad restante | % alcanzado</p>
+                    <!-- Fila superior: Gráficos de rosco de balance mensual -->
+                    <h2>Balance mensual</h2>
                 </section>
 
                 <section class="dashboard-card">
-                    <!-- Fila inferior: Gráficos de progreso -->
-                    <h2>Últimos informes</h2>
-                    <p class="muted">Título | Fecha | Enlace de descarga</p>
+                    <!-- Fila inferior: Objetivos actuales -->
+                    <h2>Objetivos actuales</h2>
+                    <p class="muted">Cantidad ahorrada | Cantidad restante | % alcanzado</p>
                 </section>
             </div>
         </div>

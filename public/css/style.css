@@ -910,10 +910,109 @@ label {
   margin-bottom: 12px;
 }
 
+.transactions-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 10px 16px;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
 .transactions-table-wrap {
   overflow-x: auto;
   border: 1px solid rgba(1, 10, 18, 0.12);
   border-radius: 12px;
+}
+
+.transactions-summary-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 12px;
+}
+
+.transactions-summary-head {
+  display: block;
+}
+
+.transactions-summary-text {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.transaction-search {
+  display: grid;
+  grid-template-columns: minmax(180px, 2fr) repeat(3, minmax(110px, 1fr)) repeat(2, minmax(140px, 1fr)) minmax(120px, 1fr) auto auto;
+  align-items: end;
+  gap: 8px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.transaction-search__input {
+  width: 100%;
+  min-width: 0;
+}
+
+.transaction-search__select,
+.transaction-search__date {
+  width: 100%;
+  min-width: 0;
+}
+
+.transaction-search__date-group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.transaction-search__date-group legend {
+  margin: 0 0 4px;
+  padding: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(1, 10, 18, 0.62);
+  line-height: 1;
+}
+
+.transaction-search__button {
+  display: inline-flex;
+  width: auto;
+  white-space: nowrap;
+  align-self: end;
+}
+
+.transaction-search__reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  white-space: nowrap;
+  align-self: end;
+}
+
+.transactions-sort-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: rgba(1, 10, 18, 0.74);
+  text-decoration: none;
+}
+
+.transactions-sort-link:hover {
+  color: var(--color-primary-75);
+}
+
+.transactions-sort-link--active {
+  color: var(--color-primary);
+  font-weight: 700;
 }
 
 .transactions-table {
@@ -1040,6 +1139,64 @@ label {
   border-color: rgba(239, 84, 93, 0.45);
 }
 
+.transactions-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid rgba(1, 10, 18, 0.08);
+}
+
+.transactions-pagination__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid var(--color-primary-25);
+  background: #fff;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
+}
+
+.transactions-pagination__link:hover {
+  background: var(--color-primary-25);
+  border-color: var(--color-primary-50);
+  color: var(--text);
+}
+
+.transactions-pagination__link:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-25);
+}
+
+.transactions-pagination__link--active {
+  background: var(--color-aux);
+  border-color: var(--color-aux);
+  color: var(--text);
+}
+
+.transactions-pagination__link--disabled {
+  background: var(--disabled-bg);
+  border-color: var(--color-primary-25);
+  color: var(--text);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.transactions-pagination__ellipsis {
+  color: rgba(1, 10, 18, 0.54);
+  font-weight: 700;
+}
+
 /* -----------------------------------------
    FORMULARIO DE TRANSACCIONES
    Bloques por secciones con layout responsive
@@ -1149,6 +1306,50 @@ label {
 @media (max-width: 600px) {
   .transaction-form__section {
     padding: 12px;
+  }
+
+  .transactions-summary-head {
+    display: block;
+  }
+
+  .transactions-summary-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .transaction-search {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    width: 100%;
+    padding: 0;
+  }
+
+  .transaction-search__input,
+  .transaction-search__select,
+  .transaction-search__date {
+    max-width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .transaction-search__button,
+  .transaction-search__reset {
+    width: 100%;
+    text-align: center;
+  }
+
+  .transactions-pagination {
+    justify-content: center;
+    gap: 6px;
+    padding: 10px;
+  }
+
+  .transactions-pagination__link {
+    min-width: 32px;
+    height: 32px;
+    font-size: 0.84rem;
   }
 
   .transaction-form .form-nav {

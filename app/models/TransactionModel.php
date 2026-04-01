@@ -6,6 +6,183 @@
             $database = new Database();
             $this->db = $database->conectar();
         }
+
+        /**
+         * Obtiene transacciones paginadas de un usuario con filtros y ordenación
+         */
+        public function obtenerTransaccionesPaginadasPorUsuario(
+            $id_usuario,
+            $limite,
+            $offset,
+            $filtros = [],
+            $ordenCampo = 'fecha',
+            $ordenDireccion = 'desc'
+        ) {
+            $condiciones = ['t.id_usuario = :id_usuario'];
+            $parametros = [
+                [
+                    'nombre' => ':id_usuario',
+                    'valor' => (int)$id_usuario,
+                    'tipo' => PDO::PARAM_INT
+                ]
+            ];
+
+            $this->agregarFiltros($condiciones, $parametros, $filtros);
+            $ordenSql = $this->obtenerOrdenSql($ordenCampo, $ordenDireccion);
+
+            $sql =
+                "SELECT
+                    t.id_transaccion,
+                    tm.nombre AS tipo_movimiento,
+                    c.nombre_categoria,
+                    s.nombre_subcategoria,
+                    t.concepto,
+                    t.fecha_movimiento,
+                    mp.nombre AS metodo_pago,
+                    t.importe
+                FROM transacciones t
+                INNER JOIN tipos_movimiento tm ON t.id_tipo = tm.id_tipo
+                INNER JOIN categorias c ON t.id_categoria = c.id_categoria
+                INNER JOIN subcategorias s ON t.id_subcategoria = s.id_subcategoria
+                INNER JOIN metodos_pago mp ON t.id_metodo = mp.id_metodo
+                WHERE " . implode(' AND ', $condiciones) . "
+                ORDER BY " . $ordenSql . ", t.id_transaccion DESC
+                LIMIT :limite OFFSET :offset
+            ";
+
+            $stmt = $this->db->prepare($sql);
+
+            foreach($parametros as $parametro) {
+                $stmt->bindValue($parametro['nombre'], $parametro['valor'], $parametro['tipo']);
+            }
+
+            $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        /**
+         * Cuenta transacciones de un usuario con filtros
+         */
+        public function contarTransaccionesPorUsuario($id_usuario, $filtros = []) {
+            $condiciones = ['t.id_usuario = :id_usuario'];
+            $parametros = [
+                [
+                    'nombre' => ':id_usuario',
+                    'valor' => (int)$id_usuario,
+                    'tipo' => PDO::PARAM_INT
+                ]
+            ];
+
+            $this->agregarFiltros($condiciones, $parametros, $filtros);
+
+            $sql =
+                "SELECT COUNT(*) AS total
+                FROM transacciones t
+                WHERE " . implode(' AND ', $condiciones);
+
+            $stmt = $this->db->prepare($sql);
+
+            foreach($parametros as $parametro) {
+                $stmt->bindValue($parametro['nombre'], $parametro['valor'], $parametro['tipo']);
+            }
+
+            $stmt->execute();
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return (int)($resultado['total'] ?? 0);
+        }
+
+        /**
+         * Añade filtros opcionales a la consulta principal.
+         */
+        private function agregarFiltros(&$condiciones, &$parametros, $filtros) {
+            if(!empty($filtros['concepto'])) {
+                $condiciones[] = 't.concepto LIKE :concepto';
+                $parametros[] = [
+                    'nombre' => ':concepto',
+                    'valor' => '%' . $filtros['concepto'] . '%',
+                    'tipo' => PDO::PARAM_STR
+                ];
+            }
+
+            if(!empty($filtros['id_tipo'])) {
+                $condiciones[] = 't.id_tipo = :id_tipo';
+                $parametros[] = [
+                    'nombre' => ':id_tipo',
+                    'valor' => (int)$filtros['id_tipo'],
+                    'tipo' => PDO::PARAM_INT
+                ];
+            }
+
+            if(!empty($filtros['id_categoria'])) {
+                $condiciones[] = 't.id_categoria = :id_categoria';
+                $parametros[] = [
+                    'nombre' => ':id_categoria',
+                    'valor' => (int)$filtros['id_categoria'],
+                    'tipo' => PDO::PARAM_INT
+                ];
+            }
+
+            if(!empty($filtros['id_subcategoria'])) {
+                $condiciones[] = 't.id_subcategoria = :id_subcategoria';
+                $parametros[] = [
+                    'nombre' => ':id_subcategoria',
+                    'valor' => (int)$filtros['id_subcategoria'],
+                    'tipo' => PDO::PARAM_INT
+                ];
+            }
+
+            if(!empty($filtros['fecha_desde'])) {
+                $condiciones[] = 't.fecha_movimiento >= :fecha_desde';
+                $parametros[] = [
+                    'nombre' => ':fecha_desde',
+                    'valor' => $filtros['fecha_desde'],
+                    'tipo' => PDO::PARAM_STR
+                ];
+            }
+
+            if(!empty($filtros['fecha_hasta'])) {
+                $condiciones[] = 't.fecha_movimiento <= :fecha_hasta';
+                $parametros[] = [
+                    'nombre' => ':fecha_hasta',
+                    'valor' => $filtros['fecha_hasta'],
+                    'tipo' => PDO::PARAM_STR
+                ];
+            }
+
+            if(!empty($filtros['id_metodo'])) {
+                $condiciones[] = 't.id_metodo = :id_metodo';
+                $parametros[] = [
+                    'nombre' => ':id_metodo',
+                    'valor' => (int)$filtros['id_metodo'],
+                    'tipo' => PDO::PARAM_INT
+                ];
+            }
+        }
+
+        /**
+         * Genera un ORDER BY seguro a partir de campos permitidos.
+         */
+        private function obtenerOrdenSql($ordenCampo, $ordenDireccion) {
+            $camposPermitidos = [
+                'tipo' => 'tm.nombre',
+                'categoria' => 'c.nombre_categoria',
+                'subcategoria' => 's.nombre_subcategoria',
+                'concepto' => 't.concepto',
+                'fecha' => 't.fecha_movimiento',
+                'metodo' => 'mp.nombre',
+                'importe' => 't.importe'
+            ];
+
+            if(!isset($camposPermitidos[$ordenCampo])) {
+                $ordenCampo = 'fecha';
+            }
+
+            $direccion = strtolower((string)$ordenDireccion) === 'asc' ? 'ASC' : 'DESC';
+            return $camposPermitidos[$ordenCampo] . ' ' . $direccion;
+        }
         
         /**
          * Obtiene las transacciones de un usuario específico

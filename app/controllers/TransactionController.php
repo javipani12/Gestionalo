@@ -7,7 +7,105 @@
         public function mostrarTransaccionesUsuario(){
             $titulo = "Mis Transacciones";
             $transactionModel = new TransactionModel();
-            $transacciones = $transactionModel->obtenerTransaccionesPorUsuario($_SESSION['usuario']['id_usuario']);
+            $defaultDataModel = new DefaultDataModel();
+            $idUsuario = (int)$_SESSION['usuario']['id_usuario'];
+            $limitePorPagina = 10;
+            $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+            $paginaActual = max(1, $paginaActual);
+
+            $filtrosActivos = [
+                'concepto' => trim($_GET['concepto'] ?? ''),
+                'id_tipo' => (int)($_GET['id_tipo'] ?? 0),
+                'id_categoria' => (int)($_GET['id_categoria'] ?? 0),
+                'id_subcategoria' => (int)($_GET['id_subcategoria'] ?? 0),
+                'fecha_desde' => trim($_GET['fecha_desde'] ?? ''),
+                'fecha_hasta' => trim($_GET['fecha_hasta'] ?? ''),
+                'id_metodo' => (int)($_GET['id_metodo'] ?? 0)
+            ];
+
+            if($filtrosActivos['id_tipo'] < 0) {
+                $filtrosActivos['id_tipo'] = 0;
+            }
+
+            if($filtrosActivos['id_categoria'] < 0) {
+                $filtrosActivos['id_categoria'] = 0;
+            }
+
+            if($filtrosActivos['id_subcategoria'] < 0) {
+                $filtrosActivos['id_subcategoria'] = 0;
+            }
+
+            if($filtrosActivos['id_metodo'] < 0) {
+                $filtrosActivos['id_metodo'] = 0;
+            }
+
+            if(
+                $filtrosActivos['fecha_desde'] !== ''
+                && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $filtrosActivos['fecha_desde'])
+            ) {
+                $filtrosActivos['fecha_desde'] = '';
+            }
+
+            if(
+                $filtrosActivos['fecha_hasta'] !== ''
+                && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $filtrosActivos['fecha_hasta'])
+            ) {
+                $filtrosActivos['fecha_hasta'] = '';
+            }
+
+            if(
+                $filtrosActivos['fecha_desde'] !== ''
+                && $filtrosActivos['fecha_hasta'] !== ''
+                && $filtrosActivos['fecha_desde'] > $filtrosActivos['fecha_hasta']
+            ) {
+                $fechaTemporal = $filtrosActivos['fecha_desde'];
+                $filtrosActivos['fecha_desde'] = $filtrosActivos['fecha_hasta'];
+                $filtrosActivos['fecha_hasta'] = $fechaTemporal;
+            }
+
+            if(
+                $filtrosActivos['id_subcategoria'] > 0
+                && $filtrosActivos['id_categoria'] > 0
+                && !$defaultDataModel->validarSubcategoriaDeCategoria(
+                    $filtrosActivos['id_subcategoria'],
+                    $filtrosActivos['id_categoria']
+                )
+            ) {
+                $filtrosActivos['id_subcategoria'] = 0;
+            }
+
+            $camposOrdenPermitidos = ['tipo', 'categoria', 'subcategoria', 'concepto', 'fecha', 'metodo', 'importe'];
+            $ordenCampo = $_GET['orden_campo'] ?? 'fecha';
+            if(!in_array($ordenCampo, $camposOrdenPermitidos, true)) {
+                $ordenCampo = 'fecha';
+            }
+
+            $ordenDireccion = strtolower($_GET['orden_direccion'] ?? 'desc');
+            if($ordenDireccion !== 'asc' && $ordenDireccion !== 'desc') {
+                $ordenDireccion = 'desc';
+            }
+
+            $totalTransacciones = $transactionModel->contarTransaccionesPorUsuario($idUsuario, $filtrosActivos);
+            $totalPaginas = max(1, (int)ceil($totalTransacciones / $limitePorPagina));
+            if ($paginaActual > $totalPaginas) {
+                $paginaActual = $totalPaginas;
+            }
+
+            $offset = ($paginaActual - 1) * $limitePorPagina;
+            $transacciones = $transactionModel->obtenerTransaccionesPaginadasPorUsuario(
+                $idUsuario,
+                $limitePorPagina,
+                $offset,
+                $filtrosActivos,
+                $ordenCampo,
+                $ordenDireccion
+            );
+
+            $tiposMovimiento = $defaultDataModel->obtenerTodos('tipos_movimiento');
+            $categorias = $defaultDataModel->obtenerTodos('categorias');
+            $subcategorias = $defaultDataModel->obtenerSubcategoriasConCategoria();
+            $metodosPago = $defaultDataModel->obtenerTodos('metodos_pago');
+
             require_once './../app/views/transaction/transactions.php';
             exit();
         }
