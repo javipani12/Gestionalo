@@ -4,6 +4,7 @@
          * Muestra el formulario de login
          */
         public function mostrarLogin() {
+            $titulo = 'Gestionalo | Iniciar sesión';
             require_once './../app/views/auth/login.php';
         }
 
@@ -11,6 +12,7 @@
          * Muestra el formulario de registro
          */
         public function mostrarRegistro() {
+            $titulo = 'Gestionalo | Nuevo usuario';
             require_once './../app/views/auth/register.php';
         }
 

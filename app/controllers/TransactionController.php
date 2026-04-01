@@ -5,7 +5,7 @@
          * Muestra la lista de transacciones del usuario en la vista correspondiente
          */
         public function mostrarTransaccionesUsuario(){
-            $titulo = "Mis Transacciones";
+            $titulo = "Gestionalo | Mis Transacciones";
             $transactionModel = new TransactionModel();
             $defaultDataModel = new DefaultDataModel();
             $idUsuario = (int)$_SESSION['usuario']['id_usuario'];
@@ -114,7 +114,7 @@
          * Muestra el formulario para crear una nueva transacción
          */
         public function mostrarFormularioCrearTransaccion(){
-            $titulo = "Crear Transacción";
+            $titulo = "Gestionalo | Crear Transacción";
             $defaultDataModel = new DefaultDataModel();
             $categorias = $defaultDataModel->obtenerTodos('categorias');
             $subcategorias = $defaultDataModel->obtenerSubcategoriasConCategoria();
@@ -128,7 +128,7 @@
          * Muestra el formulario para editar una transacción existente
          */
         public function mostrarFormularioEditarTransaccion(){
-            $titulo = "Editar Transacción";
+            $titulo = "Gestionalo | Editar Transacción";
             $transactionModel = new TransactionModel();
             $defaultDataModel = new DefaultDataModel();
             $categorias = $defaultDataModel->obtenerTodos('categorias');

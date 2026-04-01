@@ -48,7 +48,23 @@
                 <li><a href="#" class="navbar__link">Agente IA</a></li>
                 <li><a href="#" class="navbar__link">Sobre nosotros</a></li>
                 <li><a href="#" class="navbar__link">Contacto</a></li>
-                <li><a href="#" class="navbar__link">Perfil</a></li>
+                <li class="navbar__item navbar__item--dropdown">
+                    <a href="?controller=profile&action=mostrarPerfil" class="navbar__link navbar__link--dropdown" aria-haspopup="true">
+                        Perfil
+                    </a>
+                    <ul class="navbar__dropdown" aria-label="Submenú de transacciones">
+                        <li>
+                            <a href="?controller=profile&action=mostrarPerfil" class="navbar__dropdown-link">
+                                Mi Perfil
+                            </a>
+                        </li>
+                        <li>
+                            <a href="?controller=auth&action=cerrarSesion" class="navbar__dropdown-link">
+                                Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </nav>
     </header>

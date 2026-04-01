@@ -13,6 +13,7 @@ return array(
     'DefaultDataModel' => $baseDir . '/app/models/DefaultDataModel.php',
     'HomeController' => $baseDir . '/app/controllers/HomeController.php',
     'LegalController' => $baseDir . '/app/controllers/LegalController.php',
+    'ProfileController' => $baseDir . '/app/controllers/ProfileController.php',
     'TransactionController' => $baseDir . '/app/controllers/TransactionController.php',
     'TransactionModel' => $baseDir . '/app/models/TransactionModel.php',
     'UserModel' => $baseDir . '/app/models/UserModel.php',

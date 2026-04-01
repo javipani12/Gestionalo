@@ -52,6 +52,30 @@
         }
 
         /**
+         * Comprueba si la contraseña actual ingresada por el usuario es la misma 
+         * que la almacenada en la base de datos. Se usará a la hora de actualizar
+         * la contraseña
+        */
+        public function comprobarContrasennaActual($id_usuario, $passwd) {
+            $sql = "SELECT contrasenna_hash 
+                FROM contrasenas 
+                WHERE id_usuario = :id_usuario
+                LIMIT 1
+            ";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id_usuario', $id_usuario, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $contrasenna = $stmt->fetch();
+            if ($contrasenna && password_verify($passwd, $contrasenna['contrasenna_hash'])) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        /**
          * Devuelve el usuario actual una vez se ha validado el login.
          */
         public function obtenerUsuarioActual($correo) {
@@ -105,6 +129,46 @@
             } else {
                 return false;
             }
+        }
+
+        /**
+         * Actualiza los datos de un usuario existente en la base de datos.
+         */
+        public function actualizarUsuario($id_usuario, $nombre, $apellido1, $apellido2, $localidad, 
+        $fecha_nacimiento) 
+        {
+            $sql = "UPDATE usuarios 
+                    SET 
+                        nombre = :nombre, 
+                        apellido1 = :apellido1, 
+                        apellido2 = :apellido2, 
+                        localidad = :localidad, 
+                        fecha_nacimiento = :fecha_nacimiento,
+                        updated_at = CURRENT_TIMESTAMP
+                    WHERE id_usuario = :id_usuario
+            ";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id_usuario', $id_usuario, PDO::PARAM_INT);
+            $stmt->bindValue(':nombre', $nombre, PDO::PARAM_STR);
+            $stmt->bindValue(':apellido1', $apellido1, PDO::PARAM_STR);
+            $stmt->bindValue(':apellido2', $apellido2, PDO::PARAM_STR);
+            $stmt->bindValue(':localidad', $localidad, PDO::PARAM_STR);
+            $stmt->bindValue(':fecha_nacimiento', $fecha_nacimiento, PDO::PARAM_STR);
+            return $stmt->execute();
+        }
+
+        /**
+         * Actualiza la contraseña de un usuario existente en la base de datos
+         */
+        public function actualizarContrasenaUsuario($id_usuario, $hash_contrasena) {
+            $sql = "UPDATE contrasenas 
+                    SET contrasenna_hash = :contrasenna_hash 
+                    WHERE id_usuario = :id_usuario
+            ";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id_usuario', $id_usuario, PDO::PARAM_INT);
+            $stmt->bindValue(':contrasenna_hash', $hash_contrasena, PDO::PARAM_STR);
+            return $stmt->execute();
         }
 
         /**

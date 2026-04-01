@@ -101,5 +101,6 @@
 
     <script src="./js/register.js"></script>
   </div>
+  <script src="./js/alerts.js" defer></script>
 </body>
 </html>

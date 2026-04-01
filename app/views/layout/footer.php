@@ -16,5 +16,7 @@
             </div>
         </div>
     </footer>
+
+<script src="./js/alerts.js" defer></script>
 </body>
 </html>

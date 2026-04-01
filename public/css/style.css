@@ -846,56 +846,40 @@ label {
   border-bottom: 1px solid rgba(1, 10, 18, 0.1);
 }
 
-.transaction-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* -----------------------------------------
+   PERFIL
+   Vista de datos personales y edición
+   ----------------------------------------- */
+.profile-page .transactions-toolbar {
+  margin-bottom: 16px;
 }
 
-.transaction-list li {
+.profile-card {
+  border: 2px solid rgba(1, 10, 18, 0.2);
+}
+
+.profile-grid {
   display: grid;
-  grid-template-columns: 1.1fr 1.1fr 1.6fr 0.8fr 0.8fr;
-  gap: 0;
-  border-bottom: 1px solid rgba(1, 10, 18, 0.08);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
 }
 
-.transaction-list li.dashboard-tx-row--ingreso {
-  background: rgba(44, 196, 134, 0.10);
+.profile-field {
+  min-width: 0;
 }
 
-.transaction-list li.dashboard-tx-row--gasto {
-  background: rgba(239, 84, 93, 0.10);
+.profile-field--full {
+  grid-column: 1 / -1;
 }
 
-.transaction-list li:last-child {
-  border-bottom: 0;
+.profile-actions {
+  margin-top: 20px;
 }
 
-.transaction-list li:hover {
-  filter: brightness(0.98);
-}
-
-.tx-cell {
-  padding: 10px 12px;
-  font-size: 0.92rem;
-}
-
-.tx-cell--categoria {
-  font-weight: 700;
-}
-
-.tx-cell--concepto {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.tx-cell--importe {
-  font-weight: 700;
-}
-
-.is-right {
-  text-align: right;
+@media (max-width: 720px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* -----------------------------------------
@@ -1195,6 +1179,58 @@ label {
 .transactions-pagination__ellipsis {
   color: rgba(1, 10, 18, 0.54);
   font-weight: 700;
+}
+
+.transaction-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.transaction-list li {
+  display: grid;
+  grid-template-columns: 1.1fr 1.1fr 1.6fr 0.8fr 0.8fr;
+  gap: 0;
+  border-bottom: 1px solid rgba(1, 10, 18, 0.08);
+}
+
+.transaction-list li.dashboard-tx-row--ingreso {
+  background: rgba(44, 196, 134, 0.10);
+}
+
+.transaction-list li.dashboard-tx-row--gasto {
+  background: rgba(239, 84, 93, 0.10);
+}
+
+.transaction-list li:last-child {
+  border-bottom: 0;
+}
+
+.transaction-list li:hover {
+  filter: brightness(0.98);
+}
+
+.tx-cell {
+  padding: 10px 12px;
+  font-size: 0.92rem;
+}
+
+.tx-cell--categoria {
+  font-weight: 700;
+}
+
+.tx-cell--concepto {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tx-cell--importe {
+  font-weight: 700;
+}
+
+.is-right {
+  text-align: right;
 }
 
 /* -----------------------------------------
