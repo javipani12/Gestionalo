@@ -4,7 +4,7 @@
 
     <div class="dashboard-page profile-page">
         <div class="transactions-toolbar">
-            <h1>Mi perfil</h1>
+            <h1>Estos son tus datos de perfil <?= htmlspecialchars($_SESSION['usuario']['nombre'] ?? '') ?></h1>
             <button type="button" class="btn" id="profile-edit-btn">Editar</button>
         </div>
 
@@ -47,6 +47,7 @@
                     <div class="profile-field">
                         <label for="email">Correo electrónico</label>
                         <input id="email" name="email" type="email" value="<?= htmlspecialchars($datosUsuario['email'] ?? '') ?>" disabled>
+                        <p class="muted">Para cambiar el correo electrónico, abre una nueva consulta <a class="link" href="?controller=contact&action=mostrarCrearConsulta">aquí</a>.</p>
                     </div>
 
                     <div class="profile-field profile-field--full">
@@ -56,11 +57,15 @@
                     </div>
                 </div>
 
-                <div class="form-nav profile-actions" id="profile-actions" hidden>
-                    <button type="button" class="btn btn-volver" id="profile-cancel-btn">Cancelar</button>
-                    <button type="submit" class="btn btn-enviar">Guardar cambios</button>
-                </div>
             </form>
+
+            <div class="form-nav profile-actions" id="profile-actions" hidden>
+                <form action="?controller=profile&action=eliminarCuenta" method="post" class="profile-delete"
+                    onsubmit="return confirm('¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer.');">
+                    <button type="submit" class="btn btn-danger">Eliminar cuenta</button>
+                </form>
+                <button type="submit" form="profile-form" class="btn btn-enviar" id="profile-save-btn" disabled>Guardar cambios</button>
+            </div>
         </section>
     </div>
 

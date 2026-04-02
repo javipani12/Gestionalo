@@ -115,7 +115,11 @@
          */
         public function mostrarFormularioCrearTransaccion(){
             $titulo = "Gestionalo | Crear Transacción";
+            $transactionModel = new TransactionModel();
             $defaultDataModel = new DefaultDataModel();
+            $limiteDiarioTransacciones = 20;
+            $transaccionesHoy = $transactionModel->contarTransaccionesDiariasPorUsuario($_SESSION['usuario']['id_usuario']);
+            $puedeCrearTransaccion = $transaccionesHoy < $limiteDiarioTransacciones;
             $categorias = $defaultDataModel->obtenerTodos('categorias');
             $subcategorias = $defaultDataModel->obtenerSubcategoriasConCategoria();
             $tiposMovimiento = $defaultDataModel->obtenerTodos('tipos_movimiento');
@@ -148,6 +152,16 @@
         public function guardarTransaccion() {
             $transactionModel = new TransactionModel();
             $defaultDataModel = new DefaultDataModel();
+            $limiteDiarioTransacciones = 20;
+
+            if (empty($_POST['id_transaccion'])) {
+                $transaccionesHoy = $transactionModel->contarTransaccionesDiariasPorUsuario($_SESSION['usuario']['id_usuario']);
+                if ($transaccionesHoy >= $limiteDiarioTransacciones) {
+                    $_SESSION['error'] = "Has alcanzado el límite diario de {$limiteDiarioTransacciones} transacciones. Podrás crear más mañana.";
+                    header('Location: index.php?controller=transaction&action=mostrarFormularioCrearTransaccion');
+                    exit();
+                }
+            }
             // Recogemos los datos del formulario
             $datosTransaccion = [
                 'id_transaccion' => $_POST['id_transaccion'] ?? null,

@@ -19,6 +19,14 @@
                 'id' => 'id_estado',
                 'name' => 'nombre'
             ],
+            'estados_consulta' => [
+                'id' => 'id_estado',
+                'name' => 'nombre'
+            ],
+            'asuntos' => [
+                'id' => 'id_asunto',
+                'name' => 'nombre'
+            ],
             'roles' => [
                 'id' => 'id_rol',
                 'name' => 'nombre'

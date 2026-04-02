@@ -1,20 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
   var formulario = document.getElementById('profile-form');
   var botonEditar = document.getElementById('profile-edit-btn');
-  var botonCancelar = document.getElementById('profile-cancel-btn');
   var contenedorAcciones = document.getElementById('profile-actions');
+  var botonGuardar = document.getElementById('profile-save-btn');
 
-  if (!formulario || !botonEditar || !botonCancelar || !contenedorAcciones) {
-    return;
-  }
-
-  var botonGuardar = formulario.querySelector('button[type="submit"]');
-  if (!botonGuardar) {
+  if (!formulario || !botonEditar || !contenedorAcciones || !botonGuardar) {
     return;
   }
 
   var camposEditables = formulario.querySelectorAll('input[name="nombre"], input[name="apellido1"], input[name="apellido2"], input[name="localidad"], input[name="fecha_nacimiento"], input[name="passwd"]');
   var valoresIniciales = {};
+  var estaEnEdicion = false;
 
   camposEditables.forEach(function (campo) {
     valoresIniciales[campo.name] = campo.value;
@@ -32,9 +28,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     contenedorAcciones.hidden = !estaEnEdicion;
-    botonCancelar.disabled = !estaEnEdicion;
     botonGuardar.disabled = !estaEnEdicion;
-    botonEditar.disabled = estaEnEdicion;
+    botonEditar.textContent = estaEnEdicion ? 'Cancelar Edición' : 'Editar';
 
     if (estaEnEdicion) {
       var primerCampo = formulario.querySelector('input[name="nombre"]');
@@ -45,12 +40,15 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   botonEditar.addEventListener('click', function () {
-    establecerModoEdicion(true);
-  });
+    if (estaEnEdicion) {
+      restaurarValoresIniciales();
+      establecerModoEdicion(false);
+      estaEnEdicion = false;
+      return;
+    }
 
-  botonCancelar.addEventListener('click', function () {
-    restaurarValoresIniciales();
-    establecerModoEdicion(false);
+    establecerModoEdicion(true);
+    estaEnEdicion = true;
   });
 
   establecerModoEdicion(false);

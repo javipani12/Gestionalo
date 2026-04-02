@@ -95,6 +95,24 @@
         }
 
         /**
+         * Cuenta las transacciones creadas hoy por un usuario.
+         */
+        public function contarTransaccionesDiariasPorUsuario($id_usuario) {
+            $sql = "SELECT COUNT(*) AS total
+                FROM transacciones
+                WHERE id_usuario = :id_usuario
+                AND DATE(created_at) = CURDATE()
+            ";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id_usuario', (int)$id_usuario, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+            return (int)($resultado['total'] ?? 0);
+        }
+
+        /**
          * Añade filtros opcionales a la consulta principal.
          */
         private function agregarFiltros(&$condiciones, &$parametros, $filtros) {

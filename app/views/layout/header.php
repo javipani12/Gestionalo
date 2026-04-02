@@ -46,8 +46,24 @@
                 </li>
                 <li><a href="#" class="navbar__link">Herramientas</a></li>
                 <li><a href="#" class="navbar__link">Agente IA</a></li>
-                <li><a href="#" class="navbar__link">Sobre nosotros</a></li>
-                <li><a href="#" class="navbar__link">Contacto</a></li>
+                <li><a href="?controller=about&action=mostrarSobreNosotros" class="navbar__link">Sobre nosotros</a></li>
+                <li class="navbar__item navbar__item--dropdown">
+                    <a href="?controller=contact&action=mostrarMisConsultas" class="navbar__link navbar__link--dropdown" aria-haspopup="true">
+                        Contacto
+                    </a>
+                    <ul class="navbar__dropdown" aria-label="Submenú de transacciones">
+                        <li>
+                            <a href="?controller=contact&action=mostrarMisConsultas" class="navbar__dropdown-link">
+                                Mis Consultas
+                            </a>
+                        </li>
+                        <li>
+                            <a href="?controller=contact&action=mostrarCrearConsulta" class="navbar__dropdown-link">
+                                Nueva Consulta
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="navbar__item navbar__item--dropdown">
                     <a href="?controller=profile&action=mostrarPerfil" class="navbar__link navbar__link--dropdown" aria-haspopup="true">
                         Perfil

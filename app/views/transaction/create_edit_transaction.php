@@ -6,9 +6,17 @@
     if (!empty($transaccion['fecha_movimiento'])) {
         $fechaMovimiento = date('Y-m-d', strtotime($transaccion['fecha_movimiento']));
     }
+    $limiteDiarioTransacciones = $limiteDiarioTransacciones ?? 20;
+    $transaccionesHoy = $transaccionesHoy ?? 0;
+    $puedeCrearTransaccion = $puedeCrearTransaccion ?? true;
 ?>
     <div class="dashboard-page">
-        <h1><?= $titulo ?></h1>
+        <h1><?= $esEdicion ? 'Editar Transacción' : 'Crear Nueva Transacción' ?></h1>
+        <?php if (!$esEdicion && isset($transaccionesHoy, $limiteDiarioTransacciones) && !$puedeCrearTransaccion): ?>
+            <div class="alert error">Has alcanzado el límite diario de <?= (int)$limiteDiarioTransacciones ?> transacciones. Podrás crear más mañana.</div>
+        <?php elseif (!$esEdicion && isset($transaccionesHoy, $limiteDiarioTransacciones) && $transaccionesHoy > 0): ?>
+            <div class="alert success">Hoy has creado <?= (int)$transaccionesHoy ?> de <?= (int)$limiteDiarioTransacciones ?> transacciones permitidas.</div>
+        <?php endif; ?>
         <section class="dashboard-card dashboard-card--main">
             <form action="index.php?controller=transaction&action=guardarTransaccion" method="POST" class="transaction-form">
                 <input type="hidden" name="id_transaccion" value="<?= $transaccion['id_transaccion'] ?? '' ?>">
@@ -113,7 +121,7 @@
 
                 <div class="form-nav">
                     <button type="button" class="btn btn-volver" onclick="window.location.href='index.php?controller=transaction&action=mostrarTransaccionesUsuario'">Cancelar</button>
-                    <button type="submit" class="btn btn-enviar"><?= $esEdicion ? 'Actualizar transacción' : 'Crear transacción' ?></button>
+                    <button type="submit" class="btn btn-enviar" <?= (!$esEdicion && !$puedeCrearTransaccion) ? 'disabled' : '' ?>><?= $esEdicion ? 'Actualizar transacción' : 'Crear transacción' ?></button>
                 </div>
             </form>
         </section>

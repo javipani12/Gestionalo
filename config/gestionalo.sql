@@ -49,6 +49,20 @@ CREATE TABLE IF NOT EXISTS `estados_objetivo` (
   UNIQUE KEY `uq_estados_objetivo_nombre` (`nombre`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `estados_consulta` (
+  `id_estado` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id_estado`),
+  UNIQUE KEY `uq_estados_consulta_nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `asuntos` (
+  `id_asunto` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`id_asunto`),
+  UNIQUE KEY `uq_asuntos_nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `tipos_movimiento` (
   `id_tipo` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(50) NOT NULL,
@@ -67,6 +81,17 @@ INSERT INTO `tipos_informe` (`nombre`) VALUES
   ON DUPLICATE KEY UPDATE nombre=VALUES(nombre);
 INSERT INTO `estados_objetivo` (`nombre`) VALUES
   ('en curso'), ('completado'), ('cancelado')
+  ON DUPLICATE KEY UPDATE nombre=VALUES(nombre);
+INSERT INTO `estados_consulta` (`nombre`) VALUES
+  ('Enviada'), ('En Curso'), ('Finalizada')
+  ON DUPLICATE KEY UPDATE nombre=VALUES(nombre);
+INSERT INTO `asuntos` (`nombre`) VALUES
+  ('Cambio de correo electrónico'),
+  ('Cambio de contraseña'),
+  ('Problema técnico'),
+  ('Duda sobre transacciones'),
+  ('Sugerencia de mejora'),
+  ('Otra consulta')
   ON DUPLICATE KEY UPDATE nombre=VALUES(nombre);
 INSERT INTO `tipos_movimiento` (`nombre`) VALUES
   ('gasto'), ('ingreso')
@@ -227,6 +252,25 @@ CREATE TABLE `contrasenas` (
   PRIMARY KEY (`id_contrasena`),
   INDEX (`id_usuario`),
   CONSTRAINT `contrasenas_fk_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios`(`id_usuario`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Consultas de contacto al admin
+CREATE TABLE `consultas` (
+  `id_consulta` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id_usuario` INT UNSIGNED NOT NULL,
+  `id_asunto` INT UNSIGNED NOT NULL,
+  `comentario` TEXT NOT NULL,
+  `respuesta` TEXT DEFAULT NULL,
+  `id_estado` INT UNSIGNED NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id_consulta`),
+  INDEX (`id_usuario`),
+  INDEX (`id_asunto`),
+  INDEX (`id_estado`),
+  CONSTRAINT `consultas_fk_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios`(`id_usuario`) ON DELETE CASCADE,
+  CONSTRAINT `consultas_fk_asunto` FOREIGN KEY (`id_asunto`) REFERENCES `asuntos`(`id_asunto`) ON DELETE RESTRICT,
+  CONSTRAINT `consultas_fk_estado` FOREIGN KEY (`id_estado`) REFERENCES `estados_consulta`(`id_estado`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Transacciones (unifica ingresos y gastos)
