@@ -281,7 +281,7 @@ CREATE TABLE `transacciones` (
   `id_subcategoria` INT UNSIGNED DEFAULT NULL,
   `id_tipo` INT UNSIGNED NOT NULL, -- referencia a tipos_movimiento (gasto/ingreso/transferencia)
   `concepto` VARCHAR(255) DEFAULT NULL,
-  `fecha_movimiento` DATETIME NOT NULL,
+  `fecha_movimiento` DATE NOT NULL,
   `id_metodo` INT UNSIGNED DEFAULT NULL,
   `importe` DECIMAL(14,2) NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

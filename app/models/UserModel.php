@@ -97,6 +97,46 @@
         }
 
         /**
+         * Obtiene un usuario activo por ID.
+         */
+        public function obtenerUsuarioPorId($id_usuario) {
+            $sql = "SELECT u.id_usuario, u.nombre, u.apellido1, u.apellido2,
+                    u.localidad, u.fecha_nacimiento, u.email, r.nombre AS nombre_rol
+                FROM usuarios u
+                INNER JOIN roles r ON u.rol_id = r.id_rol
+                WHERE u.id_usuario = :id_usuario
+                AND u.eliminado = 0
+                LIMIT 1
+            ";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id_usuario', (int)$id_usuario, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $stmt->fetch();
+        }
+
+        /**
+         * Comprueba si un correo ya está en uso por otro usuario activo.
+         */
+        public function correoEnUsoPorOtroUsuario($id_usuario, $correo) {
+            $sql = "SELECT 1
+                FROM usuarios u
+                WHERE u.email = :correo
+                AND u.id_usuario <> :id_usuario
+                AND u.eliminado = 0
+                LIMIT 1
+            ";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':correo', $correo, PDO::PARAM_STR);
+            $stmt->bindValue(':id_usuario', (int)$id_usuario, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return (bool)$stmt->fetchColumn();
+        }
+
+        /**
          * Crea un nuevo usuario en la base de datos con los datos proporcionados y 
          * el hash de contraseña generado previamente.
          */
@@ -154,6 +194,40 @@
             $stmt->bindValue(':apellido2', $apellido2, PDO::PARAM_STR);
             $stmt->bindValue(':localidad', $localidad, PDO::PARAM_STR);
             $stmt->bindValue(':fecha_nacimiento', $fecha_nacimiento, PDO::PARAM_STR);
+            return $stmt->execute();
+        }
+
+        /**
+         * Actualiza los datos de un usuario y opcionalmente su correo electrónico.
+         */
+        public function actualizarUsuarioConEmail($id_usuario, $nombre, $apellido1, $apellido2, $localidad, $fecha_nacimiento, $email = null) {
+            $sql = "UPDATE usuarios
+                    SET
+                        nombre = :nombre,
+                        apellido1 = :apellido1,
+                        apellido2 = :apellido2,
+                        localidad = :localidad,
+                        fecha_nacimiento = :fecha_nacimiento,
+                        updated_at = CURRENT_TIMESTAMP";
+
+            if ($email !== null) {
+                $sql .= ", email = :email";
+            }
+
+            $sql .= " WHERE id_usuario = :id_usuario";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id_usuario', (int)$id_usuario, PDO::PARAM_INT);
+            $stmt->bindValue(':nombre', $nombre, PDO::PARAM_STR);
+            $stmt->bindValue(':apellido1', $apellido1, PDO::PARAM_STR);
+            $stmt->bindValue(':apellido2', $apellido2, PDO::PARAM_STR);
+            $stmt->bindValue(':localidad', $localidad, PDO::PARAM_STR);
+            $stmt->bindValue(':fecha_nacimiento', $fecha_nacimiento, PDO::PARAM_STR);
+
+            if ($email !== null) {
+                $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+            }
+
             return $stmt->execute();
         }
 

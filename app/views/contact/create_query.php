@@ -3,8 +3,6 @@
 ?>
 
     <div class="dashboard-page">
-        <h1>Crear nueva consulta</h1>
-
         <?php if(isset($_SESSION['correcto'])): ?>
             <div class="alert success"><?= htmlspecialchars($_SESSION['correcto']) ?></div>
         <?php unset($_SESSION['correcto']); endif; ?>
@@ -18,6 +16,7 @@
         <?php endif; ?>
 
         <section class="dashboard-card dashboard-card--main">
+            <h1>Crear nueva consulta</h1>
             <form action="index.php?controller=contact&action=enviarConsulta" method="POST" class="transaction-form">
                 <div class="transaction-form__grid">
                     <fieldset class="transaction-form__section">

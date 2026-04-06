@@ -8,7 +8,14 @@ document.addEventListener('DOMContentLoaded', function () {
     return;
   }
 
-  var camposEditables = formulario.querySelectorAll('input[name="nombre"], input[name="apellido1"], input[name="apellido2"], input[name="localidad"], input[name="fecha_nacimiento"], input[name="passwd"]');
+  var puedeEditarEmail = formulario.dataset.canEditEmail === '1';
+  var selectorCampos = 'input[name="nombre"], input[name="apellido1"], input[name="apellido2"], input[name="localidad"], input[name="fecha_nacimiento"], input[name="passwd"]';
+
+  if (puedeEditarEmail) {
+    selectorCampos += ', input[name="email"]';
+  }
+
+  var camposEditables = formulario.querySelectorAll(selectorCampos);
   var valoresIniciales = {};
   var estaEnEdicion = false;
 

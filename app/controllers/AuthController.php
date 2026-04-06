@@ -142,7 +142,7 @@
                             'rol' => $usuario['nombre_rol']
                         ];
                         ($_SESSION['usuario']['rol'] === 'admin') 
-                            ? header("Location: ?controller=admin&action=mostrarAdmin")
+                            ? header("Location: ?controller=admin&action=mostrarDashboardAdmin")
                             : header("Location: ?controller=dashboard&action=mostrarDashboard");
                         exit();
                     }

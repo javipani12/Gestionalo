@@ -2,9 +2,23 @@
     class ProfileController {
 
         public function mostrarPerfil() {
-            $titulo = 'Gestionalo | Mi Perfil';
             $userModel = new UserModel();
-            $datosUsuario = $userModel->obtenerUsuarioActual($_SESSION['usuario']['email']);
+            $id_usuario = (int)($_SESSION['usuario']['id_usuario'] ?? 0);
+            $datosUsuario = $userModel->obtenerUsuarioPorId($id_usuario);
+
+            if (!$datosUsuario) {
+                $_SESSION['error'] = 'No se han podido cargar tus datos de perfil.';
+                header('Location: ?controller=dashboard&action=mostrarDashboard');
+                exit();
+            }
+
+            if (($_SESSION['usuario']['rol'] ?? '') === 'admin') {
+                $titulo = 'Gestionalo | Perfil Admin';
+                require_once './../app/views/admin/profile/profile_admin.php';
+                return;
+            }
+
+            $titulo = 'Gestionalo | Mi Perfil';
             require_once './../app/views/profile/profile.php';
         }
 
@@ -14,24 +28,54 @@
          */
         public function actualizarPerfil() {
             $userModel = new UserModel();
-            $id_usuario = $_SESSION['usuario']['id_usuario'];
+            $id_usuario = (int)($_SESSION['usuario']['id_usuario'] ?? 0);
             $nombre = trim($_POST['nombre'] ?? '');
             $apellido1 = trim($_POST['apellido1'] ?? '');
             $apellido2 = trim($_POST['apellido2'] ?? '');
             $localidad = trim($_POST['localidad'] ?? '');
             $fecha_nacimiento = trim($_POST['fecha_nacimiento'] ?? '');
+            $email = trim($_POST['email'] ?? '');
             $passwd = $_POST['passwd'] ?? '';
+            $esAdmin = (($_SESSION['usuario']['rol'] ?? '') === 'admin');
 
             // Realizamos validaciones similares a las del registro
             if($nombre === '' || $apellido1 === '' || $apellido2 === '' || $localidad === '' || $fecha_nacimiento === '') {
                 $_SESSION['error'] = 'Los campos no pueden estar vacíos.';
                 header('Location: ?controller=profile&action=mostrarPerfil');
-                return;
+                exit();
+            }
+
+            if ($esAdmin) {
+                if ($email === '') {
+                    $_SESSION['error'] = 'El correo electrónico es obligatorio.';
+                    header('Location: ?controller=profile&action=mostrarPerfil');
+                    exit();
+                }
+
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $_SESSION['error'] = 'El formato del correo electrónico no es válido.';
+                    header('Location: ?controller=profile&action=mostrarPerfil');
+                    exit();
+                }
+
+                if ($userModel->correoEnUsoPorOtroUsuario($id_usuario, $email)) {
+                    $_SESSION['error'] = 'Ese correo electrónico ya está en uso.';
+                    header('Location: ?controller=profile&action=mostrarPerfil');
+                    exit();
+                }
             }
 
             if($userModel->comprobarContrasennaActual($id_usuario, $passwd) || $passwd === '') {
                 // Si es la misma contraseña o esta está vacía, no actualizamos el hash, solo los datos del usuario
-                if($userModel->actualizarUsuario($id_usuario, $nombre, $apellido1, $apellido2, $localidad, $fecha_nacimiento)){
+                if($userModel->actualizarUsuarioConEmail(
+                    $id_usuario,
+                    $nombre,
+                    $apellido1,
+                    $apellido2,
+                    $localidad,
+                    $fecha_nacimiento,
+                    $esAdmin ? $email : null
+                )){
                     $this->mostrarMensajeActualizarPerfil('correcto');
                 } else {
                     $this->mostrarMensajeActualizarPerfil('error');
@@ -42,7 +86,15 @@
                 $hash_contrasena = password_hash($passwd, PASSWORD_DEFAULT);
                 if(
                     $userModel->actualizarContrasenaUsuario($id_usuario, $hash_contrasena) && 
-                    $userModel->actualizarUsuario($id_usuario, $nombre, $apellido1, $apellido2, $localidad, $fecha_nacimiento)
+                    $userModel->actualizarUsuarioConEmail(
+                        $id_usuario,
+                        $nombre,
+                        $apellido1,
+                        $apellido2,
+                        $localidad,
+                        $fecha_nacimiento,
+                        $esAdmin ? $email : null
+                    )
                 ){
                     $this->mostrarMensajeActualizarPerfil('correcto');
                 } else {
@@ -76,7 +128,14 @@
         function mostrarMensajeActualizarPerfil($tipo){
             if($tipo === 'correcto') {
                 $userModel = new UserModel();
-                $usuario = $userModel->obtenerUsuarioActual($_SESSION['usuario']['email']);
+                $usuario = $userModel->obtenerUsuarioPorId((int)$_SESSION['usuario']['id_usuario']);
+
+                if (!$usuario) {
+                    $_SESSION['error'] = 'No se han podido refrescar los datos de sesión.';
+                    header('Location: ?controller=profile&action=mostrarPerfil');
+                    exit();
+                }
+
                 session_regenerate_id(true);
                 // Actualizamos los datos de la sesión con la información más reciente del usuario
                 $_SESSION['usuario'] = [

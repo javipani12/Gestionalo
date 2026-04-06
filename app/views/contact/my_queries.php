@@ -3,13 +3,6 @@
 ?>
 
     <div class="dashboard-page">
-        <div class="transactions-toolbar">
-            <h1>Estas son tus consultas <?= htmlspecialchars($_SESSION['usuario']['nombre']) ?></h1>
-            <button class="btn transactions-action-btn transaction-search__reset" type="button"
-                onclick="window.location.href='index.php?controller=contact&action=mostrarCrearConsulta'">
-                Nueva consulta
-            </button>
-        </div>
 
         <?php if(isset($_SESSION['correcto'])): ?>
             <div class="alert success"><?= htmlspecialchars($_SESSION['correcto']) ?></div>
@@ -20,6 +13,13 @@
         <?php unset($_SESSION['error']); endif; ?>
 
         <section class="dashboard-card dashboard-card--main">
+            <div class="transactions-toolbar">
+                <h1>Estas son tus consultas <?= htmlspecialchars($_SESSION['usuario']['nombre']) ?></h1>
+                <button class="btn transactions-action-btn transaction-search__reset" type="button"
+                    onclick="window.location.href='index.php?controller=contact&action=mostrarCrearConsulta'">
+                    Nueva consulta
+                </button>
+            </div>
             <div class="transactions-table-wrap">
                 <div class="transactions-summary-bar">
                     <p class="muted text-center">Tambien puedes enviar tus consultas al correo electrónico: gestionalo2026@gmail.com</p>

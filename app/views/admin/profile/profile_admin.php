@@ -1,5 +1,5 @@
 <?php
-    require_once './../app/views/layout/header.php';
+    require_once './../app/views/layout/header_admin.php';
 ?>
 
     <div class="dashboard-page profile-page">
@@ -18,7 +18,7 @@
                 <button type="button" class="btn" id="profile-edit-btn">Editar</button>
             </div>
             <div class="profile-form-card">
-                <form action="?controller=profile&action=actualizarPerfil" method="post" id="profile-form" data-can-edit-email="0" novalidate>
+                <form action="?controller=profile&action=actualizarPerfil" method="post" id="profile-form" data-can-edit-email="1" novalidate>
                     <div class="profile-grid">
                         <div class="profile-field">
                             <label for="nombre">Nombre</label>
@@ -47,8 +47,8 @@
 
                         <div class="profile-field">
                             <label for="email">Correo electrónico</label>
-                            <input id="email" name="email" type="email" value="<?= htmlspecialchars($datosUsuario['email'] ?? '') ?>" disabled>
-                            <p class="muted">Para cambiar el correo electrónico, abre una nueva consulta <a class="link" href="?controller=contact&action=mostrarCrearConsulta">aquí</a>.</p>
+                            <input id="email" name="email" type="email" value="<?= htmlspecialchars($datosUsuario['email'] ?? '') ?>" disabled required>
+                            <p class="muted">Como administrador puedes actualizar también el correo electrónico.</p>
                         </div>
 
                         <div class="profile-field profile-field--full">

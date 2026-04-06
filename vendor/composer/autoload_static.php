@@ -8,6 +8,8 @@ class ComposerStaticInitecd0d84d90339e11902c4ff0a8cb5d31
 {
     public static $classMap = array (
         'AboutController' => __DIR__ . '/../..' . '/app/controllers/AboutController.php',
+        'AdminController' => __DIR__ . '/../..' . '/app/controllers/AdminController.php',
+        'AdminModel' => __DIR__ . '/../..' . '/app/models/AdminModel.php',
         'AuthController' => __DIR__ . '/../..' . '/app/controllers/AuthController.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'ContactController' => __DIR__ . '/../..' . '/app/controllers/ContactController.php',

@@ -231,9 +231,9 @@
         }
 
         /**
-         * Obtiene las últimas 10 transacciones de un usuario específico
+         * Obtiene las últimas transacciones de un usuario específico
          */
-        public function obtenerUltimasDiezTransacciones($id_usuario) {
+        public function obtenerUltimasTransacciones($id_usuario, $limite = 10) {
             $sql = 
                 "SELECT
                     tm.nombre AS tipo_movimiento,
@@ -249,10 +249,11 @@
                 INNER JOIN tipos_movimiento tm ON t.id_tipo = tm.id_tipo
                 WHERE id_usuario = :id_usuario
                 ORDER BY fecha_movimiento DESC
-                LIMIT 10
+                LIMIT :limite
             ";
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':id_usuario', $id_usuario, PDO::PARAM_INT);
+            $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }

@@ -15,16 +15,6 @@
 <body>
     <header class="header">
         <nav class="navbar">
-            <!--
-                Inicio
-                Transacciones
-                Herramientas
-                Agente IA
-                Contacto (dropdown con opciones: Nueva consulta, Mis consultas)
-                Sobre nosotros
-                Icono perfil (dropdown con opciones: Ver perfil, Cerrar sesión)
-            -->
-
             <ul class="navbar__menu">
                 <li><a href="?controller=dashboard&action=mostrarDashboard" class="navbar__link">Inicio</a></li>
                 <li class="navbar__item navbar__item--dropdown">

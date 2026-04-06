@@ -117,7 +117,7 @@ Este proyecto está bajo la licencia especificada en el archivo [LICENSE](LICENS
 
 ## 👤 Autor
 
-Desarrollado como proyecto de gestión de transacciones personales.
+Desarrollado por Javier Fernández Paniagua, como Proyecto de Fin de Grado para el Ciclo Formativo de Grado Superior en Desarrollo de Aplicaciones Web.
 
 ## 📞 Soporte
 

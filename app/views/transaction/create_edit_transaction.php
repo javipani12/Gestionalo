@@ -11,13 +11,13 @@
     $puedeCrearTransaccion = $puedeCrearTransaccion ?? true;
 ?>
     <div class="dashboard-page">
-        <h1><?= $esEdicion ? 'Editar Transacción' : 'Crear Nueva Transacción' ?></h1>
         <?php if (!$esEdicion && isset($transaccionesHoy, $limiteDiarioTransacciones) && !$puedeCrearTransaccion): ?>
             <div class="alert error">Has alcanzado el límite diario de <?= (int)$limiteDiarioTransacciones ?> transacciones. Podrás crear más mañana.</div>
         <?php elseif (!$esEdicion && isset($transaccionesHoy, $limiteDiarioTransacciones) && $transaccionesHoy > 0): ?>
             <div class="alert success">Hoy has creado <?= (int)$transaccionesHoy ?> de <?= (int)$limiteDiarioTransacciones ?> transacciones permitidas.</div>
         <?php endif; ?>
         <section class="dashboard-card dashboard-card--main">
+            <h1><?= $esEdicion ? 'Editar Transacción' : 'Crear Nueva Transacción' ?></h1>
             <form action="index.php?controller=transaction&action=guardarTransaccion" method="POST" class="transaction-form">
                 <input type="hidden" name="id_transaccion" value="<?= $transaccion['id_transaccion'] ?? '' ?>">
                 <div class="transaction-form__grid">
