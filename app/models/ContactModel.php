@@ -24,6 +24,22 @@
             return (int)$stmt->fetchColumn();
         }
 
+
+        /**
+         * Cuenta el total de consultas enviadas.
+         */
+        public function contarTodasConsultas() {
+            $sql = 
+                "SELECT COUNT(*) AS total
+                FROM consultas
+            ";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+
+            return (int)$stmt->fetchColumn();
+        }
+
         /**
          * Cuenta cuántas consultas ha enviado hoy un usuario específico.
          */
@@ -73,6 +89,36 @@
         }
 
         /**
+         * Obtiene todas las consultas de la aplicación paginadas, permitiendo navegar por el historial
+         * sin cargar todos los registros de una sola vez.
+         */
+        public function obtenerTodasConsultasPaginadas($limite, $offset) {
+            $sql = 
+                "SELECT 
+                    c.id_consulta, 
+                    c.created_at AS fecha_creacion,
+                    a.nombre AS asunto,
+                    c.comentario,  
+                    c.respuesta,
+                    ec.nombre AS estado,
+                    u.email AS email_usuario
+                FROM consultas c
+                INNER JOIN asuntos a ON c.id_asunto = a.id_asunto
+                INNER JOIN estados_consulta ec ON c.id_estado = ec.id_estado
+                INNER JOIN usuarios u ON c.id_usuario = u.id_usuario
+                ORDER BY c.created_at DESC
+                LIMIT :limite OFFSET :offset
+            ";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':limite', (int)$limite, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        /**
          * Permite a un usuario enviar una nueva consulta al equipo de soporte,
          */
         public function crearConsulta($idUsuario, $idAsunto, $comentario) {
@@ -94,14 +140,17 @@
             $sql = 
                 "SELECT 
                     c.id_consulta, 
+                    c.id_estado,
                     c.created_at AS fecha_creacion,
                     a.nombre AS asunto,
                     c.comentario,  
                     c.respuesta,
-                    ec.nombre AS estado
+                    ec.nombre AS estado,
+                    u.email AS email_usuario
                 FROM consultas c
                 INNER JOIN asuntos a ON c.id_asunto = a.id_asunto
                 INNER JOIN estados_consulta ec ON c.id_estado = ec.id_estado
+                INNER JOIN usuarios u ON c.id_usuario = u.id_usuario
                 WHERE c.id_consulta = :id_consulta
             ";
 

@@ -41,8 +41,8 @@
                     </article>
 
                     <article class="dashboard-stat-card dashboard-stat-card--accent">
-                        <span class="dashboard-stat-label">Transacciones del mes</span>
-                        <strong class="dashboard-stat-value"><?= number_format((int)($dashboardStats['transacciones_mes'] ?? 0), 0, ',', '.') ?></strong>
+                        <span class="dashboard-stat-label">Total de transacciones</span>
+                        <strong class="dashboard-stat-value"><?= number_format((int)($dashboardStats['transacciones_totales'] ?? 0), 0, ',', '.') ?></strong>
                     </article>
                 </div>
             </section>
@@ -86,8 +86,8 @@
                 <div class="dashboard-activity-grid">
                     <article class="dashboard-card dashboard-activity-card">
                         <div class="transactions-toolbar">
-                            <h3>Últimas 5 consultas</h3>
-                            <a class="btn transactions-action-btn" href="#">Ir a consultas generadas</a>
+                            <h3>Últimas 10 consultas</h3>
+                            <a class="btn transactions-action-btn" href="?controller=admin&action=mostrarConsultasAdmin">Ir a consultas generadas</a>
                         </div>
                         <?php if (!empty($ultimasConsultas)): ?>
                             <div class="dashboard-table-wrap">
@@ -121,45 +121,8 @@
                     </article>
 
                     <article class="dashboard-card dashboard-activity-card">
-                        <h3>Últimas 5 transacciones</h3>
-                        <?php if (!empty($ultimasTransacciones)): ?>
-                            <div class="dashboard-table-wrap">
-                                <table class="dashboard-table dashboard-table--recent-pair">
-                                    <thead>
-                                        <tr>
-                                            <th>Concepto</th>
-                                            <th>Usuario</th>
-                                            <th>Categoría</th>
-                                            <th>Importe</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($ultimasTransacciones as $transaccion): ?>
-                                            <?php $claseFilaMovimiento = (strtolower($transaccion['tipo_movimiento'] ?? '') === 'gasto') ? 'dashboard-row--gasto' : 'dashboard-row--ingreso'; ?>
-                                            <tr class="<?= $claseFilaMovimiento ?>">
-                                                <td>
-                                                    <strong><?= htmlspecialchars($transaccion['concepto'] ?? '-') ?></strong><br>
-                                                    <span class="muted"><?= htmlspecialchars(date('d/m/Y', strtotime($transaccion['fecha_movimiento'] ?? 'now'))) ?></span>
-                                                </td>
-                                                <td><?= htmlspecialchars(trim(($transaccion['nombre'] ?? '') . ' ' . ($transaccion['apellido1'] ?? ''))) ?></td>
-                                                <td>
-                                                    <span class="dashboard-pill"><?= htmlspecialchars($transaccion['nombre_categoria'] ?? 'Sin categoría') ?></span>
-                                                    <span class="muted dashboard-table__subtext"><?= htmlspecialchars($transaccion['nombre_subcategoria'] ?? '') ?></span>
-                                                </td>
-                                                <td><?= number_format((float)($transaccion['importe'] ?? 0), 2, ',', '.') ?> €</td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <?php else: ?>
-                            <p class="muted">No hay transacciones recientes.</p>
-                        <?php endif; ?>
-                    </article>
-
-                    <article class="dashboard-card dashboard-activity-card">
                         <div class="transactions-toolbar">
-                            <h3>Últimos 5 usuarios registrados</h3>
+                            <h3>Últimos 10 usuarios registrados</h3>
                             <a class="btn transactions-action-btn" href="#">Ir a gestión usuarios</a>
                         </div>
                         <?php if (!empty($ultimosUsuarios)): ?>
@@ -188,39 +151,6 @@
                         <?php endif; ?>
                     </article>
 
-                    <article class="dashboard-card dashboard-activity-card">
-                        <h3>Últimos 5 informes generados</h3>
-
-                        <?php if (!empty($ultimosInformes)): ?>
-                            <div class="dashboard-reports-grid">
-                                <?php foreach ($ultimosInformes as $informe): ?>
-                                    <article class="dashboard-report-card">
-                                        <div class="dashboard-report-card__head">
-                                            <div>
-                                                <span class="dashboard-stat-label"><?= htmlspecialchars($informe['tipo_informe'] ?? 'Informe') ?></span>
-                                                <strong><?= htmlspecialchars($informe['nombre_informe'] ?? 'Sin nombre') ?></strong>
-                                            </div>
-                                            <span class="dashboard-pill dashboard-pill--neutral">PDF</span>
-                                        </div>
-
-                                        <p class="muted dashboard-report-card__meta">
-                                            Generado por <?= htmlspecialchars(trim(($informe['nombre'] ?? '') . ' ' . ($informe['apellido1'] ?? ''))) ?>
-                                        </p>
-
-                                        <p class="muted dashboard-report-card__meta">
-                                            <?= !empty($informe['fecha_generacion']) ? date('d/m/Y H:i', strtotime($informe['fecha_generacion'])) : '-' ?>
-                                        </p>
-
-                                        <p class="dashboard-report-card__path">
-                                            <?= htmlspecialchars($informe['ruta_archivo'] ?? '') ?>
-                                        </p>
-                                    </article>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php else: ?>
-                            <p class="muted">No hay informes recientes.</p>
-                        <?php endif; ?>
-                    </article>
                 </div>
             </section>
         </section>

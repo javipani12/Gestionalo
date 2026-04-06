@@ -12,13 +12,21 @@
             <div class="alert error"><?= htmlspecialchars($_SESSION['error']) ?></div>
         <?php unset($_SESSION['error']); endif; ?>
 
+        <?php
+            $profileHeadingText = $profileHeading ?? ('Estos son tus datos de perfil ' . ($_SESSION['usuario']['nombre'] ?? ''));
+            $profileFormActionUrl = $profileFormAction ?? '?controller=profile&action=actualizarPerfil';
+            $isAdminEditingUser = (bool)($isAdminEditingUser ?? false);
+            $returnToGestionUsuarios = (bool)($returnToGestionUsuarios ?? false);
+            $backToGestionUsuariosUrl = $backToGestionUsuariosUrl ?? '';
+        ?>
+
         <section class="dashboard-card dashboard-card--main profile-card">
             <div class="transactions-toolbar">
-                <h1>Estos son tus datos de perfil <?= htmlspecialchars($_SESSION['usuario']['nombre'] ?? '') ?></h1>
+                <h1><?= htmlspecialchars($profileHeadingText) ?></h1>
                 <button type="button" class="btn" id="profile-edit-btn">Editar</button>
             </div>
             <div class="profile-form-card">
-                <form action="?controller=profile&action=actualizarPerfil" method="post" id="profile-form" data-can-edit-email="1" novalidate>
+                <form action="<?= htmlspecialchars($profileFormActionUrl) ?>" method="post" id="profile-form" data-can-edit-email="1" novalidate>
                     <div class="profile-grid">
                         <div class="profile-field">
                             <label for="nombre">Nombre</label>
@@ -61,10 +69,14 @@
                 </form>
                 </div>
                 <div class="form-nav profile-actions" id="profile-actions" hidden>
-                    <form action="?controller=profile&action=eliminarCuenta" method="post" class="profile-delete"
-                        onsubmit="return confirm('¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer.');">
-                        <button type="submit" class="btn btn-danger">Eliminar cuenta</button>
-                    </form>
+                    <?php if ($isAdminEditingUser && $returnToGestionUsuarios && !empty($backToGestionUsuariosUrl)): ?>
+                        <button class="btn btn-volver" onclick="window.location.href = '<?= htmlspecialchars($backToGestionUsuariosUrl) ?>'">Volver a gestión de usuarios</button>
+                    <?php elseif (!$isAdminEditingUser): ?>
+                        <form action="?controller=profile&action=eliminarCuenta" method="post" class="profile-delete"
+                            onsubmit="return confirm('¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer.');">
+                            <button type="submit" class="btn btn-danger">Eliminar cuenta</button>
+                        </form>
+                    <?php endif; ?>
                     <button type="submit" form="profile-form" class="btn btn-enviar" id="profile-save-btn" disabled>Guardar cambios</button>
                 </div>
         </section>

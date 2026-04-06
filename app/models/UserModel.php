@@ -258,5 +258,90 @@
             $stmt->bindValue(':id_usuario', $id_usuario, PDO::PARAM_INT);
             return $stmt->execute();
         }
+
+        /**
+         * Cuenta el número total de usuarios activos en el sistema, excluyendo los eliminados
+         */
+        public function contarUsuariosTotales() {
+            $sql = 
+                "SELECT COUNT(*) 
+                FROM usuarios 
+                WHERE eliminado = 0
+            ";
+
+            $stmt = $this->db->query($sql);
+            return (int)$stmt->fetchColumn();
+        }
+
+        /**
+         * Cuenta los usuarios activos aplicando un filtro opcional por correo.
+         */
+        public function contarUsuariosFiltrados($correo = '') {
+            $correo = trim((string)$correo);
+
+            $sql = "SELECT COUNT(*)
+                FROM usuarios u
+                WHERE u.eliminado = 0";
+
+            if ($correo !== '') {
+                $sql .= " AND u.email LIKE :correo";
+            }
+
+            $stmt = $this->db->prepare($sql);
+
+            if ($correo !== '') {
+                $stmt->bindValue(':correo', '%' . $correo . '%', PDO::PARAM_STR);
+            }
+
+            $stmt->execute();
+            return (int)$stmt->fetchColumn();
+        }
+
+        /**
+         * Función para obtener todos los usuarios activos en el sistema, excluyendo los eliminados
+         */
+        public function obtenerTodosUsuarios() {
+            $sql = 
+                "SELECT u.id_usuario, u.nombre, u.apellido1, u.apellido2, u.email, u.localidad, u.fecha_nacimiento, r.nombre AS rol
+                FROM usuarios u 
+                INNER JOIN roles r on u.rol_id = r.id_rol
+                WHERE eliminado = 0
+                ORDER BY u.fecha_registro DESC
+            ";
+
+            $stmt = $this->db->query($sql); 
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        /**
+         * Obtiene usuarios activos paginados con filtro opcional por correo.
+         */
+        public function obtenerUsuariosPaginados($limite, $offset, $correo = '') {
+            $correo = trim((string)$correo);
+
+            $sql = "SELECT u.id_usuario, u.nombre, u.apellido1, u.apellido2, u.email, u.localidad, u.fecha_nacimiento, r.nombre AS rol
+                FROM usuarios u
+                INNER JOIN roles r ON u.rol_id = r.id_rol
+                WHERE u.eliminado = 0";
+
+            if ($correo !== '') {
+                $sql .= " AND u.email LIKE :correo";
+            }
+
+            $sql .= " ORDER BY u.fecha_registro DESC
+                LIMIT :limite OFFSET :offset";
+
+            $stmt = $this->db->prepare($sql);
+
+            if ($correo !== '') {
+                $stmt->bindValue(':correo', '%' . $correo . '%', PDO::PARAM_STR);
+            }
+
+            $stmt->bindValue(':limite', (int)$limite, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
     }
 ?>

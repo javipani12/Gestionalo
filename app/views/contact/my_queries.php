@@ -22,7 +22,12 @@
             </div>
             <div class="transactions-table-wrap">
                 <div class="transactions-summary-bar">
-                    <p class="muted text-center">Tambien puedes enviar tus consultas al correo electrónico: gestionalo2026@gmail.com</p>
+                    <div class="transactions-summary-head">
+                        <p class="transactions-summary-text">
+                            Total de consultas: <?= (int)($totalConsultas ?? count($consultas ?? [])) ?>
+                        </p>
+                    </div>
+                    <p class="muted">Tambien puedes enviar tus consultas al correo electrónico: gestionalo2026@gmail.com</p>
                 </div>
                 <?php
                     $queryBase = [
@@ -35,7 +40,7 @@
                     };
                 ?>
                 <?php if (!empty($consultas)): ?>
-                    <table class="transactions-table">
+                    <table class="transactions-table queries-table">
                         <thead>
                             <tr>
                                 <th>Asunto</th>
@@ -61,10 +66,10 @@
                                 ?>
                                 <tr>
                                     <td><?= htmlspecialchars($consulta['asunto'] ?? '') ?></td>
-                                    <td class="tx-concepto" title="<?= htmlspecialchars($consulta['comentario'] ?? '') ?>">
+                                    <td class="tx-concepto query-text-cell" title="<?= htmlspecialchars($consulta['comentario'] ?? '') ?>">
                                         <?= htmlspecialchars($consulta['comentario'] ?? '') ?>
                                     </td>
-                                    <td class="tx-concepto" title="<?= htmlspecialchars($consulta['respuesta'] ?? '') ?>">
+                                    <td class="tx-concepto query-text-cell" title="<?= htmlspecialchars($consulta['respuesta'] ?? '') ?>">
                                         <?php if (!empty($consulta['respuesta'])): ?>
                                             <?= htmlspecialchars($consulta['respuesta']) ?>
                                         <?php else: ?>

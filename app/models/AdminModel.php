@@ -8,6 +8,9 @@
             $this->db = $database->conectar();
         }
 
+        /**
+         * Función para contar el total de usuarios registrados en el sistema excluyendo los eliminados
+         */
         public function contarUsuariosTotales() {
             $sql = "SELECT COUNT(*) AS total
                 FROM usuarios
@@ -17,6 +20,9 @@
             return (int)$this->db->query($sql)->fetchColumn();
         }
 
+        /**
+         * Función para contar el total de consultas enviadas por los usuarios
+         */
         public function contarConsultasTotales() {
             $sql = "SELECT COUNT(*) AS total
                 FROM consultas
@@ -25,6 +31,9 @@
             return (int)$this->db->query($sql)->fetchColumn();
         }
 
+        /**
+         * Función para contar el total de consultas que no están finalizadas (pendientes)
+         */
         public function contarConsultasPendientes() {
             $sql = "SELECT COUNT(*) AS total
                 FROM consultas c
@@ -35,26 +44,45 @@
             return (int)$this->db->query($sql)->fetchColumn();
         }
 
-        public function contarTransaccionesDelMes() {
-            $inicioMes = date('Y-m-01 00:00:00');
-            $inicioMesSiguiente = date('Y-m-01 00:00:00', strtotime('first day of next month'));
+        /**
+         * Función para contar el total de transacciones realizadas en el sistema
+         */
+        public function contarTransaccionesTotales() {
+            $sql = "SELECT COUNT(*) AS total
+                FROM transacciones
+            ";
 
-            return $this->contarRegistrosEntreFechas('transacciones', 'fecha_movimiento', $inicioMes, $inicioMesSiguiente);
+            return (int)$this->db->query($sql)->fetchColumn();
         }
 
+        /**
+         * Función para obtener la comparativa de usuarios nuevos registrados entre
+         * el mes actual y el mes anterior, excluyendo los usuarios eliminados
+         */
         public function obtenerComparativaUsuariosNuevos() {
             return $this->obtenerComparativaEntreFechas('usuarios', 'fecha_registro', 'eliminado = 0');
         }
 
+        /**
+         * Función para obtener la comparativa de consultas creadas entre
+         * el mes actual y el mes anterior
+         */
         public function obtenerComparativaConsultasCreadas() {
             return $this->obtenerComparativaEntreFechas('consultas', 'created_at');
         }
 
+        /**
+         * Función para obtener la comparativa de transacciones realizadas entre
+         * el mes actual y el mes anterior
+         */
         public function obtenerComparativaTransacciones() {
             return $this->obtenerComparativaEntreFechas('transacciones', 'fecha_movimiento');
         }
 
-        public function obtenerUltimasConsultas($limite = 5) {
+        /**
+         * Obtiene las últimas consultas creadas en el sistema
+         */
+        public function obtenerUltimasConsultas($limite = 10) {
             $sql = "SELECT
                     c.id_consulta,
                     c.created_at,
@@ -78,34 +106,10 @@
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
-        public function obtenerUltimasTransacciones($limite = 5) {
-            $sql = "SELECT
-                    t.id_transaccion,
-                    tm.nombre AS tipo_movimiento,
-                    c.nombre_categoria,
-                    s.nombre_subcategoria,
-                    t.concepto,
-                    t.fecha_movimiento,
-                    t.importe,
-                    u.nombre,
-                    u.apellido1
-                FROM transacciones t
-                INNER JOIN tipos_movimiento tm ON t.id_tipo = tm.id_tipo
-                LEFT JOIN categorias c ON t.id_categoria = c.id_categoria
-                LEFT JOIN subcategorias s ON t.id_subcategoria = s.id_subcategoria
-                INNER JOIN usuarios u ON t.id_usuario = u.id_usuario
-                ORDER BY t.fecha_movimiento DESC
-                LIMIT :limite
-            ";
-
-            $stmt = $this->db->prepare($sql);
-            $stmt->bindValue(':limite', (int)$limite, PDO::PARAM_INT);
-            $stmt->execute();
-
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-
-        public function obtenerUltimosUsuarios($limite = 5) {
+        /**
+         * Obtiene los últimos usuarios registrados en el sistema, excluyendo los eliminados
+         */
+        public function obtenerUltimosUsuarios($limite = 10) {
             $sql = "SELECT
                     id_usuario,
                     nombre,
@@ -125,29 +129,10 @@
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
-        public function obtenerUltimosInformes($limite = 5) {
-            $sql = "SELECT
-                    i.id_informe,
-                    i.nombre_informe,
-                    i.ruta_archivo,
-                    i.fecha_generacion,
-                    ti.nombre AS tipo_informe,
-                    u.nombre,
-                    u.apellido1
-                FROM informes i
-                INNER JOIN usuarios u ON i.id_usuario = u.id_usuario
-                LEFT JOIN tipos_informe ti ON i.id_tipo_informe = ti.id_tipo_informe
-                ORDER BY i.fecha_generacion DESC
-                LIMIT :limite
-            ";
-
-            $stmt = $this->db->prepare($sql);
-            $stmt->bindValue(':limite', (int)$limite, PDO::PARAM_INT);
-            $stmt->execute();
-
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-
+        /**
+         * Función genérica para contar registros en una tabla entre dos fechas,
+         * con una condición extra opcional
+         */
         private function contarRegistrosEntreFechas($tabla, $campoFecha, $inicio, $fin, $condicionExtra = '') {
             $sql = "SELECT COUNT(*) AS total
                 FROM {$tabla}
@@ -167,6 +152,10 @@
             return (int)$stmt->fetchColumn();
         }
 
+        /**
+         * Función para obtener la comparativa de usuarios nuevos registrados entre
+         * el mes actual y el mes anterior, excluyendo los usuarios eliminados
+         */
         private function obtenerComparativaEntreFechas($tabla, $campoFecha, $condicionExtra = '') {
             $inicioMesActual = date('Y-m-01 00:00:00');
             $inicioMesSiguiente = date('Y-m-01 00:00:00', strtotime('first day of next month'));
