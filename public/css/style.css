@@ -6,6 +6,7 @@
    VARIABLES GLOBALES
    Colores y ajustes reutilizables para todo
    ----------------------------------------- */
+
 :root {
   --color-primary: #FF8A30;
   --color-primary-75: rgba(255, 138, 48, 0.75);
@@ -22,11 +23,16 @@
   --disabled-bg: #F6FBFF;
 }
 
+/* -----------------------------------------
+  VARIABLES GLOBALES - FIN
+  ----------------------------------------- */
+
 
 /* -----------------------------------------
    ESTILOS BASE
    Reseteo ligero y tipografía
    ----------------------------------------- */
+
 * {
   box-sizing: border-box;
 }
@@ -85,11 +91,16 @@ h2, h3, .lead {
   font-family: 'Inter', system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
+/* -----------------------------------------
+  ESTILOS BASE - FIN
+  ----------------------------------------- */
+
 
 /* -----------------------------------------
    FORMULARIOS
    Estilos para formularios y campos
    ----------------------------------------- */
+   
 form {
   width: 100%;
   background: transparent; /* sin capa blanca interior, hereda de .card */
@@ -149,13 +160,19 @@ select:disabled {
   margin-top: 12px;
 }
 
+/* -----------------------------------------
+  FORMULARIOS - FIN
+  ----------------------------------------- */
+
 
 /* -----------------------------------------
    ENLACES Y BOTONES BÁSICOS
    Reglas reutilizables para botones/links
    ----------------------------------------- */
 .btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 14px;
   border-radius: 8px;
   border: 0;
@@ -163,6 +180,7 @@ select:disabled {
   color: #fff;
   cursor: pointer;
   font-weight: 600;
+  text-align: center;
 }
 
 .btn:hover {
@@ -192,6 +210,10 @@ pre {
   white-space: pre-wrap;
   word-break: break-word;
 }
+
+/* -----------------------------------------
+  ENLACES Y BOTONES BÁSICOS - FIN
+  ----------------------------------------- */
 
 
 /* -----------------------------------------
@@ -273,6 +295,10 @@ pre {
   background: #fee2e2;
   border-color: rgba(239, 84, 93, 0.36);
 }
+
+/* -----------------------------------------
+  AYUDAS / UTILIDADES - FIN
+  ----------------------------------------- */
 
 
 /* -----------------------------------------
@@ -405,7 +431,9 @@ label {
    Estilos para botones con variantes auxiliares
    ----------------------------------------- */
 .btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 10px 16px;
   border-radius: 10px;
   border: 0;
@@ -415,6 +443,7 @@ label {
   font-weight: 600;
   text-decoration: none;
   line-height: 1.2;
+  text-align: center;
 }
 
 .btn.primary {
@@ -469,6 +498,147 @@ label {
   filter: brightness(.98);
 }
 
+/* Ajustes base del landing para evitar que herede tamaños excesivos de .card */
+.split.split--landing .right.right--landing {
+  gap: 12px;
+}
+
+.split.split--landing .right.right--landing .lead,
+.split.split--landing .left.left--landing .lead,
+.split.split--landing .left.left--landing .muted {
+  max-width: 34ch;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.split.split--landing .right.right--landing .card.cta-box {
+  width: min(520px, 100%);
+  max-width: min(520px, 100%);
+  padding: 14px 18px;
+  backdrop-filter: none;
+  box-shadow: 0 6px 18px rgba(255, 138, 48, 0.12);
+}
+
+/* Tablet: centrar ambos paneles en vertical y horizontal */
+@media (min-width: 768px) and (max-width: 1180px) {
+  .split.split--landing {
+    align-items: center;
+  }
+
+  .split.split--landing .left.left--landing,
+  .split.split--landing .right.right--landing {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2.25rem 1.75rem;
+  }
+
+  .split.split--landing .left.left--landing .logo {
+    width: min(420px, 38vw);
+  }
+}
+
+/* Móvil horizontal: mantener dos columnas equilibradas y centradas */
+@media (max-width: 932px) and (orientation: landscape) {
+  .split.split--landing {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  .split.split--landing .left.left--landing,
+  .split.split--landing .right.right--landing {
+    flex: 1 1 50%;
+    min-width: 0;
+    padding: 1.2rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .split.split--landing .left.left--landing .logo {
+    width: min(280px, 32vw);
+  }
+
+  .split.split--landing .left.left--landing .lead {
+    margin-bottom: 6px;
+    font-size: 1rem;
+  }
+
+  .split.split--landing .left.left--landing .muted {
+    font-size: 0.92rem;
+  }
+
+  .split.split--landing .right.right--landing .lead {
+    margin-bottom: 8px;
+    font-size: 1.05rem;
+  }
+
+  .split.split--landing .right.right--landing .card.cta-box {
+    margin: 6px 0;
+    width: min(420px, 100%);
+    max-width: min(420px, 100%);
+  }
+}
+
+/* Móvil vertical: mantener el flujo en columna y centrado */
+@media (max-width: 767px) and (orientation: portrait) {
+  .split.split--landing .left.left--landing,
+  .split.split--landing .right.right--landing {
+    padding: 1.5rem 1.25rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .split.split--landing .left.left--landing .logo {
+    width: min(260px, 62vw);
+  }
+
+  .split.split--landing .right.right--landing .card.cta-box {
+    width: min(360px, 100%);
+    max-width: min(360px, 100%);
+  }
+}
+
+/* Tablet vertical: apilar y centrar todo el landing */
+@media (min-width: 768px) and (max-width: 1180px) and (orientation: portrait) {
+  .split.split--landing {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: calc(100vh - 40px);
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+    gap: 0.75rem;
+  }
+
+  .split.split--landing .left.left--landing,
+  .split.split--landing .right.right--landing {
+    flex: 0 1 auto;
+    width: min(760px, 100%);
+    padding: 0.85rem 1.75rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .split.split--landing .left.left--landing .logo {
+    width: min(360px, 52vw);
+  }
+
+  .split.split--landing .right.right--landing .card.cta-box {
+    width: min(460px, 100%);
+    max-width: min(460px, 100%);
+  }
+}
+
+/* -----------------------------------------
+  LAYOUT SPLIT - FIN
+  ----------------------------------------- */
+
 
 /* -----------------------------------------
    ADAPTACIÓN A PANTALLAS PEQUEÑAS
@@ -508,6 +678,10 @@ label {
     margin-bottom: 10px;
   }
 }
+
+/* -----------------------------------------
+   ADAPTACIÓN A PANTALLAS PEQUEÑAS - FIN
+   ----------------------------------------- */
 
 /* -----------------------------------------
   Página de registro en columna única
@@ -630,6 +804,10 @@ label {
   max-width: min(1100px, 92vw);
 }
 
+/* -----------------------------------------
+   APARTADO LEGAL - FIN
+   ----------------------------------------- */
+
 /* Clases auxiliares para animaciones de entrada/salida */
 .step.turn-in-forward { animation: fadeInForward 420ms both; }
 .step.turn-out-forward { animation: fadeOutForward 420ms both; }
@@ -712,6 +890,236 @@ label {
   align-self: center; 
   margin-bottom: 40px; 
 }
+
+/* Registro responsive: móvil y tablet */
+@media (max-width: 932px) {
+  .register-page {
+    width: 100%;
+    max-width: 100%;
+    justify-content: flex-start;
+  }
+
+  .register-page .card {
+    width: min(100%, 760px);
+    max-width: 100%;
+    padding: 28px 20px;
+    margin: 0 auto;
+  }
+
+  .register-page h1 {
+    margin-bottom: 22px;
+    font-size: clamp(1.55rem, 4.8vw, 2rem);
+    text-align: center;
+  }
+
+  .register-page .steps-wrap,
+  .register-page .card:not(.shrink) .steps-wrap {
+    min-height: auto;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .register-page .step {
+    position: static;
+    inset: auto;
+    transform: none;
+    transition: none;
+    display: none;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .register-page .step.active {
+    display: block;
+  }
+
+  .register-page .step h3 {
+    margin: 0 0 18px;
+  }
+
+  .register-page .checkboxes {
+    gap: 12px;
+  }
+
+  .register-page .checkboxes label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  .register-page .checkboxes input[type="checkbox"] {
+    flex: 0 0 auto;
+    margin-top: 3px;
+    transform: none;
+  }
+
+  .register-page .form-nav {
+    margin-top: 14px;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .register-page .form-nav .btn {
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 932px) and (orientation: landscape) {
+  body {
+    padding: 8px;
+  }
+
+  .register-page {
+    justify-content: flex-start;
+    align-items: stretch;
+    width: 100%;
+    gap: 8px;
+    min-height: calc(100vh - 20px);
+    overflow-x: hidden;
+  }
+
+  .register-page .card {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px 10px;
+    border-radius: 12px;
+  }
+
+  .register-page h1 {
+    margin: 0 0 8px;
+    font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+  }
+
+  .register-page .progress {
+    margin-bottom: 6px;
+  }
+
+  .register-page .progress-track {
+    height: 4px;
+  }
+
+  .register-page .progress-steps {
+    margin-top: 6px;
+  }
+
+  .register-page .progress-step {
+    width: 22px;
+    height: 22px;
+    font-size: 0.7rem;
+  }
+
+  .register-page .step h3 {
+    margin: 0 0 6px;
+    font-size: 0.96rem;
+  }
+
+  .register-page label {
+    margin: 5px 0 3px;
+    font-size: 0.84rem;
+  }
+
+  .register-page input,
+  .register-page select,
+  .register-page textarea {
+    padding: 7px 9px;
+    border-radius: 7px;
+    font-size: 0.86rem;
+  }
+
+  .register-page .checkboxes {
+    gap: 4px;
+    margin-top: 5px;
+  }
+
+  .register-page .checkboxes label {
+    font-size: 0.82rem;
+    line-height: 1.18;
+  }
+
+  .register-page .form-nav {
+    margin-top: 6px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 6px;
+  }
+
+  .register-page .form-nav .btn,
+  .register-page .form-nav .btn-volver {
+    width: 100%;
+    min-width: 0;
+    min-height: 30px;
+    padding: 6px 8px;
+    font-size: 0.84rem;
+    margin-right: 0;
+  }
+
+  .register-page .login-link {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) and (orientation: portrait) {
+  .register-page {
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 40px);
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1180px) {
+  .register-page {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: calc(100vh - 40px);
+  }
+
+  .register-page .card {
+    width: min(760px, 92vw);
+    margin: 0 auto;
+    padding: 34px 34px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
+  .register-page {
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 40px);
+    width: 100%;
+  }
+
+  .register-page .card {
+    width: min(820px, 92vw);
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) {
+  .register-page {
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 40px);
+    width: 100%;
+  }
+
+  .register-page .card {
+    width: min(860px, 90vw);
+    margin: 0 auto;
+  }
+}
+
+/* -----------------------------------------
+  PÁGINA DE REGISTRO EN COLUMNA ÚNICA - FIN
+  ----------------------------------------- */
 
 
 /* -----------------------------------------
@@ -836,6 +1244,10 @@ label {
   color: var(--color-primary);
 }
 
+/* -----------------------------------------
+  HEADER Y NAVBAR - FIN
+  ----------------------------------------- */
+
 
 /* -----------------------------------------
    DASHBOARD
@@ -956,6 +1368,8 @@ label {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   margin: 14px 0;
+  justify-items: center;
+  text-align: center;
 }
 
 .dashboard-comparison-values strong {
@@ -965,12 +1379,20 @@ label {
 }
 
 .dashboard-variation {
-  display: inline-flex;
+  display: flex;
+  width: max-content;
   align-items: center;
   padding: 6px 10px;
   border-radius: 999px;
   font-weight: 700;
   font-size: 0.88rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dashboard-comparison-card .dashboard-stat-label {
+  text-align: left;
+  width: 100%;
 }
 
 .dashboard-variation--up {
@@ -992,6 +1414,7 @@ label {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
+  align-items: stretch;
 }
 
 .dashboard-activity-card h3 {
@@ -1017,6 +1440,11 @@ label {
   vertical-align: top;
 }
 
+.dashboard-activity-card .dashboard-table th,
+.dashboard-activity-card .dashboard-table td {
+  vertical-align: middle;
+}
+
 .dashboard-table th {
   font-size: 0.82rem;
   text-transform: uppercase;
@@ -1036,10 +1464,6 @@ label {
 .dashboard-table--recent-pair tbody td {
   padding-top: 10px;
   padding-bottom: 10px;
-}
-
-.dashboard-activity-card .dashboard-table--recent-pair {
-  min-height: 410px;
 }
 
 .dashboard-table__truncated {
@@ -1083,6 +1507,7 @@ label {
 
 .dashboard-activity-card {
   padding: 22px;
+  height: 100%;
 }
 
 .dashboard-comparison-card {
@@ -1153,6 +1578,10 @@ label {
 }
 
 /* -----------------------------------------
+  DASHBOARD - FIN
+  ----------------------------------------- */
+
+/* -----------------------------------------
    PERFIL
    Vista de datos personales y edición
    ----------------------------------------- */
@@ -1209,6 +1638,10 @@ label {
 }
 
 /* -----------------------------------------
+  PERFIL - FIN
+  ----------------------------------------- */
+
+/* -----------------------------------------
    SOBRE NOSOTROS
    Vista informativa con texto y mapa
    ----------------------------------------- */
@@ -1258,6 +1691,33 @@ label {
   }
 }
 
+@media (max-width: 932px) and (orientation: landscape) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-content,
+  .about-map {
+    width: 100%;
+  }
+
+  .about-map__frame-wrap iframe {
+    min-height: 240px;
+  }
+
+  .about-content {
+    padding-bottom: 16px;
+  }
+
+  .about-map {
+    margin-top: 0;
+  }
+}
+
+/* -----------------------------------------
+   SOBRE NOSOTROS - FIN
+   ----------------------------------------- */
+
 /* -----------------------------------------
    LISTADO DE TRANSACCIONES
    Tabla responsive y acciones con iconos
@@ -1279,6 +1739,13 @@ label {
   line-height: 1;
   text-decoration: none;
   white-space: nowrap;
+}
+
+.dashboard-page .transactions-toolbar > .transactions-action-btn,
+.dashboard-page .profile-actions > .btn-volver,
+.dashboard-page .profile-actions > .btn-enviar {
+  font-size: 0.875rem;
+  line-height: 1.2;
 }
 
 .transactions-table-wrap {
@@ -1666,6 +2133,11 @@ label {
 }
 
 /* -----------------------------------------
+   LISTADO DE TRANSACCIONES - FIN
+   ----------------------------------------- */
+
+
+/* -----------------------------------------
    GESTION DE TABLAS MAESTRAS
    Cards de acceso y listado de registros
    ----------------------------------------- */
@@ -1718,6 +2190,11 @@ label {
 .master-table-empty-state {
   margin: 4px 2px 0;
 }
+
+/* -----------------------------------------
+  GESTION DE TABLAS MAESTRAS - FIN
+  ----------------------------------------- */
+
 
 /* -----------------------------------------
    FORMULARIO DE TRANSACCIONES
@@ -1773,7 +2250,11 @@ label {
   background: rgba(255, 255, 255, 0.96);
 }
 
-@media (max-width: 900px) {
+/* -----------------------------------------
+   FORMULARIO DE TRANSACCIONES - FIN
+   ----------------------------------------- */
+
+@media (max-width: 1024px) {
   .transaction-form__section--class {
     grid-template-columns: 1fr;
   }
@@ -1947,6 +2428,578 @@ label {
   }
 }
 
+/* Ajuste táctil (móvil horizontal + tablet): escalar contenido común */
+@media (hover: none) and (pointer: coarse) and (max-width: 1366px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  body {
+    padding: 12px;
+  }
+
+  .dashboard-page,
+  .header,
+  .footer {
+    width: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .dashboard-card,
+  .dashboard-activity-card,
+  .dashboard-comparison-card,
+  .dashboard-stat-card {
+    padding: 16px;
+  }
+
+  .dashboard-grid,
+  .dashboard-stats-grid,
+  .dashboard-comparisons-grid,
+  .dashboard-activity-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .dashboard-col {
+    gap: 12px;
+  }
+
+  .dashboard-hero,
+  .dashboard-section__head,
+  .transactions-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .dashboard-table-wrap,
+  .transactions-table-wrap,
+  .dashboard-tx-wrap {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dashboard-tx-head,
+  .transaction-list {
+    min-width: 0;
+  }
+
+  .transactions-table {
+    min-width: 720px;
+  }
+
+  .transaction-search {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .transaction-search.transaction-search--compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .transaction-search.transaction-search--compact .transaction-search__input {
+    grid-column: 1 / -1;
+  }
+
+  .transaction-search.transaction-search--compact .transaction-search__button {
+    grid-column: 1 / 2;
+  }
+
+  .transaction-search.transaction-search--compact .transaction-search__reset {
+    grid-column: 2 / 3;
+  }
+
+  .transaction-search__select[name="id_metodo"] {
+    grid-column: 1 / -1;
+  }
+
+  .transaction-search__button,
+  .transaction-search__reset {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .transactions-summary-bar {
+    overflow-x: hidden;
+  }
+
+  .master-tables-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Corrección de simetría lateral en móvil horizontal y tablet vertical */
+@media (hover: none) and (pointer: coarse) and (max-width: 932px) and (orientation: landscape) {
+  body {
+    padding: 8px;
+  }
+
+  .header,
+  .dashboard-page,
+  .footer,
+  .header .navbar,
+  .dashboard-page > .dashboard-card--main,
+  .footer .footer-inner {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) and (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
+  body {
+    padding: 10px;
+  }
+
+  .header,
+  .dashboard-page,
+  .footer,
+  .header .navbar,
+  .dashboard-page > .dashboard-card--main,
+  .footer .footer-inner {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 767px) and (orientation: portrait) {
+  .dashboard-page .dashboard-tx-wrap {
+    overflow-x: hidden;
+  }
+
+  .dashboard-page .dashboard-tx-head,
+  .dashboard-page .transaction-list {
+    min-width: 0;
+  }
+
+  .dashboard-page .queries-table {
+    min-width: 0;
+  }
+
+  .dashboard-page .queries-table thead {
+    display: none;
+  }
+
+  .dashboard-page .queries-table,
+  .dashboard-page .queries-table tbody,
+  .dashboard-page .queries-table tr,
+  .dashboard-page .queries-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .dashboard-page .queries-table tr {
+    margin-bottom: 12px;
+    padding: 10px 10px 4px;
+    border: 1px solid rgba(1, 10, 18, 0.12);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    overflow: hidden;
+  }
+
+  .dashboard-page .queries-table td {
+    display: grid;
+    grid-template-columns: minmax(92px, 34%) minmax(0, 1fr);
+    gap: 8px;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(1, 10, 18, 0.08);
+    text-align: left;
+    white-space: normal;
+  }
+
+  .dashboard-page .queries-table td:last-child {
+    border-bottom: 0;
+    padding-bottom: 10px;
+  }
+
+  .dashboard-page .queries-table td::before {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(1, 10, 18, 0.62);
+    line-height: 1.25;
+  }
+
+  .dashboard-page .queries-table td:nth-child(1)::before { content: 'Asunto'; }
+  .dashboard-page .queries-table td:nth-child(2)::before { content: 'Comentario'; }
+  .dashboard-page .queries-table td:nth-child(3)::before { content: 'Respuesta'; }
+  .dashboard-page .queries-table td:nth-child(4)::before { content: 'Estado'; }
+  .dashboard-page .queries-table td:nth-child(5)::before { content: 'Fecha'; }
+
+  .dashboard-page .queries-table td:nth-child(2),
+  .dashboard-page .queries-table td:nth-child(3) {
+    word-break: break-word;
+  }
+
+  .dashboard-page .queries-table td:nth-child(4) {
+    align-items: center;
+  }
+
+  .profile-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .profile-delete {
+    margin-right: 0;
+  }
+
+  .profile-actions .btn {
+    white-space: nowrap;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) and (max-width: 1366px) and (orientation: portrait),
+       (hover: none) and (pointer: coarse) and (max-width: 932px) and (orientation: landscape) {
+  .transactions-table-wrap {
+    overflow-x: hidden;
+    padding: 0;
+  }
+
+  .transactions-table {
+    min-width: 0;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    background: transparent;
+  }
+
+  .transactions-table thead {
+    display: none;
+  }
+
+  .transactions-table,
+  .transactions-table tbody,
+  .transactions-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .transactions-table tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    border: 1px solid rgba(1, 10, 18, 0.24);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    padding: 8px;
+    overflow: hidden;
+  }
+
+  .transactions-table tr + tr {
+    margin-top: 10px;
+  }
+
+  .transactions-table td {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 64px;
+    padding: 8px;
+    border: 1px solid rgba(1, 10, 18, 0.08);
+    border-radius: 10px;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .transactions-table td::before {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(1, 10, 18, 0.62);
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .transactions-table .tx-concepto {
+    max-width: none;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  .transactions-table td:nth-child(1)::before { content: 'Tipo'; }
+  .transactions-table td:nth-child(2)::before { content: 'Categoría'; }
+  .transactions-table td:nth-child(3)::before { content: 'Subcategoría'; }
+  .transactions-table td:nth-child(4)::before { content: 'Concepto'; }
+  .transactions-table td:nth-child(5)::before { content: 'Fecha'; }
+  .transactions-table td:nth-child(6)::before { content: 'Método'; }
+  .transactions-table td:nth-child(7)::before { content: 'Importe'; }
+  .transactions-table td:nth-child(8)::before { content: 'Acciones'; }
+
+  .transactions-table td:nth-child(7) {
+    align-items: center;
+  }
+
+  .transactions-table td:nth-child(8) {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .dashboard-page .admin-queries-table td:nth-child(1)::before { content: 'Asunto'; }
+  .dashboard-page .admin-queries-table td:nth-child(2)::before { content: 'Usuario'; }
+  .dashboard-page .admin-queries-table td:nth-child(3)::before { content: 'Comentario'; }
+  .dashboard-page .admin-queries-table td:nth-child(4)::before { content: 'Comentario admin'; }
+  .dashboard-page .admin-queries-table td:nth-child(5)::before { content: 'Estado'; }
+  .dashboard-page .admin-queries-table td:nth-child(6)::before { content: 'Fecha de creación'; }
+  .dashboard-page .admin-queries-table td:nth-child(7)::before { content: 'Acciones'; }
+
+  .dashboard-page .admin-queries-table td {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 78px;
+    text-align: center;
+  }
+
+  .dashboard-page .admin-queries-table td::before {
+    display: block;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .dashboard-page .admin-queries-table td:nth-child(2),
+  .dashboard-page .admin-queries-table td:nth-child(3),
+  .dashboard-page .admin-queries-table td:nth-child(4),
+  .dashboard-page .admin-queries-table td:nth-child(5),
+  .dashboard-page .admin-queries-table td:nth-child(6) {
+    word-break: break-word;
+  }
+
+  .dashboard-page .admin-queries-table td:nth-child(7) {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .dashboard-page .admin-queries-table td:nth-child(7) .transactions-actions {
+    justify-content: center;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) and (min-width: 768px) and (max-width: 1366px) {
+  .dashboard-admin-shell .dashboard-stats-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .dashboard-admin-shell .dashboard-comparisons-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .dashboard-admin-shell .dashboard-activity-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (hover: none) and (pointer: coarse) and (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
+  .master-tables-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records tr {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories tr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records td:nth-child(1)::before {
+    content: 'ID';
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records td:nth-child(2)::before {
+    content: 'Nombre';
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records td:nth-child(3)::before {
+    content: 'Acciones';
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories td:nth-child(3)::before {
+    content: 'Categoría';
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories td:nth-child(4)::before {
+    content: 'Acciones';
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records td:nth-child(3),
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories td:nth-child(4) {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records td:nth-child(1),
+  .master-table-list-wrap .transactions-table.master-table-records td:nth-child(2),
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories td:nth-child(1),
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories td:nth-child(2),
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories td:nth-child(3) {
+    justify-content: flex-start;
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records td:nth-child(3) .transactions-actions,
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories td:nth-child(4) .transactions-actions {
+    justify-content: center;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) and (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) {
+  .master-tables-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 932px) {
+  .dashboard-admin-shell .dashboard-activity-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .dashboard-admin-shell .dashboard-table-wrap {
+    overflow-x: hidden;
+  }
+
+  .dashboard-admin-shell .dashboard-table {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+  }
+
+  .dashboard-admin-shell .dashboard-table thead {
+    display: none;
+  }
+
+  .dashboard-admin-shell .dashboard-table,
+  .dashboard-admin-shell .dashboard-table tbody,
+  .dashboard-admin-shell .dashboard-table tr,
+  .dashboard-admin-shell .dashboard-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .dashboard-admin-shell .dashboard-table tr {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid rgba(1, 10, 18, 0.12);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    overflow: hidden;
+  }
+
+  .dashboard-admin-shell .dashboard-table td {
+    display: grid;
+    grid-template-columns: minmax(88px, 34%) minmax(0, 1fr);
+    gap: 8px;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(1, 10, 18, 0.08);
+    text-align: left;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .dashboard-admin-shell .dashboard-table td:last-child {
+    border-bottom: 0;
+  }
+
+  .dashboard-admin-shell .dashboard-table td::before {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: rgba(1, 10, 18, 0.62);
+    line-height: 1.25;
+  }
+
+  .dashboard-admin-shell .dashboard-activity-grid > article:first-child .dashboard-table td:nth-child(1)::before { content: 'Asunto'; }
+  .dashboard-admin-shell .dashboard-activity-grid > article:first-child .dashboard-table td:nth-child(2)::before { content: 'Usuario'; }
+  .dashboard-admin-shell .dashboard-activity-grid > article:first-child .dashboard-table td:nth-child(3)::before { content: 'Estado'; }
+  .dashboard-admin-shell .dashboard-activity-grid > article:first-child .dashboard-table td:nth-child(4)::before { content: 'Fecha'; }
+
+  .dashboard-admin-shell .dashboard-activity-grid > article:last-child .dashboard-table td:nth-child(1)::before { content: 'Nombre'; }
+  .dashboard-admin-shell .dashboard-activity-grid > article:last-child .dashboard-table td:nth-child(2)::before { content: 'Email'; }
+  .dashboard-admin-shell .dashboard-activity-grid > article:last-child .dashboard-table td:nth-child(3)::before { content: 'Registro'; }
+
+  .dashboard-admin-shell .dashboard-table__truncated {
+    max-width: none;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records tr {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories tr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records td:nth-child(1)::before {
+    content: 'ID';
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records td:nth-child(2)::before {
+    content: 'Nombre';
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records td:nth-child(3)::before {
+    content: 'Acciones';
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories td:nth-child(3)::before {
+    content: 'Categoría';
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories td:nth-child(4)::before {
+    content: 'Acciones';
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records td:nth-child(3),
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories td:nth-child(4) {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records td:nth-child(1),
+  .master-table-list-wrap .transactions-table.master-table-records td:nth-child(2),
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories td:nth-child(1),
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories td:nth-child(2),
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories td:nth-child(3) {
+    justify-content: flex-start;
+  }
+
+  .master-table-list-wrap .transactions-table.master-table-records td:nth-child(3) .transactions-actions,
+  .master-table-list-wrap .transactions-table.master-table-records--subcategories td:nth-child(4) .transactions-actions {
+    justify-content: center;
+  }
+}
+
 
 /* -----------------------------------------
    FOOTER
@@ -1960,7 +3013,7 @@ label {
 .footer-inner {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 10px;
@@ -1973,13 +3026,14 @@ label {
 
 .footer-text {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 6px;
   font-size: 0.98rem;
   line-height: 1.4;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
 }
 
 .footer-text a {
@@ -1998,8 +3052,9 @@ label {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: nowrap;
-  white-space: nowrap;
+  flex-wrap: wrap;
+  justify-content: center;
+  white-space: normal;
 }
 
 .footer-license-icons img {
@@ -2011,14 +3066,22 @@ label {
 @media (max-width: 768px) {
   .footer-inner {
     padding: 0.9rem 1rem;
+    flex-direction: column;
+    align-items: center;
   }
 
   .footer-text {
     font-size: 0.92rem;
     gap: 5px;
+    width: 100%;
   }
 
   .footer-license-icons {
     gap: 7px;
+    width: 100%;
   }
 }
+
+/* -----------------------------------------
+   FOOTER - FIN
+   ----------------------------------------- */

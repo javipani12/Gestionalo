@@ -62,12 +62,12 @@
                             <span class="dashboard-stat-label"><?= htmlspecialchars($comparativa['titulo']) ?></span>
                             <div class="dashboard-comparison-values">
                                 <div>
-                                    <small class="muted">Mes actual</small>
-                                    <strong><?= number_format((int)$comparativa['valor_actual'], 0, ',', '.') ?></strong>
-                                </div>
-                                <div>
                                     <small class="muted">Mes anterior</small>
                                     <strong><?= number_format((int)$comparativa['valor_anterior'], 0, ',', '.') ?></strong>
+                                </div>
+                                <div>
+                                    <small class="muted">Mes actual</small>
+                                    <strong><?= number_format((int)$comparativa['valor_actual'], 0, ',', '.') ?></strong>
                                 </div>
                             </div>
                             <span class="dashboard-variation <?= $variacionClase ?>">

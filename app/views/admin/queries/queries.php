@@ -35,7 +35,7 @@
                     };
                 ?>
                 <?php if (!empty($consultas)): ?>
-                    <table class="transactions-table">
+                    <table class="transactions-table admin-queries-table">
                         <thead>
                             <tr>
                                 <th>Asunto</th>

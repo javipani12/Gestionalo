@@ -105,7 +105,7 @@
 					</div>
 
 					<?php if (!empty($registros)): ?>
-						<table class="transactions-table">
+						<table class="transactions-table master-table-records <?= $tablaActual === 'subcategorias' ? 'master-table-records--subcategories' : '' ?>">
 							<thead>
 								<tr>
 									<th>ID</th>
