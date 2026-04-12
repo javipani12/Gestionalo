@@ -20,6 +20,8 @@ class ComposerStaticInitecd0d84d90339e11902c4ff0a8cb5d31
         'HomeController' => __DIR__ . '/../..' . '/app/controllers/HomeController.php',
         'LegalController' => __DIR__ . '/../..' . '/app/controllers/LegalController.php',
         'ProfileController' => __DIR__ . '/../..' . '/app/controllers/ProfileController.php',
+        'ToolController' => __DIR__ . '/../..' . '/app/controllers/ToolController.php',
+        'ToolModel' => __DIR__ . '/../..' . '/app/models/ToolModel.php',
         'TransactionController' => __DIR__ . '/../..' . '/app/controllers/TransactionController.php',
         'TransactionModel' => __DIR__ . '/../..' . '/app/models/TransactionModel.php',
         'UserModel' => __DIR__ . '/../..' . '/app/models/UserModel.php',

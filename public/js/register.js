@@ -1,11 +1,11 @@
-const form = document.getElementById('formulario-registro');
-const btnVolver = document.getElementById('btn-volver');
-const btnAnterior = document.getElementById('btn-anterior');
-const btnSiguiente = document.getElementById('btn-siguiente');
-const submitBtn = document.getElementById('submit');
-const loginLink = document.querySelector('.login-link');
-const progressFill = document.getElementById('progress-fill');
-const progressSteps = document.querySelectorAll('.progress-step');
+const formulario = document.getElementById('formulario-registro');
+const botonVolver = document.getElementById('btn-volver');
+const botonAnterior = document.getElementById('btn-anterior');
+const botonSiguiente = document.getElementById('btn-siguiente');
+const botonEnviar = document.getElementById('submit');
+const enlaceLogin = document.querySelector('.login-link');
+const rellenoProgreso = document.getElementById('progress-fill');
+const pasosProgreso = document.querySelectorAll('.progress-step');
 
 let pasoActual = 0;
 const pasos = document.querySelectorAll('.step');
@@ -17,11 +17,11 @@ const ultimoPaso = pasos.length - 1;
  */
 function actualizarProgreso(indicePaso) {
 	const porcentaje = ultimoPaso === 0 ? 100 : (indicePaso / ultimoPaso) * 100;
-	if (progressFill) {
-		progressFill.style.width = `${porcentaje}%`;
+	if (rellenoProgreso) {
+		rellenoProgreso.style.width = `${porcentaje}%`;
 	}
 
-	progressSteps.forEach((step, index) => {
+	pasosProgreso.forEach((step, index) => {
 		step.classList.toggle('active', index === indicePaso);
 		step.classList.toggle('done', index < indicePaso);
 	});
@@ -42,14 +42,15 @@ function validarPaso(indicePaso) {
 		}
 	}
 
+	// En el ultimo paso se comprueba que ambas contrasenas coincidan.
 	if (indicePaso === 2) {
-		const pass = form.querySelector('input[name="contrasena"]');
-		const pass2 = form.querySelector('input[name="contrasena2"]');
+		const contrasena = formulario.querySelector('input[name="contrasena"]');
+		const contrasenaConfirmacion = formulario.querySelector('input[name="contrasena2"]');
 
-		if (pass && pass2 && pass.value !== pass2.value) {
-			pass2.setCustomValidity('Las contrasenas no coinciden.');
-			pass2.reportValidity();
-			pass2.setCustomValidity('');
+		if (contrasena && contrasenaConfirmacion && contrasena.value !== contrasenaConfirmacion.value) {
+			contrasenaConfirmacion.setCustomValidity('Las contrasenas no coinciden.');
+			contrasenaConfirmacion.reportValidity();
+			contrasenaConfirmacion.setCustomValidity('');
 			return false;
 		}
 	}
@@ -62,16 +63,16 @@ function validarPaso(indicePaso) {
  * @param {number} indicePaso 
  */
 function pintarNavegacion(indicePaso) {
-	btnVolver.style.display = indicePaso === 0 ? 'inline-flex' : 'none';
-	btnAnterior.style.display = indicePaso > 0 ? 'inline-flex' : 'none';
-	btnSiguiente.style.display = 'inline-flex';
-	submitBtn.style.display = 'none';
+	botonVolver.style.display = indicePaso === 0 ? 'inline-flex' : 'none';
+	botonAnterior.style.display = indicePaso > 0 ? 'inline-flex' : 'none';
+	botonSiguiente.style.display = 'inline-flex';
+	botonEnviar.style.display = 'none';
 
-	if (loginLink) {
-		loginLink.style.display = indicePaso === 0 ? 'block' : 'none';
+	if (enlaceLogin) {
+		enlaceLogin.style.display = indicePaso === 0 ? 'block' : 'none';
 	}
 
-	btnSiguiente.textContent = indicePaso === ultimoPaso ? 'Crear cuenta' : 'Siguiente';
+	botonSiguiente.textContent = indicePaso === ultimoPaso ? 'Crear cuenta' : 'Siguiente';
 }
 
 /**
@@ -88,13 +89,13 @@ function mostrarPaso(indicePaso) {
 }
 
 
-btnSiguiente.addEventListener('click', () => {
+botonSiguiente.addEventListener('click', () => {
 	if (!validarPaso(pasoActual)) {
 		return;
 	}
 
 	if (pasoActual === ultimoPaso) {
-		form.requestSubmit();
+		formulario.requestSubmit();
 		return;
 	}
 
@@ -102,7 +103,7 @@ btnSiguiente.addEventListener('click', () => {
 	mostrarPaso(pasoActual);
 });
 
-btnAnterior.addEventListener('click', () => {
+botonAnterior.addEventListener('click', () => {
 	if (pasoActual === 0) {
 		return;
 	}

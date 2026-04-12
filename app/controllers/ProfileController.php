@@ -1,6 +1,10 @@
 <?php
     class ProfileController {
 
+        /**
+         * Muestra el perfil del usuario activo, permitiéndole ver
+         * y editar su información personal.
+         */
         public function mostrarPerfil() {
             $userModel = new UserModel();
             $id_usuario = (int)($_SESSION['usuario']['id_usuario'] ?? 0);
@@ -122,7 +126,7 @@
         }
 
         /**
-         * Functión auxiliar para mostrar un mensaje de éxito o error después de intentar 
+         * Función auxiliar para mostrar un mensaje de éxito o error después de intentar 
          * actualizar el perfil del usuario. Solamente se usará para esta acción.
          */
         function mostrarMensajeActualizarPerfil($tipo){

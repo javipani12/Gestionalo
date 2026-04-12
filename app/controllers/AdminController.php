@@ -1,6 +1,10 @@
 <?php
     class AdminController {
 
+        /**
+         * Verifica que el usuario actual tiene rol de admin antes de permitir 
+         * el acceso a las funciones del controlador. Si no es admin, redirige al home.
+         */
         private function requerirAdmin() {
             // Verificar que el usuario tiene rol de admin
             if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'admin') {
@@ -9,6 +13,10 @@
             }
         }
 
+        /**
+         * Función interna que construye la URL para volver a la gestión de usuarios,
+         * manteniendo los filtros y paginación actuales.
+         */
         private function construirUrlGestionUsuarios() {
             $params = [
                 'controller' => 'admin',
@@ -29,6 +37,10 @@
             return 'index.php?' . http_build_query($params);
         }
 
+        /**
+         * Función interna que construye la URL para editar un usuario,
+         * manteniendo los filtros y paginación actuales.
+         */
         private function construirUrlEditarUsuario($idUsuario) {
             $params = [
                 'controller' => 'admin',
@@ -54,6 +66,10 @@
             return 'index.php?' . http_build_query($params);
         }
 
+        /**
+         * Función interna que construye la URL para volver a la gestión de tablas maestras,
+         * manteniendo la tabla seleccionada, filtros de búsqueda y paginación actuales.
+         */
         private function construirUrlGestionTablasMaestras($tabla = '', $extras = []) {
             $params = [
                 'controller' => 'admin',
@@ -79,6 +95,11 @@
             return 'index.php?' . http_build_query($params);
         }
 
+        /**
+         * Función interna que construye la URL para el formulario de tabla maestra,
+         * manteniendo la tabla seleccionada, el ID del registro (si es edición)
+         * y cualquier filtro de búsqueda o paginación para volver a la lista después de guardar.
+         */
         private function construirUrlFormularioTablaMaestra($tabla, $id = 0, $extras = []) {
             $params = [
                 'controller' => 'admin',
@@ -104,6 +125,10 @@
             return 'index.php?' . http_build_query($params);
         }
 
+        /**
+         * Muestra el dashboard con estadísticas clave, comparativas
+         * y listados recientes para la gestión del sitio.
+         */
         public function mostrarDashboardAdmin() {
             $this->requerirAdmin();
             $adminModel = new AdminModel();
@@ -153,6 +178,10 @@
             require_once './../app/views/admin/dashboard/dashboard_admin.php';
         }
 
+        /**
+         * Función interna que calcula la variación porcentual entre dos valores,
+         * manejando casos de división por cero.
+         */
         private function calcularVariacionPorcentual($actual, $anterior) {
             if ((int)$anterior === 0) {
                 return (int)$actual > 0 ? 100 : 0;
@@ -161,7 +190,10 @@
             return round((($actual - $anterior) / $anterior) * 100, 1);
         }
 
-
+        /**
+         * Muestra el perfil del admin con la posibilidad de editar su información
+         * personal y cambiar su contraseña.
+         */
         public function mostrarPerfilAdmin() {
             $this->requerirAdmin();
 
@@ -171,7 +203,10 @@
             require_once './../app/views/admin/profile/profile_admin.php';
         }
 
-
+        /**
+         * Muestra la gestión de usuarios con filtros, paginación y acciones
+         * para editar o eliminar usuarios.
+         */
         public function mostrarGestionUsuarios() {
             $this->requerirAdmin();
             $titulo = "Gestionalo | Gestión de usuarios";
@@ -194,6 +229,10 @@
             require_once './../app/views/admin/manage_users/manage_users.php';
         }
 
+        /**
+         * Muestra el formulario para editar un usuario desde el panel admin, 
+         * prellenando los datos actuales y permitiendo cambiar su información personal y contraseña.
+         */
         public function mostrarEditarUsuario() {
             $this->requerirAdmin();
 
@@ -236,6 +275,12 @@
             require_once './../app/views/admin/profile/profile_admin.php';
         }
 
+        /**
+         * Actualiza la información de un usuario desde el panel admin, 
+         * validando los datos y permitiendo cambiar su contraseña si se proporciona una nueva. 
+         * Si el admin está editando su propio perfil y cambia su contraseña,
+         *  se refresca la sesión para mantenerlo autenticado con los nuevos datos.
+         */
         public function actualizarUsuario() {
             $this->requerirAdmin();
 
@@ -283,6 +328,7 @@
 
             $actualizado = false;
 
+            // Si está vacía la contraseña, solo actualizamos los datos sin cambiar la contraseña
             if ($passwd === '' || $userModel->comprobarContrasennaActual($idUsuario, $passwd)) {
                 $actualizado = $userModel->actualizarUsuarioConEmail(
                     $idUsuario,
@@ -321,6 +367,10 @@
             exit();
         }
 
+        /**
+         * Elimina un usuario desde el panel admin, validando que no se elimine a sí mismo
+         * y que el ID del usuario sea válido.
+         */
         public function eliminarUsuario() {
             $this->requerirAdmin();
 
@@ -661,6 +711,9 @@
             exit();
         }
 
+        /**
+         * Función interna que refresca la sesión del admin después de actualizar su propio perfil
+         */
         private function refrescarSesionAdmin() {
             $userModel = new UserModel();
             $usuario = $userModel->obtenerUsuarioPorId((int)$_SESSION['usuario']['id_usuario']);

@@ -34,7 +34,7 @@
                         </li>
                     </ul>
                 </li>
-                <li><a href="#" class="navbar__link">Herramientas</a></li>
+                <li><a href="?controller=tool&action=mostrarHerramientas" class="navbar__link">Herramientas</a></li>
                 <li><a href="#" class="navbar__link">Agente IA</a></li>
                 <li><a href="?controller=about&action=mostrarSobreNosotros" class="navbar__link">Sobre nosotros</a></li>
                 <li class="navbar__item navbar__item--dropdown">

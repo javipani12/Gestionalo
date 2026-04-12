@@ -13,6 +13,7 @@
             $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
             $paginaActual = max(1, $paginaActual);
 
+            // Recogemos y validamos los filtros de búsqueda
             $filtrosActivos = [
                 'concepto' => trim($_GET['concepto'] ?? ''),
                 'id_tipo' => (int)($_GET['id_tipo'] ?? 0),
@@ -23,6 +24,7 @@
                 'id_metodo' => (int)($_GET['id_metodo'] ?? 0)
             ];
 
+            // Validamos que los filtros numéricos no sean negativos
             if($filtrosActivos['id_tipo'] < 0) {
                 $filtrosActivos['id_tipo'] = 0;
             }
@@ -39,6 +41,8 @@
                 $filtrosActivos['id_metodo'] = 0;
             }
 
+            // Validamos que las fechas tengan el formato correcto (YYYY-MM-DD)
+            // y que la fecha desde no sea mayor que la fecha hasta
             if(
                 $filtrosActivos['fecha_desde'] !== ''
                 && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $filtrosActivos['fecha_desde'])
@@ -63,6 +67,7 @@
                 $filtrosActivos['fecha_hasta'] = $fechaTemporal;
             }
 
+            // Validamos que la subcategoría seleccionada corresponda a la categoría seleccionada
             if(
                 $filtrosActivos['id_subcategoria'] > 0
                 && $filtrosActivos['id_categoria'] > 0
@@ -74,23 +79,27 @@
                 $filtrosActivos['id_subcategoria'] = 0;
             }
 
+            // Validamos los parámetros de ordenación
             $camposOrdenPermitidos = ['tipo', 'categoria', 'subcategoria', 'concepto', 'fecha', 'metodo', 'importe'];
             $ordenCampo = $_GET['orden_campo'] ?? 'fecha';
             if(!in_array($ordenCampo, $camposOrdenPermitidos, true)) {
                 $ordenCampo = 'fecha';
             }
 
+            // Validamos que la dirección de ordenación sea 'asc' o 'desc'
             $ordenDireccion = strtolower($_GET['orden_direccion'] ?? 'desc');
             if($ordenDireccion !== 'asc' && $ordenDireccion !== 'desc') {
                 $ordenDireccion = 'desc';
             }
 
+            // Obtenemos el total de transacciones para el usuario con los filtros aplicados
             $totalTransacciones = $transactionModel->contarTransaccionesPorUsuario($idUsuario, $filtrosActivos);
             $totalPaginas = max(1, (int)ceil($totalTransacciones / $limitePorPagina));
             if ($paginaActual > $totalPaginas) {
                 $paginaActual = $totalPaginas;
             }
 
+            // Obtenemos las transacciones paginadas para el usuario con los filtros y ordenación aplicados
             $offset = ($paginaActual - 1) * $limitePorPagina;
             $transacciones = $transactionModel->obtenerTransaccionesPaginadasPorUsuario(
                 $idUsuario,
@@ -100,7 +109,8 @@
                 $ordenCampo,
                 $ordenDireccion
             );
-
+            
+            // Obtenemos los datos necesarios para los filtros y la visualización
             $tiposMovimiento = $defaultDataModel->obtenerTodos('tipos_movimiento');
             $categorias = $defaultDataModel->obtenerTodos('categorias');
             $subcategorias = $defaultDataModel->obtenerSubcategoriasConCategoria();

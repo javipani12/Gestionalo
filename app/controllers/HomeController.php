@@ -1,5 +1,6 @@
 <?php
     class HomeController {
+        
         /**
          * Muestra la página de inicio (landing page) para usuarios no autenticados.
          */

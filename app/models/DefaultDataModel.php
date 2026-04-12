@@ -2,6 +2,7 @@
     class DefaultDataModel {
         private $db;
 
+        // Mapeo de tablas maestras con sus campos clave y de nombre para uso genérico
         private const TABLE_MAP = [
             'categorias' => [
                 'id' => 'id_categoria',

@@ -1,54 +1,56 @@
 (() => {
-  const categoriaSelect = document.getElementById('id_categoria');
-  const subcategoriaSelect = document.getElementById('id_subcategoria');
+  const selectorCategoria = document.getElementById('id_categoria');
+  const selectorSubcategoria = document.getElementById('id_subcategoria');
 
-  if (!categoriaSelect || !subcategoriaSelect) {
+  if (!selectorCategoria || !selectorSubcategoria) {
     return;
   }
 
-  const subcategoriaOptions = Array.from(subcategoriaSelect.options).slice(1).map((option) => ({
-    value: option.value,
-    text: option.text,
-    categoriaId: option.dataset.categoriaId || '',
+  // Conserva las opciones originales para poder reconstruir la lista.
+  const opcionesSubcategoria = Array.from(selectorSubcategoria.options).slice(1).map((opcion) => ({
+    value: opcion.value,
+    text: opcion.text,
+    categoriaId: opcion.dataset.categoriaId || '',
   }));
 
-  const optionPlaceholder = subcategoriaSelect.options[0]?.cloneNode(true) || new Option('Selecciona una subcategoría', '');
-  const selectedSubcategoriaInicial = subcategoriaSelect.value;
+  const opcionPlaceholder = selectorSubcategoria.options[0]?.cloneNode(true) || new Option('Selecciona una subcategoría', '');
+  const subcategoriaInicialSeleccionada = selectorSubcategoria.value;
 
-  function repintarSubcategorias() {
-    const categoriaIdSeleccionada = categoriaSelect.value;
+  // Filtra las subcategorias segun la categoria elegida.
+  function pintarSubcategorias() {
+    const categoriaIdSeleccionada = selectorCategoria.value;
 
-    subcategoriaSelect.innerHTML = '';
-    subcategoriaSelect.appendChild(optionPlaceholder.cloneNode(true));
+    selectorSubcategoria.innerHTML = '';
+    selectorSubcategoria.appendChild(opcionPlaceholder.cloneNode(true));
 
-    subcategoriaOptions
-      .filter((item) => item.categoriaId === categoriaIdSeleccionada)
-      .forEach((item) => {
-        const option = new Option(item.text, item.value);
-        option.dataset.categoriaId = item.categoriaId;
-        subcategoriaSelect.appendChild(option);
+    opcionesSubcategoria
+      .filter((elemento) => elemento.categoriaId === categoriaIdSeleccionada)
+      .forEach((elemento) => {
+        const opcion = new Option(elemento.text, elemento.value);
+        opcion.dataset.categoriaId = elemento.categoriaId;
+        selectorSubcategoria.appendChild(opcion);
       });
 
-    if (selectedSubcategoriaInicial && categoriaIdSeleccionada) {
-      const existe = subcategoriaOptions.some((item) =>
-        item.value === selectedSubcategoriaInicial && item.categoriaId === categoriaIdSeleccionada
+    if (subcategoriaInicialSeleccionada && categoriaIdSeleccionada) {
+      const existe = opcionesSubcategoria.some((elemento) =>
+        elemento.value === subcategoriaInicialSeleccionada && elemento.categoriaId === categoriaIdSeleccionada
       );
 
       if (existe) {
-        subcategoriaSelect.value = selectedSubcategoriaInicial;
+        selectorSubcategoria.value = subcategoriaInicialSeleccionada;
       }
     }
 
-    if (!subcategoriaSelect.value) {
-      subcategoriaSelect.selectedIndex = 0;
+    if (!selectorSubcategoria.value) {
+      selectorSubcategoria.selectedIndex = 0;
     }
 
-    subcategoriaSelect.disabled = !categoriaIdSeleccionada;
+    selectorSubcategoria.disabled = !categoriaIdSeleccionada;
   }
 
-  categoriaSelect.addEventListener('change', () => {
-    repintarSubcategorias();
+  selectorCategoria.addEventListener('change', () => {
+    pintarSubcategorias();
   });
 
-  repintarSubcategorias();
+  pintarSubcategorias();
 })();

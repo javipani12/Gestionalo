@@ -113,9 +113,10 @@
         }
 
         /**
-         * Añade filtros opcionales a la consulta principal.
+         * Función interna que añade filtros opcionales a la consulta principal.
          */
         private function agregarFiltros(&$condiciones, &$parametros, $filtros) {
+            // Solo se procesan filtros si el array no está vacío
             if(!empty($filtros['concepto'])) {
                 $condiciones[] = 't.concepto LIKE :concepto';
                 $parametros[] = [
@@ -125,6 +126,7 @@
                 ];
             }
 
+            // Se validan los filtros numéricos solo si no están vacíos y son valores válidos
             if(!empty($filtros['id_tipo'])) {
                 $condiciones[] = 't.id_tipo = :id_tipo';
                 $parametros[] = [
@@ -152,6 +154,7 @@
                 ];
             }
 
+            // Se validan los filtros de fecha solo si no están vacíos y son fechas válidas
             if(!empty($filtros['fecha_desde'])) {
                 $condiciones[] = 't.fecha_movimiento >= :fecha_desde';
                 $parametros[] = [
@@ -170,6 +173,7 @@
                 ];
             }
 
+            // Se validan los filtros de método de pago solo si no están vacíos y son valores válidos
             if(!empty($filtros['id_metodo'])) {
                 $condiciones[] = 't.id_metodo = :id_metodo';
                 $parametros[] = [

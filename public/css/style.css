@@ -1677,9 +1677,425 @@ label {
   border: 0;
 }
 
+/* -----------------------------------------
+   HERRAMIENTAS
+   Vista principal y acceso a modulos
+   ----------------------------------------- */
+.tools-hero {
+  margin-bottom: 18px;
+}
+
+.tools-hero h1 {
+  margin: 0 0 8px;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.tool-card {
+  display: grid;
+  grid-template-rows: 190px 1fr;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(1, 10, 18, 0.14);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(1, 10, 18, 0.08);
+}
+
+.tool-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tool-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+}
+
+.tool-card__content h2 {
+  margin: 0;
+  color: var(--color-primary-75);
+}
+
+.tool-card__content p {
+  margin: 0;
+  line-height: 1.5;
+  color: rgba(1, 10, 18, 0.82);
+}
+
+.tool-card__content .btn {
+  margin-top: auto;
+  width: fit-content;
+}
+
+.tool-detail-card {
+  max-width: 820px;
+}
+
+.tool-detail-card h1 {
+  margin: 0 0 10px;
+}
+
+.tool-detail-card p {
+  margin: 0 0 12px;
+}
+
+.tool-detail-actions {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mortgage-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.mortgage-form-card,
+.mortgage-results-card {
+  min-width: 0;
+}
+
+.mortgage-results-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mortgage-form {
+  display: grid;
+  gap: 14px;
+}
+
+.mortgage-block {
+  margin: 0;
+  padding: 12px;
+  border: 1px solid rgba(1, 10, 18, 0.2);
+  border-radius: 12px;
+  background: rgba(246, 251, 255, 0.75);
+}
+
+.mortgage-block legend {
+  padding: 0 8px;
+  color: var(--color-primary-75);
+  font-weight: 700;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.mortgage-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.mortgage-grid--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.mortgage-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mortgage-field label {
+  margin: 0 0 6px;
+  font-size: 0.87rem;
+  font-weight: 600;
+  color: rgba(1, 10, 18, 0.74);
+  cursor: help;
+  text-decoration: underline dotted rgba(1, 10, 18, 0.35);
+  text-underline-offset: 2px;
+}
+
+.mortgage-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.mortgage-kpi {
+  margin: 10px 0 18px;
+  padding: 14px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, rgba(255, 138, 48, 0.16), rgba(48, 165, 255, 0.14));
+  border: 1px solid rgba(1, 10, 18, 0.14);
+}
+
+.mortgage-kpi__label {
+  margin: 0;
+  font-weight: 600;
+  color: rgba(1, 10, 18, 0.68);
+}
+
+.mortgage-kpi__value {
+  margin: 4px 0 6px;
+  font-size: clamp(1.65rem, 3vw, 2.2rem);
+  color: var(--text);
+  font-weight: 700;
+}
+
+.mortgage-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  flex: 1;
+  align-content: space-between;
+  grid-auto-rows: minmax(104px, 1fr);
+}
+
+.mortgage-summary-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(1, 10, 18, 0.12);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.mortgage-summary-card .muted {
+  display: block;
+  margin: 0 0 4px;
+}
+
+.mortgage-summary-card h3 {
+  margin: 0 0 6px;
+  font-size: 0.92rem;
+  color: var(--color-primary);
+}
+
+.mortgage-summary-card p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.mortgage-ratio {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.2rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: rgba(1, 10, 18, 0.04);
+}
+
+.mortgage-ratio--healthy {
+  color: #1f7a3f;
+  background: rgba(46, 204, 113, 0.14);
+  border-color: rgba(46, 204, 113, 0.26);
+}
+
+.mortgage-ratio--moderate {
+  color: #a35d00;
+  background: rgba(255, 193, 7, 0.18);
+  border-color: rgba(255, 193, 7, 0.28);
+}
+
+.mortgage-ratio--high {
+  color: #b42318;
+  background: rgba(255, 99, 71, 0.16);
+  border-color: rgba(255, 99, 71, 0.28);
+}
+
+.mortgage-ratio--neutral {
+  color: rgba(1, 10, 18, 0.7);
+  background: rgba(1, 10, 18, 0.04);
+  border-color: rgba(1, 10, 18, 0.08);
+}
+
+.mortgage-section {
+  margin-top: 16px;
+}
+
+.mortgage-section h3 {
+  margin: 0 0 8px;
+  color: var(--color-primary);
+}
+
+#mortgageChart {
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid rgba(1, 10, 18, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.mortgage-chart-legend {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+
+.mortgage-chart-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(1, 10, 18, 0.74);
+}
+
+.mortgage-chart-legend__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.mortgage-chart-legend__dot--capital {
+  background: rgba(48, 165, 255, 0.9);
+}
+
+.mortgage-chart-legend__dot--interes {
+  background: rgba(255, 138, 48, 0.9);
+}
+
+.mortgage-table {
+  min-width: 680px;
+}
+
+.mortgage-table th,
+.mortgage-table td {
+  text-align: center;
+}
+
+.mortgage-table thead th {
+  text-align: center;
+}
+
+.mortgage-amort-pagination {
+  margin-top: 10px;
+}
+
+.mortgage-table--scenario {
+  min-width: 520px;
+}
+
+.mortgage-analysis-card {
+  margin-top: 18px;
+}
+
+.mortgage-analysis-card h2 {
+  margin: 0;
+  color: var(--color-primary-75);
+}
+
+.mortgage-analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.mortgage-analysis-card .mortgage-analysis-grid {
+  margin-top: 12px;
+}
+
+.mortgage-analysis-grid > .mortgage-section {
+  min-width: 0;
+}
+
+.mortgage-analysis-grid > .mortgage-section[aria-labelledby="scenario-title"] .transactions-table-wrap {
+  overflow-x: hidden;
+}
+
+.mortgage-analysis-grid > .mortgage-section[aria-labelledby="scenario-title"] .mortgage-table--scenario {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+}
+
+.mortgage-analysis-grid > .mortgage-section[aria-labelledby="scenario-title"] .mortgage-table--scenario th,
+.mortgage-analysis-grid > .mortgage-section[aria-labelledby="scenario-title"] .mortgage-table--scenario td {
+  padding: 10px 8px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.mortgage-analysis-grid > .mortgage-section[aria-labelledby="scenario-title"] .mortgage-table--scenario th:first-child,
+.mortgage-analysis-grid > .mortgage-section[aria-labelledby="scenario-title"] .mortgage-table--scenario td:first-child {
+  width: 32%;
+}
+
+/* -----------------------------------------
+   AJUSTES FINALES HIPOTECA
+   Overrides al final para evitar colisiones
+   ----------------------------------------- */
+.mortgage-analysis-card .mortgage-table thead th,
+.mortgage-analysis-card .mortgage-table tbody td {
+  text-align: center;
+}
+
+#tablaAmortizacion {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+}
+
+#tablaAmortizacion th:nth-child(1),
+#tablaAmortizacion td:nth-child(1) {
+  width: 8%;
+}
+
+#tablaAmortizacion th:nth-child(2),
+#tablaAmortizacion td:nth-child(2),
+#tablaAmortizacion th:nth-child(3),
+#tablaAmortizacion td:nth-child(3),
+#tablaAmortizacion th:nth-child(4),
+#tablaAmortizacion td:nth-child(4),
+#tablaAmortizacion th:nth-child(5),
+#tablaAmortizacion td:nth-child(5),
+#tablaAmortizacion th:nth-child(6),
+#tablaAmortizacion td:nth-child(6) {
+  width: 18.4%;
+}
+
+/* -----------------------------------------
+  HERRAMIENTAS - FIN
+  ----------------------------------------- */
+
 @media (max-width: 720px) {
   .about-grid {
     grid-template-columns: 1fr;
+  }
+
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mortgage-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .mortgage-grid--three,
+  .mortgage-grid--two,
+  .mortgage-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mortgage-analysis-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .mortgage-summary-grid {
+    grid-auto-rows: auto;
+    align-content: stretch;
   }
 
   .about-map__frame-wrap iframe {
@@ -1694,6 +2110,19 @@ label {
 @media (max-width: 932px) and (orientation: landscape) {
   .about-grid {
     grid-template-columns: 1fr;
+  }
+
+  .tools-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mortgage-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .mortgage-analysis-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
 
   .about-content,
@@ -1711,6 +2140,97 @@ label {
 
   .about-map {
     margin-top: 0;
+  }
+
+  .mortgage-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .mortgage-analysis-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .mortgage-analysis-card .transactions-table-wrap {
+    overflow-x: auto;
+    padding: 2px;
+  }
+
+  .mortgage-analysis-card .transactions-table {
+    display: table;
+    width: 100%;
+    min-width: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: rgba(246, 251, 255, 0.72);
+  }
+
+  .mortgage-analysis-card .transactions-table thead {
+    display: table-header-group;
+  }
+
+  .mortgage-analysis-card .transactions-table tbody {
+    display: table-row-group;
+  }
+
+  .mortgage-analysis-card .transactions-table tr {
+    display: table-row;
+    width: auto;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .mortgage-analysis-card .transactions-table td,
+  .mortgage-analysis-card .transactions-table th {
+    display: table-cell;
+    width: auto;
+    padding: 10px 8px;
+    border: 0;
+    border-bottom: 1px solid rgba(1, 10, 18, 0.08);
+    text-align: center;
+    white-space: normal;
+  }
+
+  .mortgage-analysis-card .transactions-table td::before {
+    content: none;
+    display: none;
+  }
+
+  .mortgage-analysis-grid > .mortgage-section[aria-labelledby="scenario-title"] .mortgage-table--scenario th,
+  .mortgage-analysis-grid > .mortgage-section[aria-labelledby="scenario-title"] .mortgage-table--scenario td {
+    padding: 10px 8px;
+  }
+
+  .mortgage-analysis-grid > .mortgage-section[aria-labelledby="scenario-title"] .mortgage-table--scenario th:first-child,
+  .mortgage-analysis-grid > .mortgage-section[aria-labelledby="scenario-title"] .mortgage-table--scenario td:first-child {
+    width: 32%;
+  }
+
+  #tablaAmortizacion {
+    width: 100%;
+    min-width: 0;
+    table-layout: fixed;
+  }
+
+  #tablaAmortizacion th:nth-child(1),
+  #tablaAmortizacion td:nth-child(1) {
+    width: 8%;
+  }
+
+  #tablaAmortizacion th:nth-child(2),
+  #tablaAmortizacion td:nth-child(2),
+  #tablaAmortizacion th:nth-child(3),
+  #tablaAmortizacion td:nth-child(3),
+  #tablaAmortizacion th:nth-child(4),
+  #tablaAmortizacion td:nth-child(4),
+  #tablaAmortizacion th:nth-child(5),
+  #tablaAmortizacion td:nth-child(5),
+  #tablaAmortizacion th:nth-child(6),
+  #tablaAmortizacion td:nth-child(6) {
+    width: 18.4%;
   }
 }
 
@@ -2423,6 +2943,10 @@ label {
     grid-template-columns: 1fr;
   }
 
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+
   .dashboard-page {
     padding: 0;
   }
@@ -2567,6 +3091,15 @@ label {
     max-width: 100%;
     margin-left: 0;
     margin-right: 0;
+  }
+
+  .mortgage-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .mortgage-analysis-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
 }
 
@@ -2796,6 +3329,59 @@ label {
   }
 }
 
+@media (hover: none) and (pointer: coarse) and (max-width: 767px) and (orientation: portrait) {
+  .mortgage-table--scenario tr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mortgage-analysis-grid > .mortgage-section[aria-labelledby="scenario-title"] .mortgage-table--scenario td:first-child {
+    width: auto;
+  }
+
+  .mortgage-table--scenario td {
+    word-break: normal;
+  }
+
+  .mortgage-table--scenario td:nth-child(5) {
+    grid-column: 1 / -1;
+  }
+
+  .mortgage-table--scenario td:nth-child(1)::before { content: 'Escenario'; }
+  .mortgage-table--scenario td:nth-child(2)::before { content: 'Interés'; }
+  .mortgage-table--scenario td:nth-child(3)::before { content: 'Plazo'; }
+  .mortgage-table--scenario td:nth-child(4)::before { content: 'Cuota'; }
+  .mortgage-table--scenario td:nth-child(5)::before { content: 'Intereses'; }
+
+  #tablaAmortizacion tr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  #tablaAmortizacion td {
+    width: 100% !important;
+    min-width: 0;
+    align-self: stretch;
+    min-height: 72px;
+    word-break: normal;
+  }
+
+  #tablaAmortizacion td:nth-child(1),
+  #tablaAmortizacion td:nth-child(2),
+  #tablaAmortizacion td:nth-child(3),
+  #tablaAmortizacion td:nth-child(4),
+  #tablaAmortizacion td:nth-child(5),
+  #tablaAmortizacion td:nth-child(6) {
+    width: 100% !important;
+  }
+
+  #tablaAmortizacion td:nth-child(1)::before { content: 'Mes'; }
+  #tablaAmortizacion td:nth-child(2)::before { content: 'Cuota'; }
+  #tablaAmortizacion td:nth-child(3)::before { content: 'Interés'; }
+  #tablaAmortizacion td:nth-child(4)::before { content: 'Capital'; }
+  #tablaAmortizacion td:nth-child(5)::before { content: 'Extra'; }
+  #tablaAmortizacion td:nth-child(6)::before { content: 'Saldo'; }
+}
+
 @media (hover: none) and (pointer: coarse) and (min-width: 768px) and (max-width: 1366px) {
   .dashboard-admin-shell .dashboard-stats-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2863,6 +3449,88 @@ label {
   .master-table-list-wrap .transactions-table.master-table-records td:nth-child(3) .transactions-actions,
   .master-table-list-wrap .transactions-table.master-table-records--subcategories td:nth-child(4) .transactions-actions {
     justify-content: center;
+  }
+
+  .mortgage-analysis-card .transactions-table-wrap {
+    overflow-x: auto;
+    padding: 2px;
+  }
+
+  .mortgage-analysis-card .transactions-table {
+    display: table;
+    width: 100%;
+    min-width: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: rgba(246, 251, 255, 0.72);
+  }
+
+  .mortgage-analysis-card .transactions-table thead {
+    display: table-header-group;
+  }
+
+  .mortgage-analysis-card .transactions-table tbody {
+    display: table-row-group;
+  }
+
+  .mortgage-analysis-card .transactions-table tr {
+    display: table-row;
+    width: auto;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .mortgage-analysis-card .transactions-table td,
+  .mortgage-analysis-card .transactions-table th {
+    display: table-cell;
+    width: auto;
+    padding: 10px 8px;
+    border: 0;
+    border-bottom: 1px solid rgba(1, 10, 18, 0.08);
+    text-align: center;
+    white-space: normal;
+  }
+
+  .mortgage-analysis-card .transactions-table td::before {
+    content: none;
+    display: none;
+  }
+
+  .mortgage-analysis-grid > .mortgage-section[aria-labelledby="scenario-title"] .mortgage-table--scenario th,
+  .mortgage-analysis-grid > .mortgage-section[aria-labelledby="scenario-title"] .mortgage-table--scenario td {
+    padding: 10px 8px;
+  }
+
+  .mortgage-analysis-grid > .mortgage-section[aria-labelledby="scenario-title"] .mortgage-table--scenario th:first-child,
+  .mortgage-analysis-grid > .mortgage-section[aria-labelledby="scenario-title"] .mortgage-table--scenario td:first-child {
+    width: 32%;
+  }
+
+  #tablaAmortizacion {
+    width: 100%;
+    min-width: 0;
+    table-layout: fixed;
+  }
+
+  #tablaAmortizacion th:nth-child(1),
+  #tablaAmortizacion td:nth-child(1) {
+    width: 8%;
+  }
+
+  #tablaAmortizacion th:nth-child(2),
+  #tablaAmortizacion td:nth-child(2),
+  #tablaAmortizacion th:nth-child(3),
+  #tablaAmortizacion td:nth-child(3),
+  #tablaAmortizacion th:nth-child(4),
+  #tablaAmortizacion td:nth-child(4),
+  #tablaAmortizacion th:nth-child(5),
+  #tablaAmortizacion td:nth-child(5),
+  #tablaAmortizacion th:nth-child(6),
+  #tablaAmortizacion td:nth-child(6) {
+    width: 18.4%;
   }
 }
 

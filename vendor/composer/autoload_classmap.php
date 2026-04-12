@@ -19,6 +19,8 @@ return array(
     'HomeController' => $baseDir . '/app/controllers/HomeController.php',
     'LegalController' => $baseDir . '/app/controllers/LegalController.php',
     'ProfileController' => $baseDir . '/app/controllers/ProfileController.php',
+    'ToolController' => $baseDir . '/app/controllers/ToolController.php',
+    'ToolModel' => $baseDir . '/app/models/ToolModel.php',
     'TransactionController' => $baseDir . '/app/controllers/TransactionController.php',
     'TransactionModel' => $baseDir . '/app/models/TransactionModel.php',
     'UserModel' => $baseDir . '/app/models/UserModel.php',

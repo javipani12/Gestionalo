@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+  // Cierra automáticamente las alertas visibles después de unos segundos.
   var alertas = document.querySelectorAll('.alert');
 
   alertas.forEach(function (alerta) {

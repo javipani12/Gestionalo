@@ -1,5 +1,6 @@
 <?php
     class AuthController {
+
         /**
          * Muestra el formulario de login
          */
@@ -39,7 +40,7 @@
                 $privacidad = isset($_POST['privacidad']);
                 $consentimiento = isset($_POST['consentimiento']);
 
-                // Validar datos
+                // Validamos los datos del formulario con las diferentes reglas de validación
                 if($nombre === '' || $apellido1 === '' || $correo === '' || $contrasena === '' || $contrasena2 === '') {
                     $_SESSION['error'] = 'Los campos obligatorios no pueden estar vacíos.';
                     require_once './../app/views/auth/register.php';

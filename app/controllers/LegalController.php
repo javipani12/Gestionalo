@@ -1,5 +1,6 @@
 <?php
     class LegalController {
+        
         /**
          * Muestra la página de consentimiento para el tratamiento de datos
          */

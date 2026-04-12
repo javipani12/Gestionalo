@@ -19,16 +19,19 @@ document.addEventListener('DOMContentLoaded', function () {
   var valoresIniciales = {};
   var estaEnEdicion = false;
 
+  // Guarda el valor original para poder cancelar cambios sin perder referencia.
   camposEditables.forEach(function (campo) {
     valoresIniciales[campo.name] = campo.value;
   });
 
+  // Restaura el formulario al estado previo a la edicion.
   function restaurarValoresIniciales() {
     camposEditables.forEach(function (campo) {
       campo.value = valoresIniciales[campo.name] || '';
     });
   }
 
+  // Habilita o bloquea los campos y actualiza los botones visibles.
   function establecerModoEdicion(estaEnEdicion) {
     camposEditables.forEach(function (campo) {
       campo.disabled = !estaEnEdicion;
