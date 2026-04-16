@@ -105,6 +105,46 @@
         }
 
         /**
+         * Muestra el detalle de un objetivo con su historial asociado.
+         */
+        public function mostrarDetalleObjetivo() {
+            $titulo = 'Gestionalo | Detalle de objetivo';
+            $idUsuario = (int)($_SESSION['usuario']['id_usuario'] ?? 0);
+            $idObjetivo = (int)($_GET['id_objetivo'] ?? 0);
+
+            if ($idUsuario <= 0) {
+                $_SESSION['error'] = 'Usuario no identificado. Por favor, inicia sesión nuevamente.';
+                header('Location: index.php?controller=goal&action=mostrarObjetivosAhorro');
+                exit();
+            }
+
+            if ($idObjetivo <= 0) {
+                $_SESSION['error'] = 'El objetivo seleccionado no es válido.';
+                header('Location: index.php?controller=goal&action=mostrarObjetivosAhorro');
+                exit();
+            }
+
+            try {
+                $goalModel = new GoalModel();
+                $objetivoDetalle = $goalModel->obtenerDetalleObjetivoPorIdUsuario($idUsuario, $idObjetivo);
+
+                if (!$objetivoDetalle) {
+                    $_SESSION['error'] = 'No se encontró el objetivo solicitado.';
+                    header('Location: index.php?controller=goal&action=mostrarObjetivosAhorro');
+                    exit();
+                }
+
+                $historialObjetivo = $goalModel->obtenerHistorialTransaccionesObjetivo($idUsuario, $idObjetivo, 30);
+                require_once './../app/views/goals/goal_detail.php';
+            } catch (Throwable $e) {
+                error_log('GoalController::mostrarDetalleObjetivo -> ' . $e->getMessage());
+                $_SESSION['error'] = 'No se pudo cargar el detalle del objetivo.';
+                header('Location: index.php?controller=goal&action=mostrarObjetivosAhorro');
+                exit();
+            }
+        }
+
+        /**
          * Procesa el formulario y guarda un nuevo objetivo de ahorro.
          */
         public function guardarObjetivo() {

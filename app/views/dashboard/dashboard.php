@@ -30,8 +30,8 @@
                             <?php foreach ($ultimasTransacciones as $transaccion): ?>
                                 <?php $claseFila = (strtolower($transaccion['tipo_movimiento']) === 'gasto') ? 'dashboard-tx-row--gasto' : 'dashboard-tx-row--ingreso'; ?>
                                 <li class="<?= $claseFila ?>">
-                                    <span class="tx-cell tx-cell--categoria"><?= htmlspecialchars($transaccion['nombre_categoria']) ?></span>
-                                    <span class="tx-cell"><?= htmlspecialchars($transaccion['nombre_subcategoria']) ?></span>
+                                    <span class="tx-cell tx-cell--categoria"><?= $transaccion['nombre_categoria'] ?? '-' ?></span>
+                                    <span class="tx-cell"><?= $transaccion['nombre_subcategoria'] ?? '-' ?></span>
                                     <span class="tx-cell tx-cell--concepto"><?= htmlspecialchars($transaccion['concepto']) ?></span>
                                     <span class="tx-cell tx-cell--fecha"><?= date('d/m/Y', strtotime($transaccion['fecha_movimiento'])) ?></span>
                                     <span class="tx-cell tx-cell--importe is-right"><?= number_format($transaccion['importe'], 2) ?> €</span>

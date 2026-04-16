@@ -39,12 +39,13 @@
                     t.concepto,
                     t.fecha_movimiento,
                     mp.nombre AS metodo_pago,
-                    t.importe
+                    t.importe,
+                    t.id_objetivo
                 FROM transacciones t
                 INNER JOIN tipos_movimiento tm ON t.id_tipo = tm.id_tipo
-                INNER JOIN categorias c ON t.id_categoria = c.id_categoria
-                INNER JOIN subcategorias s ON t.id_subcategoria = s.id_subcategoria
-                INNER JOIN metodos_pago mp ON t.id_metodo = mp.id_metodo
+                LEFT JOIN categorias c ON t.id_categoria = c.id_categoria
+                LEFT JOIN subcategorias s ON t.id_subcategoria = s.id_subcategoria
+                LEFT JOIN metodos_pago mp ON t.id_metodo = mp.id_metodo
                 WHERE " . implode(' AND ', $condiciones) . "
                 ORDER BY " . $ordenSql . ", t.id_transaccion DESC
                 LIMIT :limite OFFSET :offset
@@ -222,9 +223,9 @@
                     t.importe
                 FROM transacciones t
                 INNER JOIN tipos_movimiento tm ON t.id_tipo = tm.id_tipo
-                INNER JOIN categorias c ON t.id_categoria = c.id_categoria
-                INNER JOIN subcategorias s ON t.id_subcategoria = s.id_subcategoria
-                INNER JOIN metodos_pago mp ON t.id_metodo = mp.id_metodo
+                LEFT JOIN categorias c ON t.id_categoria = c.id_categoria
+                LEFT JOIN subcategorias s ON t.id_subcategoria = s.id_subcategoria
+                LEFT JOIN metodos_pago mp ON t.id_metodo = mp.id_metodo
                 WHERE id_usuario = :id_usuario
                 ORDER BY fecha_movimiento DESC
             ";
@@ -248,10 +249,11 @@
                     t.fecha_movimiento, 
                     t.importe
                 FROM transacciones t
-                INNER JOIN categorias c ON t.id_categoria = c.id_categoria
-                INNER JOIN subcategorias s ON t.id_subcategoria = s.id_subcategoria
+                LEFT JOIN categorias c ON t.id_categoria = c.id_categoria
+                LEFT JOIN subcategorias s ON t.id_subcategoria = s.id_subcategoria
                 INNER JOIN tipos_movimiento tm ON t.id_tipo = tm.id_tipo
                 WHERE id_usuario = :id_usuario
+                AND tm.nombre NOT IN ('Transferencia Interna Aporte', 'Transferencia Interna Retiro')
                 ORDER BY fecha_movimiento DESC
                 LIMIT :limite
             ";
@@ -271,6 +273,7 @@
                     t.id_transaccion, 
                     t.id_usuario,
                     t.id_tipo,
+                    t.id_objetivo,
                     tm.nombre AS tipo_movimiento, 
                     c.id_categoria,
                     c.nombre_categoria, 
@@ -283,9 +286,9 @@
                     t.importe
                 FROM transacciones t
                 INNER JOIN tipos_movimiento tm ON t.id_tipo = tm.id_tipo
-                INNER JOIN categorias c ON t.id_categoria = c.id_categoria
-                INNER JOIN subcategorias s ON t.id_subcategoria = s.id_subcategoria
-                INNER JOIN metodos_pago mp ON t.id_metodo = mp.id_metodo
+                LEFT JOIN categorias c ON t.id_categoria = c.id_categoria
+                LEFT JOIN subcategorias s ON t.id_subcategoria = s.id_subcategoria
+                LEFT JOIN metodos_pago mp ON t.id_metodo = mp.id_metodo
                 WHERE id_transaccion = :id_transaccion
             ";
             $stmt = $this->db->prepare($sql);
@@ -303,6 +306,7 @@
                     id_usuario, 
                     id_categoria,
                     id_subcategoria,
+                    id_objetivo,
                     id_tipo,
                     concepto,
                     fecha_movimiento,
@@ -314,6 +318,7 @@
                     :id_usuario,
                     :id_categoria,
                     :id_subcategoria,
+                    :id_objetivo,
                     :id_tipo,
                     :concepto,
                     :fecha_movimiento,
@@ -323,12 +328,13 @@
                 )";
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':id_usuario', $id_usuario, PDO::PARAM_INT);
-            $stmt->bindValue(':id_categoria', $datosTransaccion['id_categoria'], PDO::PARAM_INT);
-            $stmt->bindValue(':id_subcategoria', $datosTransaccion['id_subcategoria'], PDO::PARAM_INT);
+            $this->bindNullableInt($stmt, ':id_categoria', $datosTransaccion['id_categoria'] ?? null);
+            $this->bindNullableInt($stmt, ':id_subcategoria', $datosTransaccion['id_subcategoria'] ?? null);
+            $this->bindNullableInt($stmt, ':id_objetivo', $datosTransaccion['id_objetivo'] ?? null);
             $stmt->bindValue(':id_tipo', $datosTransaccion['id_tipo'], PDO::PARAM_INT);
             $stmt->bindValue(':concepto', $datosTransaccion['concepto'], PDO::PARAM_STR);
             $stmt->bindValue(':fecha_movimiento', $datosTransaccion['fecha_movimiento'], PDO::PARAM_STR);
-            $stmt->bindValue(':id_metodo', $datosTransaccion['id_metodo'], PDO::PARAM_INT);
+            $this->bindNullableInt($stmt, ':id_metodo', $datosTransaccion['id_metodo'] ?? null);
             $stmt->bindValue(':importe', $datosTransaccion['importe'], PDO::PARAM_STR);
             if($stmt->execute()) {
                 return true;
@@ -347,6 +353,7 @@
                 SET 
                     id_categoria = :id_categoria, 
                     id_subcategoria = :id_subcategoria,
+                    id_objetivo = :id_objetivo,
                     id_tipo = :id_tipo,
                     concepto = :concepto,
                     fecha_movimiento = :fecha_movimiento,
@@ -357,11 +364,12 @@
             ";
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':id_transaccion', $id_transaccion, PDO::PARAM_INT);
-            $stmt->bindValue(':id_categoria', $datosTransaccion['id_categoria'], PDO::PARAM_INT);
-            $stmt->bindValue(':id_subcategoria', $datosTransaccion['id_subcategoria'], PDO::PARAM_INT);
+            $this->bindNullableInt($stmt, ':id_categoria', $datosTransaccion['id_categoria'] ?? null);
+            $this->bindNullableInt($stmt, ':id_subcategoria', $datosTransaccion['id_subcategoria'] ?? null);
+            $this->bindNullableInt($stmt, ':id_objetivo', $datosTransaccion['id_objetivo'] ?? null);
             $stmt->bindValue(':id_tipo', $datosTransaccion['id_tipo'], PDO::PARAM_INT);
             $stmt->bindValue(':concepto', $datosTransaccion['concepto'], PDO::PARAM_STR);
-            $stmt->bindValue(':id_metodo', $datosTransaccion['id_metodo'], PDO::PARAM_INT);
+            $this->bindNullableInt($stmt, ':id_metodo', $datosTransaccion['id_metodo'] ?? null);
             $stmt->bindValue(':fecha_movimiento', $datosTransaccion['fecha_movimiento'], PDO::PARAM_STR);
             $stmt->bindValue(':importe', $datosTransaccion['importe'], PDO::PARAM_STR);
             if($stmt->execute()) {
@@ -369,6 +377,18 @@
             } else {
                 return false;
             }
+        }
+
+        /**
+         * Bindea un entero o null para columnas opcionales.
+         */
+        private function bindNullableInt($stmt, $placeholder, $value) {
+            if ($value === null || $value === '' || (int)$value <= 0) {
+                $stmt->bindValue($placeholder, null, PDO::PARAM_NULL);
+                return;
+            }
+
+            $stmt->bindValue($placeholder, (int)$value, PDO::PARAM_INT);
         }
 
         /**

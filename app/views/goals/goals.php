@@ -47,70 +47,89 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        <?php foreach ($objetivos as $objetivo): ?>
-                                            <?php
-                                                $meta = (float)($objetivo['cantidad_meta'] ?? 0);
-                                                $apartado = (float)($objetivo['saldo_apartado'] ?? 0);
-                                                $restante = max($meta - $apartado, 0);
-                                                $progreso = max(0, min(100, (float)($objetivo['progreso_pct'] ?? 0)));
-                                                $estadoObjetivo = strtolower(trim((string)($objetivo['estado_objetivo'] ?? '')));
-                                                $claseEstadoObjetivo = 'objective-state';
-                                                $claseProgresoObjetivo = 'objective-progress';
-
-                                                if ($progreso >= 100) {
-                                                    $claseProgresoObjetivo .= ' objective-progress--full';
-                                                } elseif ($progreso >= 70) {
-                                                    $claseProgresoObjetivo .= ' objective-progress--high';
-                                                } elseif ($progreso >= 30) {
-                                                    $claseProgresoObjetivo .= ' objective-progress--medium';
-                                                } else {
-                                                    $claseProgresoObjetivo .= ' objective-progress--low';
+                                    <?php foreach ($objetivos as $objetivo): ?>
+                                        <?php
+                                            $fechaLimiteTexto = '-';
+                                            if (!empty($objetivo['fecha_limite'])) {
+                                                $fechaLimite = DateTime::createFromFormat('Y-m-d', (string)$objetivo['fecha_limite']);
+                                                if ($fechaLimite !== false) {
+                                                    $fechaLimiteTexto = $fechaLimite->format('d/m/Y');
                                                 }
+                                            }
 
-                                                if ($estadoObjetivo === 'en curso') {
-                                                    $claseEstadoObjetivo .= ' objective-state--curso';
-                                                } elseif ($estadoObjetivo === 'completado') {
-                                                    $claseEstadoObjetivo .= ' objective-state--completado';
-                                                } elseif ($estadoObjetivo === 'cancelado') {
-                                                    $claseEstadoObjetivo .= ' objective-state--cancelado';
-                                                }
-                                            ?>
-                                            <tr>
-                                                <td><?= htmlspecialchars((string)($objetivo['nombre_objetivo'] ?? '')) ?></td>
-                                                <td><?= number_format($meta, 2, ',', '.') ?> €</td>
-                                                <td><?= number_format($apartado, 2, ',', '.') ?> €</td>
-                                                <td><?= number_format($restante, 2, ',', '.') ?> €</td>
-                                                <td><span class="<?= htmlspecialchars($claseProgresoObjetivo) ?>"><?= number_format($progreso, 2, ',', '.') ?>%</span></td>
-                                                <td><span class="<?= htmlspecialchars($claseEstadoObjetivo) ?>"><?= htmlspecialchars(ucfirst((string)($objetivo['estado_objetivo'] ?? '-'))) ?></span></td>
-                                                <td><?= htmlspecialchars((string)($objetivo['fecha_limite'] ?? '-')) ?></td>
-                                                <td>
-                                                    <div class="transactions-actions">
-                                                        <a
-                                                            href="index.php?controller=goal&action=mostrarFormularioEditarObjetivo&id_objetivo=<?= (int)($objetivo['id_objetivo'] ?? 0) ?>"
-                                                            class="tx-icon-btn tx-icon-btn--edit"
-                                                            aria-label="Editar objetivo"
-                                                            title="Editar objetivo"
-                                                        >
-                                                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                                                <path d="M3 17.25V21h3.75l11-11-3.75-3.75-11 11Zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0l-1.96 1.96 3.75 3.75 2.13-1.79Z"/>
-                                                            </svg>
-                                                        </a>
+                                            $meta = (float)($objetivo['cantidad_meta'] ?? 0);
+                                            $apartado = (float)($objetivo['saldo_apartado'] ?? 0);
+                                            $restante = max($meta - $apartado, 0);
+                                            $progreso = max(0, min(100, (float)($objetivo['progreso_pct'] ?? 0)));
+                                            $estadoObjetivo = strtolower(trim((string)($objetivo['estado_objetivo'] ?? '')));
+                                            $claseEstadoObjetivo = 'objective-state';
+                                            $claseProgresoObjetivo = 'objective-progress';
 
-                                                        <a
-                                                            href="index.php?controller=goal&action=eliminarObjetivo&id_objetivo=<?= (int)($objetivo['id_objetivo'] ?? 0) ?>"
-                                                            class="tx-icon-btn tx-icon-btn--delete"
-                                                            aria-label="Eliminar objetivo"
-                                                            title="Eliminar objetivo"
-                                                            onclick="return confirm('¿Estás seguro de que quieres eliminar este objetivo?');"
-                                                        >
-                                                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                                                <path d="M6 7h12v2H6V7Zm2 3h8l-.7 9.2c-.04.46-.42.8-.88.8H9.58c-.46 0-.84-.34-.88-.8L8 10Zm3-5h2c.55 0 1 .45 1 1v1h-4V6c0-.55.45-1 1-1Z"/>
-                                                            </svg>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
+                                            if ($progreso >= 100) {
+                                                $claseProgresoObjetivo .= ' objective-progress--full';
+                                            } elseif ($progreso >= 70) {
+                                                $claseProgresoObjetivo .= ' objective-progress--high';
+                                            } elseif ($progreso >= 30) {
+                                                $claseProgresoObjetivo .= ' objective-progress--medium';
+                                            } else {
+                                                $claseProgresoObjetivo .= ' objective-progress--low';
+                                            }
+
+                                            if ($estadoObjetivo === 'en curso') {
+                                                $claseEstadoObjetivo .= ' objective-state--curso';
+                                            } elseif ($estadoObjetivo === 'completado') {
+                                                $claseEstadoObjetivo .= ' objective-state--completado';
+                                            } elseif ($estadoObjetivo === 'cancelado') {
+                                                $claseEstadoObjetivo .= ' objective-state--cancelado';
+                                            }
+                                        ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars((string)($objetivo['nombre_objetivo'] ?? '')) ?></td>
+                                            <td><?= number_format($meta, 2, ',', '.') ?> €</td>
+                                            <td><?= number_format($apartado, 2, ',', '.') ?> €</td>
+                                            <td><?= number_format($restante, 2, ',', '.') ?> €</td>
+                                            <td><span class="<?= htmlspecialchars($claseProgresoObjetivo) ?>"><?= number_format($progreso, 2, ',', '.') ?>%</span></td>
+                                            <td><span class="<?= htmlspecialchars($claseEstadoObjetivo) ?>"><?= htmlspecialchars(ucfirst((string)($objetivo['estado_objetivo'] ?? '-'))) ?></span></td>
+                                            <td><?= htmlspecialchars($fechaLimiteTexto) ?></td>
+                                            <td>
+                                                <div class="transactions-actions">
+                                                    <a
+                                                        href="index.php?controller=goal&action=mostrarDetalleObjetivo&id_objetivo=<?= (int)($objetivo['id_objetivo'] ?? 0) ?>"
+                                                        class="tx-icon-btn tx-icon-btn--view"
+                                                        aria-label="Abrir objetivo"
+                                                        title="Abrir objetivo"
+                                                    >
+                                                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                            <path d="M12 5c-5.45 0-9.27 4.88-9.43 5.09a1 1 0 0 0 0 1.22C2.73 11.52 6.55 16.4 12 16.4s9.27-4.88 9.43-5.09a1 1 0 0 0 0-1.22C21.27 9.88 17.45 5 12 5Zm0 9a3.4 3.4 0 1 1 0-6.8 3.4 3.4 0 0 1 0 6.8Zm0-1.8a1.6 1.6 0 1 0 0-3.2 1.6 1.6 0 0 0 0 3.2Z"/>
+                                                        </svg>
+                                                    </a>
+
+                                                    <a
+                                                        href="index.php?controller=goal&action=mostrarFormularioEditarObjetivo&id_objetivo=<?= (int)($objetivo['id_objetivo'] ?? 0) ?>"
+                                                        class="tx-icon-btn tx-icon-btn--edit"
+                                                        aria-label="Editar objetivo"
+                                                        title="Editar objetivo"
+                                                    >
+                                                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                            <path d="M3 17.25V21h3.75l11-11-3.75-3.75-11 11Zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0l-1.96 1.96 3.75 3.75 2.13-1.79Z"/>
+                                                        </svg>
+                                                    </a>
+
+                                                    <a
+                                                        href="index.php?controller=goal&action=eliminarObjetivo&id_objetivo=<?= (int)($objetivo['id_objetivo'] ?? 0) ?>"
+                                                        class="tx-icon-btn tx-icon-btn--delete"
+                                                        aria-label="Eliminar objetivo"
+                                                        title="Eliminar objetivo"
+                                                        onclick="return confirm('¿Estás seguro de que quieres eliminar este objetivo?');"
+                                                    >
+                                                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                            <path d="M6 7h12v2H6V7Zm2 3h8l-.7 9.2c-.04.46-.42.8-.88.8H9.58c-.46 0-.84-.34-.88-.8L8 10Zm3-5h2c.55 0 1 .45 1 1v1h-4V6c0-.55.45-1 1-1Z"/>
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>

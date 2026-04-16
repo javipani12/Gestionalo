@@ -226,14 +226,25 @@
                     <tbody>
                         <?php foreach ($transacciones as $transaccion): ?>
                             <?php
-                                $esIngreso = strtolower($transaccion['tipo_movimiento']) === 'ingreso';
-                                $claseTipo = $esIngreso ? 'tx-type tx-type--ingreso' : 'tx-type tx-type--gasto';
-                                $claseImporte = $esIngreso ? 'tx-amount tx-amount--ingreso' : 'tx-amount tx-amount--gasto';
+                                $tipoMovimientoNormalizado = strtolower(trim((string)($transaccion['tipo_movimiento'] ?? '')));
+                                $esInterna = in_array($tipoMovimientoNormalizado, ['transferencia interna aporte', 'transferencia interna retiro'], true);
+                                $esIngreso = $tipoMovimientoNormalizado === 'ingreso';
+
+                                if ($esInterna) {
+                                    $claseTipo = 'tx-type tx-type--internal';
+                                    $claseImporte = 'tx-amount tx-amount--internal';
+                                } elseif ($esIngreso) {
+                                    $claseTipo = 'tx-type tx-type--ingreso';
+                                    $claseImporte = 'tx-amount tx-amount--ingreso';
+                                } else {
+                                    $claseTipo = 'tx-type tx-type--gasto';
+                                    $claseImporte = 'tx-amount tx-amount--gasto';
+                                }
                             ?>
                             <tr>
                                 <td><span class="<?= $claseTipo ?>"><?= htmlspecialchars(ucfirst($transaccion['tipo_movimiento'])) ?></span></td>
-                                <td><?= htmlspecialchars($transaccion['nombre_categoria']) ?></td>
-                                <td><?= htmlspecialchars($transaccion['nombre_subcategoria']) ?></td>
+                                <td><?= $transaccion['nombre_categoria'] ?? '-' ?></td>
+                                <td><?= $transaccion['nombre_subcategoria'] ?? '-' ?></td>
                                 <td class="tx-concepto"><?= htmlspecialchars($transaccion['concepto']) ?></td>
                                 <td><?= date('d/m/Y', strtotime($transaccion['fecha_movimiento'])) ?></td>
                                 <td><?= htmlspecialchars(ucfirst($transaccion['metodo_pago'])) ?></td>

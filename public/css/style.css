@@ -1585,6 +1585,10 @@ label {
   grid-template-columns: minmax(150px, 1.7fr) minmax(92px, 1fr) minmax(92px, 1fr) minmax(82px, 0.8fr) minmax(112px, 1fr);
 }
 
+.dashboard-tx-head--goal-summary {
+  grid-template-columns: repeat(3, minmax(86px, 1fr)) minmax(82px, 0.8fr) minmax(98px, 0.9fr) minmax(120px, 1.1fr);
+}
+
 .dashboard-tx-head > span {
   min-width: 0;
   padding: 0 12px;
@@ -2501,6 +2505,11 @@ label {
   color: #8a1e2c;
 }
 
+.tx-type--internal {
+  background: rgba(48, 165, 255, 0.16);
+  color: #1157b7;
+}
+
 .query-state {
   display: inline-flex;
   padding: 4px 8px;
@@ -2580,6 +2589,148 @@ label {
   color: #0c5132;
 }
 
+.goal-detail-highlights {
+  margin-top: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.goal-detail-highlight {
+  border: 1px solid rgba(1, 10, 18, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 12px 14px;
+}
+
+.goal-detail-highlight h3 {
+  margin: 0 0 8px;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+  color: rgba(1, 10, 18, 0.62);
+  text-transform: uppercase;
+}
+
+.goal-detail-highlight__value {
+  margin: 0;
+}
+
+.goal-detail-highlight__text {
+  margin: 0;
+  color: rgba(1, 10, 18, 0.9);
+  line-height: 1.5;
+}
+
+.dashboard-grid--goal-detail {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.transactions-table-wrap--goal-history {
+  overflow-x: hidden;
+}
+
+.transactions-table--goal-history {
+  min-width: 0;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.transactions-table--goal-history th,
+.transactions-table--goal-history td {
+  word-break: normal;
+  overflow-wrap: anywhere;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.transactions-table--goal-history th:nth-child(1),
+.transactions-table--goal-history td:nth-child(1) {
+  width: 25%;
+}
+
+.transactions-table--goal-history th:nth-child(2),
+.transactions-table--goal-history td:nth-child(2) {
+  width: 22%;
+}
+
+.transactions-table--goal-history th:nth-child(3),
+.transactions-table--goal-history td:nth-child(3) {
+  width: 14%;
+  white-space: nowrap;
+}
+
+.transactions-table--goal-history th:nth-child(4),
+.transactions-table--goal-history td:nth-child(4) {
+  width: 14%;
+}
+
+.transactions-table--goal-history th:nth-child(5),
+.transactions-table--goal-history td:nth-child(5) {
+  width: 13%;
+}
+
+.transactions-table--goal-history th:nth-child(6),
+.transactions-table--goal-history td:nth-child(6) {
+  width: 12%;
+}
+
+.transactions-table--goal-history th:nth-child(4),
+.transactions-table--goal-history td:nth-child(4) {
+  padding-right: 4px;
+}
+
+.transactions-table--goal-history th:nth-child(5),
+.transactions-table--goal-history td:nth-child(5),
+.transactions-table--goal-history th:nth-child(6),
+.transactions-table--goal-history td:nth-child(6) {
+  padding-left: 4px;
+}
+
+.transactions-table--goal-history .tx-concepto {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.transactions-table--goal-history .tx-actions-cell {
+  text-align: center;
+}
+
+.transactions-table--goal-history .tx-actions-cell .transactions-actions {
+  justify-content: center;
+}
+
+.goal-deadline-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.goal-deadline-badge--none {
+  background: rgba(1, 10, 18, 0.08);
+  color: rgba(1, 10, 18, 0.65);
+}
+
+.goal-deadline-badge--upcoming {
+  background: rgba(48, 165, 255, 0.14);
+  color: #1157b7;
+}
+
+.goal-deadline-badge--soon {
+  background: rgba(255, 190, 64, 0.2);
+  color: #8b5a00;
+}
+
+.goal-deadline-badge--overdue {
+  background: rgba(239, 84, 93, 0.14);
+  color: #8a1e2c;
+}
+
 .tx-amount {
   font-weight: 700;
 }
@@ -2590,6 +2741,10 @@ label {
 
 .tx-amount--gasto {
   color: #8a1e2c;
+}
+
+.tx-amount--internal {
+  color: #1157b7;
 }
 
 .transactions-actions {
@@ -2641,6 +2796,15 @@ label {
 .tx-icon-btn--delete:hover {
   background: rgba(239, 84, 93, 0.14);
   border-color: rgba(239, 84, 93, 0.45);
+}
+
+.tx-icon-btn--view {
+  color: #5a2ea6;
+}
+
+.tx-icon-btn--view:hover {
+  background: rgba(90, 46, 166, 0.16);
+  color: #42217a;
 }
 
 .transactions-pagination {
@@ -2721,6 +2885,10 @@ label {
 
 .transaction-list--goals li {
   grid-template-columns: minmax(150px, 1.7fr) minmax(92px, 1fr) minmax(92px, 1fr) minmax(82px, 0.8fr) minmax(112px, 1fr);
+}
+
+.transaction-list--goal-summary li {
+  grid-template-columns: repeat(3, minmax(86px, 1fr)) minmax(82px, 0.8fr) minmax(98px, 0.9fr) minmax(120px, 1.1fr);
 }
 
 .transaction-list li.dashboard-tx-row--ingreso {

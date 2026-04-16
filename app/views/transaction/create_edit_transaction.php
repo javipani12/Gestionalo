@@ -9,6 +9,21 @@
     $limiteDiarioTransacciones = $limiteDiarioTransacciones ?? 20;
     $transaccionesHoy = $transaccionesHoy ?? 0;
     $puedeCrearTransaccion = $puedeCrearTransaccion ?? true;
+    $objetivosEnCurso = $objetivosEnCurso ?? [];
+    $idTipoPreseleccionado = (int)($idTipoPreseleccionado ?? 0);
+    $idObjetivoPreseleccionado = (int)($idObjetivoPreseleccionado ?? 0);
+    $tipoSeleccionado = (int)($transaccion['id_tipo'] ?? $idTipoPreseleccionado);
+    $objetivoSeleccionado = (int)($transaccion['id_objetivo'] ?? $idObjetivoPreseleccionado);
+    $redirigirAObjetivoId = (int)($redirigirAObjetivoId ?? 0);
+
+    $idsTiposInternos = [];
+    foreach ($tiposMovimiento as $tipoMovimientoItem) {
+        $nombreTipoMovimiento = strtolower(trim((string)($tipoMovimientoItem['nombre'] ?? '')));
+        if ($nombreTipoMovimiento === 'transferencia interna aporte' || $nombreTipoMovimiento === 'transferencia interna retiro') {
+            $idsTiposInternos[] = (int)($tipoMovimientoItem['id'] ?? 0);
+        }
+    }
+    $esTipoInternoSeleccionado = in_array($tipoSeleccionado, $idsTiposInternos, true);
 ?>
     <div class="dashboard-page">
         <?php if (!$esEdicion && isset($transaccionesHoy, $limiteDiarioTransacciones) && !$puedeCrearTransaccion): ?>
@@ -20,6 +35,7 @@
             <h1><?= $esEdicion ? 'Editar Transacción' : 'Crear Nueva Transacción' ?></h1>
             <form action="index.php?controller=transaction&action=guardarTransaccion" method="POST" class="transaction-form">
                 <input type="hidden" name="id_transaccion" value="<?= $transaccion['id_transaccion'] ?? '' ?>">
+                <input type="hidden" name="redirigir_objetivo_id" value="<?= $redirigirAObjetivoId ?>">
                 <div class="transaction-form__grid">
                     <fieldset class="transaction-form__section transaction-form__section--class">
                         <legend>Clasificación</legend>
@@ -30,7 +46,12 @@
                             <select name="id_tipo" id="id_tipo" required>
                                 <option value="">Selecciona un tipo</option>
                                 <?php foreach ($tiposMovimiento as $tipo): ?>
-                                    <option value="<?= $tipo['id'] ?>" <?= (isset($transaccion) && $transaccion['id_tipo'] == $tipo['id']) ? 'selected' : '' ?>>
+                                    <?php $nombreTipo = strtolower(trim((string)($tipo['nombre'] ?? ''))); ?>
+                                    <option
+                                        value="<?= $tipo['id'] ?>"
+                                        data-is-internal="<?= ($nombreTipo === 'transferencia interna aporte' || $nombreTipo === 'transferencia interna retiro') ? '1' : '0' ?>"
+                                        <?= $tipoSeleccionado === (int)$tipo['id'] ? 'selected' : '' ?>
+                                    >
                                         <?= htmlspecialchars(ucfirst($tipo['nombre'])) ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -38,10 +59,24 @@
                         </div>
                         <!-- Fin Tipo de movimiento -->
 
+                        <!-- Objetivo -->
+                        <div class="transaction-form__field" id="id_objetivo_field" style="display:<?= $esTipoInternoSeleccionado ? 'block' : 'none' ?>;">
+                            <label for="id_objetivo">Objetivo en curso</label>
+                            <select name="id_objetivo" id="id_objetivo" <?= $esTipoInternoSeleccionado ? 'required' : 'disabled' ?>>
+                                <option value="">Selecciona un objetivo</option>
+                                <?php foreach ($objetivosEnCurso as $objetivo): ?>
+                                    <option value="<?= (int)$objetivo['id_objetivo'] ?>" <?= $objetivoSeleccionado === (int)$objetivo['id_objetivo'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars((string)$objetivo['nombre_objetivo']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <!-- Fin Objetivo -->
+
                         <!-- Categoría -->
-                        <div class="transaction-form__field">
+                        <div class="transaction-form__field" id="id_categoria_field" style="display:<?= $esTipoInternoSeleccionado ? 'none' : 'block' ?>;">
                             <label for="id_categoria">Categoría</label>
-                            <select name="id_categoria" id="id_categoria" required>
+                            <select name="id_categoria" id="id_categoria" <?= $esTipoInternoSeleccionado ? 'disabled' : '' ?> required>
                                 <option value="">Selecciona una categoría</option>
                                 <?php foreach ($categorias as $categoria): ?>
                                     <option value="<?= $categoria['id'] ?>" <?= (isset($transaccion) && $transaccion['id_categoria'] == $categoria['id']) ? 'selected' : '' ?>>
@@ -53,9 +88,9 @@
                         <!-- Fin Categoría -->
 
                         <!-- Subcategoría -->
-                        <div class="transaction-form__field">
+                        <div class="transaction-form__field" id="id_subcategoria_field" style="display:<?= $esTipoInternoSeleccionado ? 'none' : 'block' ?>;">
                             <label for="id_subcategoria">Subcategoría</label>
-                            <select name="id_subcategoria" id="id_subcategoria" required>
+                            <select name="id_subcategoria" id="id_subcategoria" <?= $esTipoInternoSeleccionado ? 'disabled' : '' ?> required>
                                 <option value="">Selecciona una subcategoría</option>
                                 <?php foreach ($subcategorias as $subcategoria): ?>
                                     <option
