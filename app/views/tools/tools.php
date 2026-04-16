@@ -32,7 +32,7 @@
                     <div class="tool-card__content">
                         <h2 id="tool-ahorro-title">Objetivos de ahorro</h2>
                         <p>Define metas economicas, plazos y seguimiento para mantener un plan de ahorro constante.</p>
-                        <a class="btn transactions-action-btn" href="?controller=tool&action=mostrarObjetivosAhorro">Acceder</a>
+                        <a class="btn transactions-action-btn" href="?controller=goal&action=mostrarObjetivosAhorro">Acceder</a>
                     </div>
                 </article>
 

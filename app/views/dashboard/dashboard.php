@@ -18,7 +18,7 @@
                     <!-- Listado de las últimas 10 transacciones -->
                     <?php if (!empty($ultimasTransacciones)): ?>
                         <div class="dashboard-tx-wrap">
-                            <div class="dashboard-tx-head" aria-hidden="true">
+                            <div class="dashboard-tx-head dashboard-tx-head--transactions" aria-hidden="true">
                                 <span>Categoría</span>
                                 <span>Subcategoría</span>
                                 <span>Concepto</span>
@@ -26,14 +26,14 @@
                                 <span class="is-right">Importe</span>
                             </div>
 
-                            <ul class="transaction-list">
+                            <ul class="transaction-list transaction-list--transactions">
                             <?php foreach ($ultimasTransacciones as $transaccion): ?>
                                 <?php $claseFila = (strtolower($transaccion['tipo_movimiento']) === 'gasto') ? 'dashboard-tx-row--gasto' : 'dashboard-tx-row--ingreso'; ?>
                                 <li class="<?= $claseFila ?>">
                                     <span class="tx-cell tx-cell--categoria"><?= htmlspecialchars($transaccion['nombre_categoria']) ?></span>
                                     <span class="tx-cell"><?= htmlspecialchars($transaccion['nombre_subcategoria']) ?></span>
                                     <span class="tx-cell tx-cell--concepto"><?= htmlspecialchars($transaccion['concepto']) ?></span>
-                                    <span class="tx-cell"><?= date('d/m/Y', strtotime($transaccion['fecha_movimiento'])) ?></span>
+                                    <span class="tx-cell tx-cell--fecha"><?= date('d/m/Y', strtotime($transaccion['fecha_movimiento'])) ?></span>
                                     <span class="tx-cell tx-cell--importe is-right"><?= number_format($transaccion['importe'], 2) ?> €</span>
                                 </li>
                             <?php endforeach; ?>
@@ -52,8 +52,55 @@
 
                     <section class="dashboard-card">
                         <!-- Fila inferior: Objetivos actuales -->
-                        <h2>Objetivos actuales</h2>
-                        <p class="muted">Cantidad ahorrada | Cantidad restante | % alcanzado</p>
+                        <div class="transactions-toolbar">
+                            <h2>Objetivos actuales</h2>
+                            <a class="btn transactions-action-btn" href="index.php?controller=goal&action=mostrarObjetivosAhorro">Ver todos los objetivos</a>
+                        </div>
+                        <?php if (!empty($ultimosObjetivos)): ?>
+                            <div class="dashboard-tx-wrap">
+                                <div class="dashboard-tx-head dashboard-tx-head--goals" aria-hidden="true">
+                                    <span>Objetivo</span>
+                                    <span class="is-right">Ahorrado</span>
+                                    <span class="is-right">Meta</span>
+                                    <span class="is-right">Progreso</span>
+                                    <span>Fecha límite</span>
+                                </div>
+
+                                <ul class="transaction-list transaction-list--goals">
+                                    <?php foreach ($ultimosObjetivos as $objetivo): ?>
+                                        <?php
+                                            $cantidadMeta = (float)($objetivo['cantidad_meta'] ?? 0);
+                                            $saldoApartado = (float)($objetivo['saldo_apartado'] ?? 0);
+                                            $progreso = max(0, min(100, (float)($objetivo['progreso_pct'] ?? 0)));
+                                            $claseProgresoObjetivo = 'objective-progress';
+
+                                            if ($progreso >= 100) {
+                                                $claseProgresoObjetivo .= ' objective-progress--full';
+                                            } elseif ($progreso >= 70) {
+                                                $claseProgresoObjetivo .= ' objective-progress--high';
+                                            } elseif ($progreso >= 30) {
+                                                $claseProgresoObjetivo .= ' objective-progress--medium';
+                                            } else {
+                                                $claseProgresoObjetivo .= ' objective-progress--low';
+                                            }
+
+                                            $fechaLimite = !empty($objetivo['fecha_limite'])
+                                                ? date('d/m/Y', strtotime($objetivo['fecha_limite']))
+                                                : '-';
+                                        ?>
+                                        <li>
+                                            <span class="tx-cell tx-cell--goal-name"><?= htmlspecialchars((string)($objetivo['nombre_objetivo'] ?? '')) ?></span>
+                                            <span class="tx-cell tx-cell--goal-saved is-right"><?= number_format($saldoApartado, 2) ?> €</span>
+                                            <span class="tx-cell tx-cell--goal-target is-right"><?= number_format($cantidadMeta, 2) ?> €</span>
+                                            <span class="tx-cell tx-cell--goal-progress is-right"><span class="<?= htmlspecialchars($claseProgresoObjetivo) ?>"><?= number_format($progreso, 2) ?>%</span></span>
+                                            <span class="tx-cell tx-cell--goal-deadline"><?= htmlspecialchars($fechaLimite) ?></span>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php else: ?>
+                            <p class="muted">Todavía no tienes objetivos creados. Empieza creando uno para seguir su progreso.</p>
+                        <?php endif; ?>
                     </section>
                 </div>
             </div>

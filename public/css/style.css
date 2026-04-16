@@ -1568,13 +1568,27 @@ label {
 .dashboard-tx-head {
   display: grid;
   grid-template-columns: 1.1fr 1.1fr 1.6fr 0.8fr 0.8fr;
-  gap: 0;
+  column-gap: 8px;
   padding: 10px 12px;
   font-size: 0.83rem;
   letter-spacing: 0.02em;
   color: rgba(1, 10, 18, 0.74);
   background: rgba(48, 165, 255, 0.08);
   border-bottom: 1px solid rgba(1, 10, 18, 0.1);
+}
+
+.dashboard-tx-head--transactions {
+  grid-template-columns: 1.15fr 1.15fr 1.6fr 0.95fr 0.95fr;
+}
+
+.dashboard-tx-head--goals {
+  grid-template-columns: minmax(150px, 1.7fr) minmax(92px, 1fr) minmax(92px, 1fr) minmax(82px, 0.8fr) minmax(112px, 1fr);
+}
+
+.dashboard-tx-head > span {
+  min-width: 0;
+  padding: 0 12px;
+  white-space: nowrap;
 }
 
 /* -----------------------------------------
@@ -1697,19 +1711,50 @@ label {
 
 .tool-card {
   display: grid;
-  grid-template-rows: 190px 1fr;
+  grid-template-rows: clamp(200px, 24vw, 260px) 1fr;
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid rgba(1, 10, 18, 0.14);
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 10px 24px rgba(1, 10, 18, 0.08);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.tool-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px rgba(1, 10, 18, 0.12);
 }
 
 .tool-card__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
+  filter: saturate(1.06) contrast(1.03);
+  transform: scale(1.001);
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.tool-card:hover .tool-card__image {
+  transform: scale(1.05);
+  filter: saturate(1.1) contrast(1.05);
+}
+
+.tools-grid .tool-card:nth-child(1) .tool-card__image {
+  object-position: center 60%;
+}
+
+.tools-grid .tool-card:nth-child(2) .tool-card__image {
+  object-position: center 35%;
+}
+
+.tools-grid .tool-card:nth-child(3) .tool-card__image {
+  object-position: center 56%;
+}
+
+.tools-grid .tool-card:nth-child(4) .tool-card__image {
+  object-position: center 40%;
 }
 
 .tool-card__content {
@@ -2479,6 +2524,62 @@ label {
   color: #0c5132;
 }
 
+.objective-state {
+  display: inline-flex;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.objective-state--curso {
+  background: rgba(255, 190, 64, 0.2);
+  color: #8b5a00;
+}
+
+.objective-state--completado {
+  background: rgba(44, 196, 134, 0.14);
+  color: #0c5132;
+}
+
+.objective-state--cancelado {
+  background: rgba(239, 84, 93, 0.14);
+  color: #8a1e2c;
+}
+
+.objective-progress {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 68px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.objective-progress--low {
+  background: rgba(239, 84, 93, 0.14);
+  color: #8a1e2c;
+}
+
+.objective-progress--medium {
+  background: rgba(255, 190, 64, 0.2);
+  color: #8b5a00;
+}
+
+.objective-progress--high {
+  background: rgba(48, 165, 255, 0.14);
+  color: #1157b7;
+}
+
+.objective-progress--full {
+  background: rgba(44, 196, 134, 0.14);
+  color: #0c5132;
+}
+
 .tx-amount {
   font-weight: 700;
 }
@@ -2609,8 +2710,17 @@ label {
 .transaction-list li {
   display: grid;
   grid-template-columns: 1.1fr 1.1fr 1.6fr 0.8fr 0.8fr;
-  gap: 0;
+  column-gap: 8px;
+  align-items: center;
   border-bottom: 1px solid rgba(1, 10, 18, 0.08);
+}
+
+.transaction-list--transactions li {
+  grid-template-columns: 1.15fr 1.15fr 1.6fr 0.95fr 0.95fr;
+}
+
+.transaction-list--goals li {
+  grid-template-columns: minmax(150px, 1.7fr) minmax(92px, 1fr) minmax(92px, 1fr) minmax(82px, 0.8fr) minmax(112px, 1fr);
 }
 
 .transaction-list li.dashboard-tx-row--ingreso {
@@ -2632,6 +2742,7 @@ label {
 .tx-cell {
   padding: 10px 12px;
   font-size: 0.92rem;
+  min-width: 0;
 }
 
 .tx-cell--categoria {
@@ -2646,6 +2757,12 @@ label {
 
 .tx-cell--importe {
   font-weight: 700;
+}
+
+.tx-cell--goal-progress {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .is-right {
@@ -2810,11 +2927,17 @@ label {
     margin-right: 6px;
   }
 
-  .tx-cell--categoria::before { content: 'Categoría:'; }
-  .tx-cell:nth-child(2)::before { content: 'Subcategoría:'; }
-  .tx-cell--concepto::before { content: 'Concepto:'; }
-  .tx-cell:nth-child(4)::before { content: 'Fecha:'; }
-  .tx-cell--importe::before { content: 'Importe:'; }
+  .transaction-list--transactions .tx-cell--categoria::before { content: 'Categoría:'; }
+  .transaction-list--transactions .tx-cell:nth-child(2)::before { content: 'Subcategoría:'; }
+  .transaction-list--transactions .tx-cell--concepto::before { content: 'Concepto:'; }
+  .transaction-list--transactions .tx-cell--fecha::before { content: 'Fecha:'; }
+  .transaction-list--transactions .tx-cell--importe::before { content: 'Importe:'; }
+
+  .transaction-list--goals .tx-cell--goal-name::before { content: 'Objetivo:'; }
+  .transaction-list--goals .tx-cell--goal-saved::before { content: 'Ahorrado:'; }
+  .transaction-list--goals .tx-cell--goal-target::before { content: 'Meta:'; }
+  .transaction-list--goals .tx-cell--goal-progress::before { content: 'Progreso:'; }
+  .transaction-list--goals .tx-cell--goal-deadline::before { content: 'Fecha límite:'; }
 
   .tx-cell--concepto {
     white-space: normal;
@@ -3291,6 +3414,24 @@ label {
   .dashboard-page .admin-queries-table td:nth-child(5)::before { content: 'Estado'; }
   .dashboard-page .admin-queries-table td:nth-child(6)::before { content: 'Fecha de creación'; }
   .dashboard-page .admin-queries-table td:nth-child(7)::before { content: 'Acciones'; }
+
+  .dashboard-page .goals-table td:nth-child(1)::before { content: 'Objetivo'; }
+  .dashboard-page .goals-table td:nth-child(2)::before { content: 'Meta'; }
+  .dashboard-page .goals-table td:nth-child(3)::before { content: 'Apartado'; }
+  .dashboard-page .goals-table td:nth-child(4)::before { content: 'Restante'; }
+  .dashboard-page .goals-table td:nth-child(5)::before { content: 'Progreso'; }
+  .dashboard-page .goals-table td:nth-child(6)::before { content: 'Estado'; }
+  .dashboard-page .goals-table td:nth-child(7)::before { content: 'Fecha límite'; }
+  .dashboard-page .goals-table td:nth-child(8)::before { content: 'Acciones'; }
+
+  .dashboard-page .goals-table td:nth-child(8) {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
 
   .dashboard-page .admin-queries-table td {
     display: flex;

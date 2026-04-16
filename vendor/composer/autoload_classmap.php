@@ -16,6 +16,8 @@ return array(
     'DashboardController' => $baseDir . '/app/controllers/DashboardController.php',
     'Database' => $baseDir . '/config/Database.php',
     'DefaultDataModel' => $baseDir . '/app/models/DefaultDataModel.php',
+    'GoalController' => $baseDir . '/app/controllers/GoalController.php',
+    'GoalModel' => $baseDir . '/app/models/GoalModel.php',
     'HomeController' => $baseDir . '/app/controllers/HomeController.php',
     'LegalController' => $baseDir . '/app/controllers/LegalController.php',
     'ProfileController' => $baseDir . '/app/controllers/ProfileController.php',

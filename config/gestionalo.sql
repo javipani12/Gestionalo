@@ -77,7 +77,7 @@ INSERT INTO `metodos_pago` (`nombre`) VALUES
   ('efectivo'), ('tarjeta'), ('transferencia'), ('bizum'), ('paypal'), ('otro')
   ON DUPLICATE KEY UPDATE nombre=VALUES(nombre);
 INSERT INTO `tipos_informe` (`nombre`) VALUES
-  ('ingresos'), ('gastos'), ('balance'), ('objetivos'), ('general')
+  ('ingresos'), ('gastos'), ('balance'), ('objetivos'), ('general'), ('hipoteca')
   ON DUPLICATE KEY UPDATE nombre=VALUES(nombre);
 INSERT INTO `estados_objetivo` (`nombre`) VALUES
   ('en curso'), ('completado'), ('cancelado')
@@ -94,7 +94,10 @@ INSERT INTO `asuntos` (`nombre`) VALUES
   ('Otra consulta')
   ON DUPLICATE KEY UPDATE nombre=VALUES(nombre);
 INSERT INTO `tipos_movimiento` (`nombre`) VALUES
-  ('gasto'), ('ingreso')
+  ('gasto'),
+  ('ingreso'),
+  ('Transferencia Interna Aporte'),
+  ('Transferencia Interna Retiro')
   ON DUPLICATE KEY UPDATE nombre=VALUES(nombre);
 
 -- Categorías y subcategorías (globales)
@@ -128,7 +131,8 @@ INSERT INTO `categorias` (`nombre_categoria`, `descripcion`) VALUES
   ('Transporte', 'Movilidad urbana e interurbana'),
   ('Vivienda y suministros', 'Gastos del hogar y servicios básicos'),
   ('Inversiones', 'Aportaciones, costes y rendimientos de inversión'),
-  ('Ingresos', 'Entradas de dinero por trabajo, rentas y cobros puntuales')
+  ('Ingresos', 'Entradas de dinero por trabajo, rentas y cobros puntuales'),
+  ('Objetivo', 'Movimientos de transferencia interna hacia o desde objetivos de ahorro')
 ON DUPLICATE KEY UPDATE
   `descripcion` = VALUES(`descripcion`),
   `updated_at` = CURRENT_TIMESTAMP;
@@ -273,13 +277,14 @@ CREATE TABLE `consultas` (
   CONSTRAINT `consultas_fk_estado` FOREIGN KEY (`id_estado`) REFERENCES `estados_consulta`(`id_estado`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Transacciones (unifica ingresos y gastos)
+-- Transacciones (ingresos, gastos y transferencias internas)
 CREATE TABLE `transacciones` (
   `id_transaccion` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `id_usuario` INT UNSIGNED NOT NULL,
   `id_categoria` INT UNSIGNED DEFAULT NULL,
   `id_subcategoria` INT UNSIGNED DEFAULT NULL,
-  `id_tipo` INT UNSIGNED NOT NULL, -- referencia a tipos_movimiento (gasto/ingreso/transferencia)
+  `id_objetivo` INT UNSIGNED DEFAULT NULL,
+  `id_tipo` INT UNSIGNED NOT NULL, -- referencia a tipos_movimiento (gasto/ingreso/transferencias internas)
   `concepto` VARCHAR(255) DEFAULT NULL,
   `fecha_movimiento` DATE NOT NULL,
   `id_metodo` INT UNSIGNED DEFAULT NULL,
@@ -290,6 +295,7 @@ CREATE TABLE `transacciones` (
   INDEX (`id_usuario`),
   INDEX (`id_categoria`),
   INDEX (`id_subcategoria`),
+  INDEX (`id_objetivo`),
   INDEX (`id_tipo`),
   INDEX (`fecha_movimiento`),
   CONSTRAINT `transacciones_fk_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios`(`id_usuario`) ON DELETE CASCADE,
@@ -307,8 +313,6 @@ CREATE TABLE `informes` (
   `id_tipo_informe` INT UNSIGNED DEFAULT NULL,
   `ruta_archivo` VARCHAR(255) NOT NULL,
   `fecha_generacion` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `periodo_inicio` DATE DEFAULT NULL,
-  `periodo_fin` DATE DEFAULT NULL,
   PRIMARY KEY (`id_informe`),
   INDEX (`id_usuario`),
   CONSTRAINT `informes_fk_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios`(`id_usuario`) ON DELETE CASCADE,
@@ -326,7 +330,6 @@ CREATE TABLE `objetivos_ahorro` (
   `fecha_limite` DATE DEFAULT NULL,
   `id_estado` INT UNSIGNED NOT NULL DEFAULT 1,
   `cantidad_final` DECIMAL(14,2) DEFAULT NULL,
-  `notificar_ia` TINYINT(1) NOT NULL DEFAULT 1,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME DEFAULT NULL,
   PRIMARY KEY (`id_objetivo`),

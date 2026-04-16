@@ -8,8 +8,8 @@
     $controllerParam = strtolower($_GET['controller'] ?? 'home');
     $action = strtolower($_GET['action'] ?? 'mostrarHome');
 
-    // Si no está autenticado y no pide 'auth', forzamos la landing pública
-    if(!isset($_SESSION['usuario']['id_usuario']) && $controllerParam !== 'auth') {
+    // Permitir acceso público a auth y legal (registro/login y textos legales).
+    if(!isset($_SESSION['usuario']['id_usuario']) && !in_array($controllerParam, ['auth', 'legal'], true)) {
         $controllerParam = 'home';
         $action = 'mostrarHome';
     }

@@ -17,6 +17,8 @@ class ComposerStaticInitecd0d84d90339e11902c4ff0a8cb5d31
         'DashboardController' => __DIR__ . '/../..' . '/app/controllers/DashboardController.php',
         'Database' => __DIR__ . '/../..' . '/config/Database.php',
         'DefaultDataModel' => __DIR__ . '/../..' . '/app/models/DefaultDataModel.php',
+        'GoalController' => __DIR__ . '/../..' . '/app/controllers/GoalController.php',
+        'GoalModel' => __DIR__ . '/../..' . '/app/models/GoalModel.php',
         'HomeController' => __DIR__ . '/../..' . '/app/controllers/HomeController.php',
         'LegalController' => __DIR__ . '/../..' . '/app/controllers/LegalController.php',
         'ProfileController' => __DIR__ . '/../..' . '/app/controllers/ProfileController.php',

@@ -6,8 +6,18 @@
          */
         public function mostrarDashboard() {
             $titulo = "Gestionalo | Inicio";
+            $idUsuario = (int)$_SESSION['usuario']['id_usuario'];
             $transactionModel = new TransactionModel();
-            $ultimasTransacciones = $transactionModel->obtenerUltimasTransacciones($_SESSION['usuario']['id_usuario'], 10);
+            $goalModel = new GoalModel();
+            $ultimasTransacciones = $transactionModel->obtenerUltimasTransacciones($idUsuario, 10);
+            $ultimosObjetivos = [];
+
+            try {
+                $ultimosObjetivos = $goalModel->obtenerObjetivosPaginadosPorUsuario($idUsuario, 5, 0);
+            } catch (Throwable $e) {
+                error_log('DashboardController::mostrarDashboard objetivos -> ' . $e->getMessage());
+            }
+
             require_once './../app/views/dashboard/dashboard.php';
         }
     }

@@ -18,16 +18,6 @@
         }
 
         /**
-         * Muestra la vista de objetivos de ahorro.
-         */
-        public function mostrarObjetivosAhorro() {
-            $titulo = 'Gestionalo | Objetivos de ahorro';
-            $nombreHerramienta = 'Objetivos de ahorro';
-            $descripcionHerramienta = 'Configura metas economicas y sigue el progreso de tus ahorros paso a paso.';
-            require_once './../app/views/tools/tool_detail.php';
-        }
-
-        /**
          * Muestra la vista de graficos financieros.
          */
         public function mostrarGraficos() {
