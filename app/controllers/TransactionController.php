@@ -175,6 +175,8 @@
             $objetivosEnCurso = $goalModel->obtenerObjetivosEnCursoPorUsuario($_SESSION['usuario']['id_usuario'], $idObjetivoTransaccion);
             $idTipoPreseleccionado = 0;
             $idObjetivoPreseleccionado = 0;
+            $redirigirAObjetivoId = max(0, (int)($_GET['redirigir_objetivo_id'] ?? 0));
+            $redirigirPaginaHistorial = max(1, (int)($_GET['redirigir_pagina_historial'] ?? 1));
 
             require_once './../app/views/transaction/create_edit_transaction.php';
             exit();
@@ -192,10 +194,11 @@
             $limiteDiarioTransacciones = 20;
             $idUsuario = (int)$_SESSION['usuario']['id_usuario'];
             $redirigirAObjetivoId = max(0, (int)($_POST['redirigir_objetivo_id'] ?? 0));
+            $redirigirPaginaHistorial = max(1, (int)($_POST['redirigir_pagina_historial'] ?? 1));
             $urlRedireccionExito = 'index.php?controller=transaction&action=mostrarTransaccionesUsuario';
 
             if ($redirigirAObjetivoId > 0) {
-                $urlRedireccionExito = 'index.php?controller=goal&action=mostrarDetalleObjetivo&id_objetivo=' . $redirigirAObjetivoId;
+                $urlRedireccionExito = 'index.php?controller=goal&action=mostrarDetalleObjetivo&id_objetivo=' . $redirigirAObjetivoId . '&pagina_historial=' . $redirigirPaginaHistorial;
             }
 
             if (empty($_POST['id_transaccion'])) {

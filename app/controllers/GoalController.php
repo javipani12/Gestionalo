@@ -111,6 +111,9 @@
             $titulo = 'Gestionalo | Detalle de objetivo';
             $idUsuario = (int)($_SESSION['usuario']['id_usuario'] ?? 0);
             $idObjetivo = (int)($_GET['id_objetivo'] ?? 0);
+            $limiteHistorialPorPagina = 10;
+            $paginaHistorialActual = isset($_GET['pagina_historial']) ? (int)$_GET['pagina_historial'] : 1;
+            $paginaHistorialActual = max(1, $paginaHistorialActual);
 
             if ($idUsuario <= 0) {
                 $_SESSION['error'] = 'Usuario no identificado. Por favor, inicia sesión nuevamente.';
@@ -134,7 +137,19 @@
                     exit();
                 }
 
-                $historialObjetivo = $goalModel->obtenerHistorialTransaccionesObjetivo($idUsuario, $idObjetivo, 30);
+                $totalHistorialObjetivo = $goalModel->contarHistorialTransaccionesObjetivo($idUsuario, $idObjetivo);
+                $totalPaginasHistorial = max(1, (int)ceil($totalHistorialObjetivo / $limiteHistorialPorPagina));
+                if ($paginaHistorialActual > $totalPaginasHistorial) {
+                    $paginaHistorialActual = $totalPaginasHistorial;
+                }
+
+                $offsetHistorial = ($paginaHistorialActual - 1) * $limiteHistorialPorPagina;
+                $historialObjetivo = $goalModel->obtenerHistorialTransaccionesObjetivo(
+                    $idUsuario,
+                    $idObjetivo,
+                    $limiteHistorialPorPagina,
+                    $offsetHistorial
+                );
                 require_once './../app/views/goals/goal_detail.php';
             } catch (Throwable $e) {
                 error_log('GoalController::mostrarDetalleObjetivo -> ' . $e->getMessage());

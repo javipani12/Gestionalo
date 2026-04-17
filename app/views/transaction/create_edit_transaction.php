@@ -15,6 +15,11 @@
     $tipoSeleccionado = (int)($transaccion['id_tipo'] ?? $idTipoPreseleccionado);
     $objetivoSeleccionado = (int)($transaccion['id_objetivo'] ?? $idObjetivoPreseleccionado);
     $redirigirAObjetivoId = (int)($redirigirAObjetivoId ?? 0);
+    $redirigirPaginaHistorial = max(1, (int)($redirigirPaginaHistorial ?? 1));
+    $urlCancelar = 'index.php?controller=transaction&action=mostrarTransaccionesUsuario';
+    if ($redirigirAObjetivoId > 0) {
+        $urlCancelar = 'index.php?controller=goal&action=mostrarDetalleObjetivo&id_objetivo=' . $redirigirAObjetivoId . '&pagina_historial=' . $redirigirPaginaHistorial;
+    }
 
     $idsTiposInternos = [];
     foreach ($tiposMovimiento as $tipoMovimientoItem) {
@@ -36,6 +41,7 @@
             <form action="index.php?controller=transaction&action=guardarTransaccion" method="POST" class="transaction-form">
                 <input type="hidden" name="id_transaccion" value="<?= $transaccion['id_transaccion'] ?? '' ?>">
                 <input type="hidden" name="redirigir_objetivo_id" value="<?= $redirigirAObjetivoId ?>">
+                <input type="hidden" name="redirigir_pagina_historial" value="<?= $redirigirPaginaHistorial ?>">
                 <div class="transaction-form__grid">
                     <fieldset class="transaction-form__section transaction-form__section--class">
                         <legend>Clasificación</legend>
@@ -155,7 +161,7 @@
                 </div>
 
                 <div class="form-nav">
-                    <button type="button" class="btn btn-volver" onclick="window.location.href='index.php?controller=transaction&action=mostrarTransaccionesUsuario'">Cancelar</button>
+                    <button type="button" class="btn btn-volver" onclick="window.location.href='<?= htmlspecialchars($urlCancelar) ?>'">Cancelar</button>
                     <button type="submit" class="btn btn-enviar" <?= (!$esEdicion && !$puedeCrearTransaccion) ? 'disabled' : '' ?>><?= $esEdicion ? 'Actualizar transacción' : 'Crear transacción' ?></button>
                 </div>
             </form>

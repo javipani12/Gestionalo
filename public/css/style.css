@@ -3367,7 +3367,8 @@ label {
   }
 }
 
-@media (hover: none) and (pointer: coarse) and (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
+@media (hover: none) and (pointer: coarse) and (min-width: 768px) and (max-width: 1366px) and (orientation: portrait),
+       (hover: none) and (pointer: coarse) and (max-width: 932px) and (orientation: landscape) {
   body {
     padding: 10px;
   }
@@ -3638,6 +3639,118 @@ label {
   }
 }
 
+@media (min-width: 768px) and (max-width: 1366px) and (orientation: portrait),
+       (max-width: 932px) and (orientation: landscape) {
+  .dashboard-tx-head--goal-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(86px, 1fr)) minmax(82px, 0.8fr) minmax(98px, 0.9fr) minmax(120px, 1.1fr);
+  }
+
+  .transaction-list--goal-summary li {
+    grid-template-columns: repeat(3, minmax(86px, 1fr)) minmax(82px, 0.8fr) minmax(98px, 0.9fr) minmax(120px, 1.1fr);
+  }
+
+  .transaction-list--goal-summary .tx-cell::before {
+    display: none;
+    min-width: 0;
+    margin-right: 0;
+  }
+
+  .transactions-table-wrap--goal-history {
+    overflow-x: hidden;
+    padding: 0;
+  }
+
+  .transactions-table.transactions-table--goal-history {
+    display: table;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background: transparent;
+  }
+
+  .transactions-table.transactions-table--goal-history thead {
+    display: table-header-group;
+  }
+
+  .transactions-table.transactions-table--goal-history tbody {
+    display: table-row-group;
+    width: auto;
+  }
+
+  .transactions-table.transactions-table--goal-history tr {
+    display: table-row;
+    grid-template-columns: none;
+    gap: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .transactions-table.transactions-table--goal-history td,
+  .transactions-table.transactions-table--goal-history th {
+    display: table-cell;
+    width: auto;
+    min-height: 0;
+    padding: 10px 8px;
+    border: 0;
+    border-bottom: 1px solid rgba(1, 10, 18, 0.08);
+    border-radius: 0;
+    text-align: left;
+    white-space: normal;
+  }
+
+  .transactions-table.transactions-table--goal-history th:nth-child(1),
+  .transactions-table.transactions-table--goal-history td:nth-child(1) {
+    width: 30%;
+  }
+
+  .transactions-table.transactions-table--goal-history th:nth-child(2),
+  .transactions-table.transactions-table--goal-history td:nth-child(2) {
+    width: 18%;
+  }
+
+  .transactions-table.transactions-table--goal-history th:nth-child(3),
+  .transactions-table.transactions-table--goal-history td:nth-child(3) {
+    width: 16%;
+  }
+
+  .transactions-table.transactions-table--goal-history th:nth-child(4),
+  .transactions-table.transactions-table--goal-history td:nth-child(4) {
+    width: 14%;
+  }
+
+  .transactions-table.transactions-table--goal-history th:nth-child(5),
+  .transactions-table.transactions-table--goal-history td:nth-child(5) {
+    width: 11%;
+  }
+
+  .transactions-table.transactions-table--goal-history th:nth-child(6),
+  .transactions-table.transactions-table--goal-history td:nth-child(6) {
+    width: 11%;
+  }
+
+  .transactions-table.transactions-table--goal-history th:nth-child(n+2),
+  .transactions-table.transactions-table--goal-history td:nth-child(n+2) {
+    padding-left: 14px;
+  }
+
+  .transactions-table.transactions-table--goal-history td::before {
+    content: none;
+    display: none;
+  }
+
+  .transactions-table.transactions-table--goal-history .tx-actions-cell,
+  .transactions-table.transactions-table--goal-history td:nth-child(6) {
+    text-align: center;
+  }
+}
+
 @media (hover: none) and (pointer: coarse) and (max-width: 767px) and (orientation: portrait) {
   .mortgage-table--scenario tr {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3689,6 +3802,94 @@ label {
   #tablaAmortizacion td:nth-child(4)::before { content: 'Capital'; }
   #tablaAmortizacion td:nth-child(5)::before { content: 'Extra'; }
   #tablaAmortizacion td:nth-child(6)::before { content: 'Saldo'; }
+}
+
+@media (max-width: 767px) and (orientation: portrait) {
+  .dashboard-tx-head--goal-summary {
+    display: none;
+  }
+
+  .transaction-list--goal-summary li {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    padding: 8px 0;
+    align-items: stretch;
+  }
+
+  .transaction-list--goal-summary .tx-cell::before {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(1, 10, 18, 0.62);
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .transaction-list--goal-summary .tx-cell:nth-child(1)::before { content: 'Ahorrado'; }
+  .transaction-list--goal-summary .tx-cell:nth-child(2)::before { content: 'Meta'; }
+  .transaction-list--goal-summary .tx-cell:nth-child(3)::before { content: 'Restante'; }
+  .transaction-list--goal-summary .tx-cell:nth-child(4)::before { content: 'Progreso'; }
+  .transaction-list--goal-summary .tx-cell:nth-child(5)::before { content: 'Estado'; }
+  .transaction-list--goal-summary .tx-cell:nth-child(6)::before { content: 'Fecha limite'; }
+
+  .transaction-list--goal-summary .tx-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 64px;
+    padding: 8px 10px;
+    border: 1px solid rgba(1, 10, 18, 0.08);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.94);
+  }
+
+  .transactions-table.transactions-table--goal-history tr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .transactions-table.transactions-table--goal-history td {
+    width: 100%;
+    min-width: 0;
+    align-self: stretch;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 0;
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+
+  .transactions-table.transactions-table--goal-history td::before {
+    display: block;
+    text-align: center;
+  }
+
+  .transactions-table.transactions-table--goal-history td:nth-child(1)::before { content: 'Tipo'; }
+  .transactions-table.transactions-table--goal-history td:nth-child(2)::before { content: 'Concepto'; }
+  .transactions-table.transactions-table--goal-history td:nth-child(3)::before { content: 'Fecha'; }
+  .transactions-table.transactions-table--goal-history td:nth-child(4)::before { content: 'Metodo'; }
+  .transactions-table.transactions-table--goal-history td:nth-child(5)::before { content: 'Importe'; }
+  .transactions-table.transactions-table--goal-history td:nth-child(6)::before { content: 'Acciones'; }
+
+  .transactions-table.transactions-table--goal-history .tx-type,
+  .transactions-table.transactions-table--goal-history .tx-amount,
+  .transactions-table.transactions-table--goal-history .tx-concepto {
+    word-break: normal;
+    overflow-wrap: normal;
+    white-space: normal;
+  }
+
+  .transactions-table.transactions-table--goal-history .tx-actions-cell {
+    align-items: center;
+  }
+
+  .transactions-table.transactions-table--goal-history .tx-actions-cell .transactions-actions {
+    justify-content: center;
+  }
 }
 
 @media (hover: none) and (pointer: coarse) and (min-width: 768px) and (max-width: 1366px) {

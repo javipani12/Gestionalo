@@ -9,6 +9,9 @@
     $restante = max($meta - $apartado, 0);
     $progreso = max(0, min(100, (float)($objetivoDetalle['progreso_pct'] ?? 0)));
     $descripcionObjetivo = trim((string)($objetivoDetalle['descripcion'] ?? ''));
+    $paginaHistorialActual = max(1, (int)($paginaHistorialActual ?? 1));
+    $totalPaginasHistorial = max(1, (int)($totalPaginasHistorial ?? 1));
+    $totalHistorialObjetivo = max(0, (int)($totalHistorialObjetivo ?? count($historialObjetivo)));
     $fechaLimiteTexto = '-';
     $claseFechaLimite = 'goal-deadline-badge goal-deadline-badge--none';
 
@@ -72,7 +75,6 @@
                     <a class="btn transactions-action-btn" href="index.php?controller=goal&action=mostrarObjetivosAhorro">Volver a objetivos</a>
                     <a class="btn transactions-action-btn" href="index.php?controller=transaction&action=mostrarFormularioCrearTransaccion&id_objetivo=<?= (int)($objetivoDetalle['id_objetivo'] ?? 0) ?>&modo_objetivo=aporte">Realizar aporte</a>
                     <a class="btn transactions-action-btn" href="index.php?controller=transaction&action=mostrarFormularioCrearTransaccion&id_objetivo=<?= (int)($objetivoDetalle['id_objetivo'] ?? 0) ?>&modo_objetivo=retiro">Realizar retiro</a>
-                    <a class="btn transactions-action-btn" href="index.php?controller=goal&action=mostrarFormularioEditarObjetivo&id_objetivo=<?= (int)($objetivoDetalle['id_objetivo'] ?? 0) ?>">Editar objetivo</a>
                 </div>
             </div>
 
@@ -115,9 +117,25 @@
 
                 <section class="dashboard-card">
                     <h2>Historial del objetivo</h2>
+                    <p class="muted">Total de transacciones asociadas: <?= $totalHistorialObjetivo ?></p>
                     <?php if (empty($historialObjetivo)): ?>
                         <p class="muted">Aún no hay transacciones asociadas a este objetivo.</p>
                     <?php else: ?>
+                        <?php
+                            $inicioPaginas = max(1, $paginaHistorialActual - 2);
+                            $finPaginas = min($totalPaginasHistorial, $paginaHistorialActual + 2);
+
+                            $buildGoalDetailUrl = function($extra = []) use ($objetivoDetalle, $paginaHistorialActual) {
+                                $params = array_merge([
+                                    'controller' => 'goal',
+                                    'action' => 'mostrarDetalleObjetivo',
+                                    'id_objetivo' => (int)($objetivoDetalle['id_objetivo'] ?? 0),
+                                    'pagina_historial' => $paginaHistorialActual,
+                                ], $extra);
+
+                                return 'index.php?' . http_build_query($params);
+                            };
+                        ?>
                         <div class="transactions-table-wrap transactions-table-wrap--goal-history" role="region" aria-label="Historial de transacciones del objetivo">
                             <table class="transactions-table transactions-table--goal-history">
                                 <thead>
@@ -154,7 +172,7 @@
                                             <td class="tx-actions-cell">
                                                 <div class="transactions-actions">
                                                     <a
-                                                        href="index.php?controller=transaction&action=mostrarFormularioEditarTransaccion&id_transaccion=<?= (int)($movimiento['id_transaccion'] ?? 0) ?>"
+                                                        href="index.php?controller=transaction&action=mostrarFormularioEditarTransaccion&id_transaccion=<?= (int)($movimiento['id_transaccion'] ?? 0) ?>&redirigir_objetivo_id=<?= (int)($objetivoDetalle['id_objetivo'] ?? 0) ?>&redirigir_pagina_historial=<?= (int)$paginaHistorialActual ?>"
                                                         class="tx-icon-btn tx-icon-btn--edit"
                                                         aria-label="Editar transacción"
                                                         title="Editar transacción"
@@ -182,6 +200,44 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <?php if ($totalPaginasHistorial > 1): ?>
+                            <nav class="transactions-pagination" aria-label="Paginación del historial del objetivo">
+                                <?php if ($paginaHistorialActual > 1): ?>
+                                    <a class="transactions-pagination__link" href="<?= htmlspecialchars($buildGoalDetailUrl(['pagina_historial' => $paginaHistorialActual - 1])) ?>">Anterior</a>
+                                <?php else: ?>
+                                    <span class="transactions-pagination__link transactions-pagination__link--disabled">Anterior</span>
+                                <?php endif; ?>
+
+                                <?php if ($inicioPaginas > 1): ?>
+                                    <a class="transactions-pagination__link" href="<?= htmlspecialchars($buildGoalDetailUrl(['pagina_historial' => 1])) ?>">1</a>
+                                    <?php if ($inicioPaginas > 2): ?>
+                                        <span class="transactions-pagination__ellipsis">...</span>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+
+                                <?php for ($pagina = $inicioPaginas; $pagina <= $finPaginas; $pagina++): ?>
+                                    <?php if ($pagina === $paginaHistorialActual): ?>
+                                        <span class="transactions-pagination__link transactions-pagination__link--active"><?= $pagina ?></span>
+                                    <?php else: ?>
+                                        <a class="transactions-pagination__link" href="<?= htmlspecialchars($buildGoalDetailUrl(['pagina_historial' => $pagina])) ?>"><?= $pagina ?></a>
+                                    <?php endif; ?>
+                                <?php endfor; ?>
+
+                                <?php if ($finPaginas < $totalPaginasHistorial): ?>
+                                    <?php if ($finPaginas < $totalPaginasHistorial - 1): ?>
+                                        <span class="transactions-pagination__ellipsis">...</span>
+                                    <?php endif; ?>
+                                    <a class="transactions-pagination__link" href="<?= htmlspecialchars($buildGoalDetailUrl(['pagina_historial' => $totalPaginasHistorial])) ?>"><?= $totalPaginasHistorial ?></a>
+                                <?php endif; ?>
+
+                                <?php if ($paginaHistorialActual < $totalPaginasHistorial): ?>
+                                    <a class="transactions-pagination__link" href="<?= htmlspecialchars($buildGoalDetailUrl(['pagina_historial' => $paginaHistorialActual + 1])) ?>">Siguiente</a>
+                                <?php else: ?>
+                                    <span class="transactions-pagination__link transactions-pagination__link--disabled">Siguiente</span>
+                                <?php endif; ?>
+                            </nav>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </section>
             </div>

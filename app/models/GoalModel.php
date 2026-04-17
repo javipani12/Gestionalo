@@ -415,10 +415,11 @@
         /**
          * Devuelve el historial de transacciones asociadas al objetivo.
          */
-        public function obtenerHistorialTransaccionesObjetivo($idUsuario, $idObjetivo, $limite = 30) {
+        public function obtenerHistorialTransaccionesObjetivo($idUsuario, $idObjetivo, $limite = 30, $offset = 0) {
             $idUsuario = (int)$idUsuario;
             $idObjetivo = (int)$idObjetivo;
             $limite = max(1, (int)$limite);
+            $offset = max(0, (int)$offset);
 
             if ($idUsuario <= 0 || $idObjetivo <= 0) {
                 return [];
@@ -441,15 +442,40 @@
                 WHERE t.id_usuario = :id_usuario
                 AND t.id_objetivo = :id_objetivo
                 ORDER BY t.fecha_movimiento DESC, t.id_transaccion DESC
-                LIMIT :limite";
+                LIMIT :limite OFFSET :offset";
 
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':id_usuario', $idUsuario, PDO::PARAM_INT);
             $stmt->bindValue(':id_objetivo', $idObjetivo, PDO::PARAM_INT);
             $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        /**
+         * Cuenta el total de transacciones asociadas al objetivo.
+         */
+        public function contarHistorialTransaccionesObjetivo($idUsuario, $idObjetivo) {
+            $idUsuario = (int)$idUsuario;
+            $idObjetivo = (int)$idObjetivo;
+
+            if ($idUsuario <= 0 || $idObjetivo <= 0) {
+                return 0;
+            }
+
+            $sql = "SELECT COUNT(*)
+                FROM transacciones
+                WHERE id_usuario = :id_usuario
+                AND id_objetivo = :id_objetivo";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id_usuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->bindValue(':id_objetivo', $idObjetivo, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return (int)$stmt->fetchColumn();
         }
 
         /**
