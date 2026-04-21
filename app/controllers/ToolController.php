@@ -18,13 +18,19 @@
         }
 
         /**
+         * Muestra la vista de objetivos de ahorro
+         */
+        public function mostrarObjetivosAhorro() {
+            $objetivoModel = new GoalController();
+            $objetivoModel->mostrarObjetivosAhorro();
+        }
+
+        /**
          * Muestra la vista de graficos financieros.
          */
         public function mostrarGraficos() {
-            $titulo = 'Gestionalo | Graficos financieros';
-            $nombreHerramienta = 'Graficos financieros';
-            $descripcionHerramienta = 'Visualiza tu comportamiento financiero con graficos claros para identificar tendencias.';
-            require_once './../app/views/tools/tool_detail.php';
+            $chartController = new ChartController();
+            $chartController->mostrarGraficos();
         }
 
         /**

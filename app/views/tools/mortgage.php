@@ -80,7 +80,7 @@
 									<input type="number" id="pagoUnico" name="pagoUnico" min="0" step="100" value="0">
 								</div>
 								<div class="mortgage-field">
-									<label for="mesPagoUnico" title="Mes en el que se aplicara ese pago extraordinario.">Mes del pago único</label>
+									<label for="mesPagoUnico" title="Mes en el que se aplicará ese pago extraordinario.">Mes del pago único</label>
 									<input type="number" id="mesPagoUnico" name="mesPagoUnico" min="1" step="1" value="24">
 								</div>
 							</div>

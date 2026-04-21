@@ -339,48 +339,6 @@ CREATE TABLE `objetivos_ahorro` (
   CONSTRAINT `objetivos_fk_estado` FOREIGN KEY (`id_estado`) REFERENCES `estados_objetivo`(`id_estado`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Preguntas y respuestas (IA)
-CREATE TABLE `preguntas` (
-  `id_pregunta` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `id_categoria` INT UNSIGNED DEFAULT NULL,
-  `texto_pregunta` VARCHAR(255) NOT NULL,
-  `activa` TINYINT(1) NOT NULL DEFAULT 1,
-  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_pregunta`),
-  INDEX (`id_categoria`),
-  CONSTRAINT `preguntas_fk_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categorias`(`id_categoria`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE `respuestas` (
-  `id_respuesta` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `id_usuario` INT UNSIGNED NOT NULL,
-  `id_pregunta` INT UNSIGNED NOT NULL,
-  `respuesta` TEXT DEFAULT NULL,
-  `fecha_respuesta` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_respuesta`),
-  INDEX (`id_usuario`),
-  INDEX (`id_pregunta`),
-  CONSTRAINT `respuestas_fk_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios`(`id_usuario`) ON DELETE CASCADE,
-  CONSTRAINT `respuestas_fk_pregunta` FOREIGN KEY (`id_pregunta`) REFERENCES `preguntas`(`id_pregunta`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE `recomendaciones_ia` (
-  `id_recomendacion` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `id_usuario` INT UNSIGNED NOT NULL,
-  `id_objetivo` INT UNSIGNED DEFAULT NULL,
-  `id_pregunta` INT UNSIGNED DEFAULT NULL,
-  `mensaje` TEXT DEFAULT NULL,
-  `fecha_creacion` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `leido` TINYINT(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id_recomendacion`),
-  INDEX (`id_usuario`),
-  INDEX (`id_objetivo`),
-  INDEX (`id_pregunta`),
-  CONSTRAINT `reco_fk_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios`(`id_usuario`) ON DELETE CASCADE,
-  CONSTRAINT `reco_fk_objetivo` FOREIGN KEY (`id_objetivo`) REFERENCES `objetivos_ahorro`(`id_objetivo`) ON DELETE SET NULL,
-  CONSTRAINT `reco_fk_pregunta` FOREIGN KEY (`id_pregunta`) REFERENCES `preguntas`(`id_pregunta`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 -- Índices compuestos sugeridos para informes/consultas frecuentes
 CREATE INDEX `idx_tx_usuario_fecha` ON `transacciones` (`id_usuario`, `fecha_movimiento`);
 CREATE INDEX `idx_tx_usuario_categoria_fecha` ON `transacciones` (`id_usuario`, `id_categoria`, `fecha_movimiento`);

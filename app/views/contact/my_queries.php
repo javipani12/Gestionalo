@@ -27,7 +27,7 @@
                             Total de consultas: <?= (int)($totalConsultas ?? count($consultas ?? [])) ?>
                         </p>
                     </div>
-                    <p class="muted">Tambien puedes enviar tus consultas al correo electrónico: gestionalo2026@gmail.com</p>
+                    <p class="muted">También puedes enviar tus consultas al correo electrónico: gestionalo2026@gmail.com</p>
                 </div>
                 <?php
                     $queryBase = [

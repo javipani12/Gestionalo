@@ -6,7 +6,7 @@
         <section class="dashboard-card dashboard-card--main tools-shell" aria-labelledby="tools-title">
             <div class="tools-hero">
                 <h1 id="tools-title">Herramientas financieras</h1>
-                <p class="dashboard-lead">Accede rapido a tus utilidades de analisis y planificacion para mejorar tus decisiones economicas.</p>
+                <p class="dashboard-lead">Accede rápidamente a tus herramientas de análisis y planificación para mejorar tus decisiones económicas.</p>
             </div>
 
             <div class="tools-grid">
@@ -18,7 +18,7 @@
                         loading="lazy">
                     <div class="tool-card__content">
                         <h2 id="tool-hipoteca-title">Calculadora de hipoteca</h2>
-                        <p>Calcula cuota mensual, intereses y coste final para evaluar distintas opciones de financiacion.</p>
+                        <p>Calcula cuota mensual, intereses y coste final para evaluar distintas opciones de financiación.</p>
                         <a class="btn transactions-action-btn" href="?controller=tool&action=mostrarCalculadoraHipoteca">Acceder</a>
                     </div>
                 </article>
@@ -31,19 +31,19 @@
                         loading="lazy">
                     <div class="tool-card__content">
                         <h2 id="tool-ahorro-title">Objetivos de ahorro</h2>
-                        <p>Define metas economicas, plazos y seguimiento para mantener un plan de ahorro constante.</p>
-                        <a class="btn transactions-action-btn" href="?controller=goal&action=mostrarObjetivosAhorro">Acceder</a>
+                        <p>Define metas económicas, plazos y seguimiento para mantener un plan de ahorro constante.</p>
+                        <a class="btn transactions-action-btn" href="?controller=tool&action=mostrarObjetivosAhorro">Acceder</a>
                     </div>
                 </article>
 
                 <article class="tool-card" aria-labelledby="tool-graficos-title">
                     <img
                         src="./img/herramientas/grafico.jpg"
-                        alt="Graficos financieros"
+                        alt="Gráficos financieros"
                         class="tool-card__image"
                         loading="lazy">
                     <div class="tool-card__content">
-                        <h2 id="tool-graficos-title">Graficos</h2>
+                        <h2 id="tool-graficos-title">Gráficos</h2>
                         <p>Explora visualizaciones de ingresos, gastos y balance para detectar patrones y oportunidades.</p>
                         <a class="btn transactions-action-btn" href="?controller=tool&action=mostrarGraficos">Acceder</a>
                     </div>
@@ -57,7 +57,7 @@
                         loading="lazy">
                     <div class="tool-card__content">
                         <h2 id="tool-informes-title">Informes generados</h2>
-                        <p>Consulta los reportes disponibles y revisa la evolucion de tus finanzas en periodos concretos.</p>
+                        <p>Consulta los reportes disponibles y revisa la evolución de tus finanzas en periodos concretos.</p>
                         <a class="btn transactions-action-btn" href="?controller=tool&action=mostrarInformesGenerados">Acceder</a>
                     </div>
                 </article>

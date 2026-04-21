@@ -5,7 +5,7 @@
     <div class="dashboard-page about-page">
         <section class="dashboard-card dashboard-card--main about-shell">
             <h1>Sobre nosotros</h1>
-            <p class="dashboard-lead">Conoce un poco mas sobre el proyecto y dónde encontrarnos.</p>
+            <p class="dashboard-lead">Conoce un poco más sobre el proyecto y dónde encontrarnos.</p>
 
             <div class="about-grid">
                 <section class="dashboard-card dashboard-card--main about-content" aria-labelledby="about-texto-title">
@@ -17,7 +17,7 @@
                 </section>
 
                 <section class="dashboard-card about-map" aria-labelledby="about-map-title">
-                    <h2 id="about-map-title">Nuestra ubicacion</h2>
+                    <h2 id="about-map-title">Nuestra ubicación</h2>
                     <div class="about-map__frame-wrap">
                         <iframe
                             title="Ubicacion de IES Ágora"

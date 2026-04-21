@@ -6,9 +6,10 @@
         <section class="dashboard-card dashboard-card--main">
             <h1>Bienvenido al panel de control <?= $_SESSION['usuario']['nombre'] ?></h1>
 
-            <!-- Contenedor grid con dos columnas -->
+            <!-- Contenedor grid con tres columnas -->
             <div class="dashboard-grid"> 
-                <section class="dashboard-card">
+                <!-- Fila 1: Últimas transacciones (2 cols) + Balance (1 col) -->
+                <section class="dashboard-card dashboard-card--transactions">
                     <div class="transactions-toolbar">
                         <h2>Últimas transacciones</h2>
                         <a class="btn btn-enviar" href="index.php?controller=transaction&action=mostrarFormularioCrearTransaccion">
@@ -44,69 +45,82 @@
                     <?php endif; ?>
                 </section>
 
-                <div class="dashboard-col">
-                    <section class="dashboard-card">
-                        <!-- Fila superior: Gráficos de rosco de balance mensual -->
-                        <h2>Balance mensual</h2>
-                    </section>
+                <section class="dashboard-card dashboard-card--balance">
+                    <h2>Balance mensual</h2>
+                    <div 
+                        class="dashboard-balance-chart"
+                        id="dashboard-balance-chart"
+                        data-balance="<?= htmlspecialchars(json_encode($balanceActual)) ?>"
+                    >
+                        <!-- Gráfico de tarta renderizado aquí -->
+                    </div>
+                    <div class="dashboard-balance-info">
+                        <p class="dashboard-balance-summary">
+                            <span class="dashboard-balance-label">Balance neto:</span>
+                            <span class="dashboard-balance-value <?= htmlspecialchars($claseBalance) ?>">
+                                <?= number_format($balanceActual['balance'], 2, ',', '.') ?> €
+                            </span>
+                        </p>
+                    </div>
+                </section>
 
-                    <section class="dashboard-card">
-                        <!-- Fila inferior: Objetivos actuales -->
-                        <div class="transactions-toolbar">
-                            <h2>Objetivos actuales</h2>
-                            <a class="btn transactions-action-btn" href="index.php?controller=goal&action=mostrarObjetivosAhorro">Ver todos los objetivos</a>
-                        </div>
-                        <?php if (!empty($ultimosObjetivos)): ?>
-                            <div class="dashboard-tx-wrap">
-                                <div class="dashboard-tx-head dashboard-tx-head--goals" aria-hidden="true">
-                                    <span>Objetivo</span>
-                                    <span class="is-right">Ahorrado</span>
-                                    <span class="is-right">Meta</span>
-                                    <span class="is-right">Progreso</span>
-                                    <span>Fecha límite</span>
-                                </div>
-
-                                <ul class="transaction-list transaction-list--goals">
-                                    <?php foreach ($ultimosObjetivos as $objetivo): ?>
-                                        <?php
-                                            $cantidadMeta = (float)($objetivo['cantidad_meta'] ?? 0);
-                                            $saldoApartado = (float)($objetivo['saldo_apartado'] ?? 0);
-                                            $progreso = max(0, min(100, (float)($objetivo['progreso_pct'] ?? 0)));
-                                            $claseProgresoObjetivo = 'objective-progress';
-
-                                            if ($progreso >= 100) {
-                                                $claseProgresoObjetivo .= ' objective-progress--full';
-                                            } elseif ($progreso >= 70) {
-                                                $claseProgresoObjetivo .= ' objective-progress--high';
-                                            } elseif ($progreso >= 30) {
-                                                $claseProgresoObjetivo .= ' objective-progress--medium';
-                                            } else {
-                                                $claseProgresoObjetivo .= ' objective-progress--low';
-                                            }
-
-                                            $fechaLimite = !empty($objetivo['fecha_limite'])
-                                                ? date('d/m/Y', strtotime($objetivo['fecha_limite']))
-                                                : '-';
-                                        ?>
-                                        <li>
-                                            <span class="tx-cell tx-cell--goal-name"><?= htmlspecialchars((string)($objetivo['nombre_objetivo'] ?? '')) ?></span>
-                                            <span class="tx-cell tx-cell--goal-saved is-right"><?= number_format($saldoApartado, 2) ?> €</span>
-                                            <span class="tx-cell tx-cell--goal-target is-right"><?= number_format($cantidadMeta, 2) ?> €</span>
-                                            <span class="tx-cell tx-cell--goal-progress is-right"><span class="<?= htmlspecialchars($claseProgresoObjetivo) ?>"><?= number_format($progreso, 2) ?>%</span></span>
-                                            <span class="tx-cell tx-cell--goal-deadline"><?= htmlspecialchars($fechaLimite) ?></span>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
+                <!-- Fila 2: Objetivos actuales (3 cols) -->
+                <section class="dashboard-card dashboard-card--goals">
+                    <div class="transactions-toolbar">
+                        <h2>Objetivos actuales</h2>
+                        <a class="btn transactions-action-btn" href="index.php?controller=goal&action=mostrarObjetivosAhorro">Ver todos los objetivos</a>
+                    </div>
+                    <?php if (!empty($ultimosObjetivos)): ?>
+                        <div class="dashboard-tx-wrap">
+                            <div class="dashboard-tx-head dashboard-tx-head--goals" aria-hidden="true">
+                                <span>Objetivo</span>
+                                <span class="is-right">Ahorrado</span>
+                                <span class="is-right">Meta</span>
+                                <span class="is-right">Progreso</span>
+                                <span>Fecha límite</span>
                             </div>
-                        <?php else: ?>
-                            <p class="muted">Todavía no tienes objetivos creados. Empieza creando uno para seguir su progreso.</p>
-                        <?php endif; ?>
-                    </section>
-                </div>
+
+                            <ul class="transaction-list transaction-list--goals">
+                                <?php foreach ($ultimosObjetivos as $objetivo): ?>
+                                    <?php
+                                        $cantidadMeta = (float)($objetivo['cantidad_meta'] ?? 0);
+                                        $saldoApartado = (float)($objetivo['saldo_apartado'] ?? 0);
+                                        $progreso = max(0, min(100, (float)($objetivo['progreso_pct'] ?? 0)));
+                                        $claseProgresoObjetivo = 'objective-progress';
+
+                                        if ($progreso >= 100) {
+                                            $claseProgresoObjetivo .= ' objective-progress--full';
+                                        } elseif ($progreso >= 70) {
+                                            $claseProgresoObjetivo .= ' objective-progress--high';
+                                        } elseif ($progreso >= 30) {
+                                            $claseProgresoObjetivo .= ' objective-progress--medium';
+                                        } else {
+                                            $claseProgresoObjetivo .= ' objective-progress--low';
+                                        }
+
+                                        $fechaLimite = !empty($objetivo['fecha_limite'])
+                                            ? date('d/m/Y', strtotime($objetivo['fecha_limite']))
+                                            : '-';
+                                    ?>
+                                    <li>
+                                        <span class="tx-cell tx-cell--goal-name"><?= htmlspecialchars((string)($objetivo['nombre_objetivo'] ?? '')) ?></span>
+                                        <span class="tx-cell tx-cell--goal-saved is-right"><?= number_format($saldoApartado, 2) ?> €</span>
+                                        <span class="tx-cell tx-cell--goal-target is-right"><?= number_format($cantidadMeta, 2) ?> €</span>
+                                        <span class="tx-cell tx-cell--goal-progress is-right"><span class="<?= htmlspecialchars($claseProgresoObjetivo) ?>"><?= number_format($progreso, 2) ?>%</span></span>
+                                        <span class="tx-cell tx-cell--goal-deadline"><?= htmlspecialchars($fechaLimite) ?></span>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php else: ?>
+                        <p class="muted">Todavía no tienes objetivos creados. Empieza creando uno para seguir su progreso.</p>
+                    <?php endif; ?>
+                </section>
             </div>
         </section>
     </div>
-
+    <script src="./js/dashboard.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <?php 
     require_once './../app/views/layout/footer.php';
 ?>
