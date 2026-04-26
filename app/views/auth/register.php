@@ -64,10 +64,10 @@
             <input name="correo" required type="email" placeholder="usuario@ejemplo.com" tabindex="6">
 
             <label for="contrasena">Contraseña:</label>
-            <input name="contrasena" required type="password" placeholder="••••••••" tabindex="7">
+            <input name="contrasena" required type="password" minlength="8" placeholder="••••••••" tabindex="7">
 
             <label for="contrasena2">Confirmar contraseña:</label>
-            <input name="contrasena2" required type="password" placeholder="••••••••" tabindex="8">
+            <input name="contrasena2" required type="password" minlength="8" placeholder="••••••••" tabindex="8">
 
             <div class="checkboxes">
               <label>

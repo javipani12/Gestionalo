@@ -281,7 +281,7 @@
 
             $sql = "SELECT COUNT(*)
                 FROM usuarios u
-                WHERE u.eliminado = 0";
+                WHERE 1 = 1";
 
             if ($correo !== '') {
                 $sql .= " AND u.email LIKE :correo";
@@ -295,6 +295,26 @@
 
             $stmt->execute();
             return (int)$stmt->fetchColumn();
+        }
+
+        /**
+         * Cuenta usuarios por estado (totales, activos e inactivos) en toda la aplicación.
+         */
+        public function contarUsuariosPorEstado() {
+            $sql = "SELECT
+                        COUNT(*) AS total,
+                        SUM(CASE WHEN eliminado = 0 THEN 1 ELSE 0 END) AS activos,
+                        SUM(CASE WHEN eliminado = 1 THEN 1 ELSE 0 END) AS inactivos
+                    FROM usuarios";
+
+            $stmt = $this->db->query($sql);
+            $fila = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+
+            return [
+                'total' => (int)($fila['total'] ?? 0),
+                'activos' => (int)($fila['activos'] ?? 0),
+                'inactivos' => (int)($fila['inactivos'] ?? 0),
+            ];
         }
 
         /**
@@ -319,10 +339,10 @@
         public function obtenerUsuariosPaginados($limite, $offset, $correo = '') {
             $correo = trim((string)$correo);
 
-            $sql = "SELECT u.id_usuario, u.nombre, u.apellido1, u.apellido2, u.email, u.localidad, u.fecha_nacimiento, r.nombre AS rol
+            $sql = "SELECT u.id_usuario, u.nombre, u.apellido1, u.apellido2, u.email, u.localidad, u.fecha_nacimiento, u.eliminado, r.nombre AS rol
                 FROM usuarios u
                 INNER JOIN roles r ON u.rol_id = r.id_rol
-                WHERE u.eliminado = 0";
+                WHERE 1 = 1";
 
             if ($correo !== '') {
                 $sql .= " AND u.email LIKE :correo";
@@ -342,6 +362,20 @@
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        /**
+         * Reactiva un usuario previamente marcado como eliminado.
+         */
+        public function reactivarUsuario($id_usuario) {
+            $sql = "UPDATE usuarios
+                SET eliminado = 0,
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE id_usuario = :id_usuario";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id_usuario', (int)$id_usuario, PDO::PARAM_INT);
+            return $stmt->execute();
         }
     }
 ?>

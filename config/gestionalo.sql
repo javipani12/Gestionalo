@@ -131,8 +131,7 @@ INSERT INTO `categorias` (`nombre_categoria`, `descripcion`) VALUES
   ('Transporte', 'Movilidad urbana e interurbana'),
   ('Vivienda y suministros', 'Gastos del hogar y servicios básicos'),
   ('Inversiones', 'Aportaciones, costes y rendimientos de inversión'),
-  ('Ingresos', 'Entradas de dinero por trabajo, rentas y cobros puntuales'),
-  ('Objetivo', 'Movimientos de transferencia interna hacia o desde objetivos de ahorro')
+  ('Ingresos', 'Entradas de dinero por trabajo, rentas y cobros puntuales')
 ON DUPLICATE KEY UPDATE
   `descripcion` = VALUES(`descripcion`),
   `updated_at` = CURRENT_TIMESTAMP;

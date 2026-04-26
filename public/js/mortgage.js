@@ -1,6 +1,7 @@
 (function () {
   const formulario = document.getElementById("mortgage-form");
   const botonRestablecer = document.getElementById("mortgage-reset");
+  const botonGuardarInforme = document.getElementById("mortgage-save-report");
   const FILAS_AMORTIZACION_POR_PAGINA = 12;
 
   const estadoPaginacionAmortizacion = {
@@ -8,6 +9,8 @@
     paginaActual: 1,
     totalPaginas: 1,
   };
+
+  let ultimoCalculo = null;
 
   if (!formulario) {
     return;
@@ -589,6 +592,8 @@
 
     const ctx = salidas.grafico.getContext("2d");
     ctx.clearRect(0, 0, salidas.grafico.width, salidas.grafico.height);
+
+    ultimoCalculo = null;
   }
 
   // Ejecuta validación, cálculo y pintado de todos los resultados.
@@ -616,6 +621,151 @@
     renderizarAmortizacion(resultado.calendario);
     renderizarComparacionEscenarios(inputs);
     dibujarGrafico(resultado.calendario);
+
+    ultimoCalculo = {
+      entradas: inputs,
+      resultado,
+      metricas: metricasAmortizacionAnticipada,
+    };
+  }
+
+  function recogerEscenariosTabla() {
+    if (!salidas.tablaEscenarios) {
+      return [];
+    }
+
+    return Array.from(salidas.tablaEscenarios.querySelectorAll("tr")).map((fila) => {
+      const celdas = Array.from(fila.querySelectorAll("td")).map((td) =>
+        td.textContent.trim(),
+      );
+      return {
+        escenario: celdas[0] || "-",
+        interes: celdas[1] || "-",
+        plazo: celdas[2] || "-",
+        cuota: celdas[3] || "-",
+        intereses: celdas[4] || "-",
+      };
+    });
+  }
+
+  function recogerAmortizacion(calendario) {
+    return calendario.map((fila) => ({
+      mes: fila.mes,
+      cuota: formatearMoneda(fila.cuota),
+      interes: formatearMoneda(fila.interes),
+      capital: formatearMoneda(fila.capitalAmortizado),
+      extra: formatearMoneda(fila.aportacionExtra),
+      saldo: formatearMoneda(fila.balance),
+    }));
+  }
+
+  async function guardarInformeHipoteca() {
+    if (!ultimoCalculo) {
+      calcularYRenderizar();
+    }
+
+    if (!ultimoCalculo) {
+      alert("No hay datos válidos para generar el informe.");
+      return;
+    }
+
+    if (botonGuardarInforme) {
+      botonGuardarInforme.disabled = true;
+      botonGuardarInforme.textContent = "Guardando...";
+    }
+
+    const graficoBase64 =
+      salidas.grafico && typeof salidas.grafico.toDataURL === "function"
+        ? salidas.grafico.toDataURL("image/png")
+        : "";
+
+    const payload = {
+      nombreInforme: `Hipoteca ${new Date().toLocaleString("es-ES")}`,
+      datos: {
+        estado: ultimoCalculo.entradas,
+        entradas: {
+          precioVivienda: formatearMoneda(ultimoCalculo.entradas.precioVivienda),
+          entradaInicial: formatearMoneda(ultimoCalculo.entradas.entradaInicial),
+          gastosCompra: formatearMoneda(ultimoCalculo.entradas.gastosCompra),
+          interesAnual: formatearPorcentaje(ultimoCalculo.entradas.interesAnual),
+          plazoMeses: ultimoCalculo.entradas.plazoMeses,
+        },
+        resumen: {
+          cuota: salidas.cuota.textContent.trim(),
+          capital: salidas.capital.textContent.trim(),
+          intereses: salidas.intereses.textContent.trim(),
+          pagado: salidas.pagado.textContent.trim(),
+          ratio: salidas.ratio.textContent.trim(),
+          plazoFinal: salidas.plazoFinal.textContent.trim(),
+        },
+        escenarios: recogerEscenariosTabla(),
+        amortizacion: recogerAmortizacion(ultimoCalculo.resultado.calendario || []),
+        graficoBase64,
+      },
+    };
+
+    try {
+      const response = await fetch(
+        "index.php?controller=report&action=generarInformeHipotecaAjax",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          credentials: "same-origin",
+          body: JSON.stringify(payload),
+        },
+      );
+
+      const contentType = response.headers.get("content-type") || "";
+      let json = null;
+      let textoRespuesta = "";
+
+      if (contentType.includes("application/json")) {
+        json = await response.json();
+      } else {
+        textoRespuesta = await response.text();
+      }
+
+      if (!response.ok) {
+        const mensajeServidor =
+          (json && json.mensaje) ||
+          extraerMensajePlano(textoRespuesta) ||
+          `Error HTTP ${response.status}`;
+        throw new Error(mensajeServidor);
+      }
+
+      if (!json || !json.ok) {
+        throw new Error(
+          (json && json.mensaje) ||
+            extraerMensajePlano(textoRespuesta) ||
+            "No se pudo guardar el informe.",
+        );
+      }
+
+      window.location.reload();
+      return;
+    } catch (error) {
+      console.error("Error al guardar informe de hipoteca:", error);
+      window.location.reload();
+      return;
+    } finally {
+      if (botonGuardarInforme) {
+        botonGuardarInforme.disabled = false;
+        botonGuardarInforme.textContent = "Guardar informe PDF";
+      }
+    }
+  }
+
+  function extraerMensajePlano(texto) {
+    if (!texto) {
+      return "";
+    }
+
+    // Si llega una página HTML de error, intentamos extraer algo legible.
+    const sinHtml = String(texto).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+    return sinHtml.slice(0, 220);
   }
 
   formulario.addEventListener("submit", function (event) {
@@ -659,6 +809,10 @@
 
     calcularYRenderizar();
   });
+
+  if (botonGuardarInforme) {
+    botonGuardarInforme.addEventListener("click", guardarInformeHipoteca);
+  }
 
   calcularYRenderizar();
 })();

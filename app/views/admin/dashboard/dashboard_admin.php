@@ -26,8 +26,8 @@
 
                 <div class="dashboard-stats-grid">
                     <article class="dashboard-stat-card">
-                        <span class="dashboard-stat-label">Usuarios totales</span>
-                        <strong class="dashboard-stat-value"><?= number_format((int)($dashboardStats['usuarios_totales'] ?? 0), 0, ',', '.') ?></strong>
+                        <span class="dashboard-stat-label">Usuarios activos</span>
+                        <strong class="dashboard-stat-value"><?= number_format((int)($dashboardStats['usuarios_activos'] ?? 0), 0, ',', '.') ?></strong>
                     </article>
 
                     <article class="dashboard-stat-card">
@@ -127,7 +127,7 @@
                         </div>
                         <?php if (!empty($ultimosUsuarios)): ?>
                             <div class="dashboard-table-wrap">
-                                <table class="dashboard-table">
+                                <table class="dashboard-table dashboard-table--recent-users">
                                     <thead>
                                         <tr>
                                             <th>Nombre</th>
@@ -139,7 +139,7 @@
                                         <?php foreach ($ultimosUsuarios as $usuario): ?>
                                             <tr>
                                                 <td><strong><?= htmlspecialchars(trim(($usuario['nombre'] ?? '') . ' ' . ($usuario['apellido1'] ?? ''))) ?></strong></td>
-                                                <td><?= htmlspecialchars($usuario['email'] ?? '-') ?></td>
+                                                <td class="dashboard-table__email"><?= htmlspecialchars($usuario['email'] ?? '-') ?></td>
                                                 <td><?= !empty($usuario['fecha_registro']) ? date('d/m/Y H:i', strtotime($usuario['fecha_registro'])) : '-' ?></td>
                                             </tr>
                                         <?php endforeach; ?>

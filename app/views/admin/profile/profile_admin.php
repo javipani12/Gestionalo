@@ -3,15 +3,6 @@
 ?>
 
     <div class="dashboard-page profile-page">
-
-        <?php if(isset($_SESSION['correcto'])): ?>
-            <div class="alert success"><?= htmlspecialchars($_SESSION['correcto']) ?></div>
-        <?php unset($_SESSION['correcto']); endif; ?>
-
-        <?php if(isset($_SESSION['error'])): ?>
-            <div class="alert error"><?= htmlspecialchars($_SESSION['error']) ?></div>
-        <?php unset($_SESSION['error']); endif; ?>
-
         <?php
             $profileHeadingText = $profileHeading ?? ('Estos son tus datos de perfil ' . ($_SESSION['usuario']['nombre'] ?? ''));
             $profileFormActionUrl = $profileFormAction ?? '?controller=profile&action=actualizarPerfil';

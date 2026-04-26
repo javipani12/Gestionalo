@@ -3,15 +3,6 @@
 ?>
 
     <div class="dashboard-page">
-
-        <?php if(isset($_SESSION['correcto'])): ?>
-            <div class="alert success"><?= htmlspecialchars($_SESSION['correcto']) ?></div>
-        <?php unset($_SESSION['correcto']); endif; ?>
-
-        <?php if(isset($_SESSION['error'])): ?>
-            <div class="alert error"><?= htmlspecialchars($_SESSION['error']) ?></div>
-        <?php unset($_SESSION['error']); endif; ?>
-
         <section class="dashboard-card dashboard-card--main goals-shell" aria-labelledby="goals-title">
             <div class="transactions-toolbar">
                 <div>
@@ -26,9 +17,8 @@
             </div>
 
             <div class="dashboard-grid">
-                <section class="dashboard-card">
+                <section class="dashboard-card goals-summary">
                     <h2>Resumen de objetivos</h2>
-                    <p class="muted">Vista global del dinero apartado y del avance acumulado de tus metas.</p>
                     <?php if (empty($objetivos)): ?>
                         <p class="muted">Todavía no tienes objetivos de ahorro creados.</p>
                     <?php else: ?>
@@ -187,16 +177,31 @@
                     <?php endif; ?>
                 </section>
 
-                <div class="dashboard-col">
-                    <section class="dashboard-card">
-                        <h2>Estado general</h2>
-                        <p class="muted">Objetivos activos: <?= (int)$totales['activos'] ?></p>
-                        <p class="muted">Objetivos completados: <?= (int)$totales['completados'] ?></p>
-                        <p class="muted">Meta total: <?= number_format($totales['meta'], 2, ',', '.') ?> €</p>
-                        <p class="muted">Dinero apartado: <?= number_format($totales['apartado'], 2, ',', '.') ?> €</p>
-                        <p class="muted">Pendiente por apartar: <?= number_format($totales['restante'], 2, ',', '.') ?> €</p>
-                    </section>
-                </div>
+                <section class="dashboard-card goals-status">
+                    <h2>Estado general</h2>
+                    <div class="goals-status-grid">
+                        <article class="goals-status-card goals-status-card--active">
+                            <p class="goals-status-card__label">Objetivos activos</p>
+                            <p class="goals-status-card__value"><?= (int)$totales['activos'] ?></p>
+                        </article>
+                        <article class="goals-status-card goals-status-card--completed">
+                            <p class="goals-status-card__label">Objetivos completados</p>
+                            <p class="goals-status-card__value"><?= (int)$totales['completados'] ?></p>
+                        </article>
+                        <article class="goals-status-card goals-status-card--active">
+                            <p class="goals-status-card__label">Meta total</p>
+                            <p class="goals-status-card__value"><?= number_format($totales['meta'], 0) ?> €</p>
+                        </article>
+                        <article class="goals-status-card goals-status-card--completed">
+                            <p class="goals-status-card__label">Dinero apartado</p>
+                            <p class="goals-status-card__value"><?= number_format($totales['apartado'], 0) ?> €</p>
+                        </article>
+                        <article class="goals-status-card goals-status-card--pending">
+                            <p class="goals-status-card__label">Pendiente por apartar</p>
+                            <p class="goals-status-card__value"><?= number_format($totales['restante'], 0) ?> €</p>
+                        </article>
+                    </div>
+                </section>
             </div>
         </section>
     </div>

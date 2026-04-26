@@ -72,6 +72,12 @@
                     return;
                 }
 
+                if(strlen($contrasena) < 8) {
+                    $_SESSION['error'] = 'La contraseña debe tener al menos 8 caracteres.';
+                    require_once './../app/views/auth/register.php';
+                    return;
+                }
+
                 if($contrasena !== $contrasena2) {
                     $_SESSION['error'] = 'Las contraseñas no coinciden.';
                     require_once './../app/views/auth/register.php';

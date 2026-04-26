@@ -8,6 +8,7 @@
                 <h1 id="graphics-title">Gráficos financieros</h1>
                 <p class="dashboard-lead">Filtra tus movimientos y actualiza los gráficos al instante.</p>
                 <div class="graphics-actions">
+                    <button type="button" class="btn transactions-action-btn" id="graphics-save-report">Guardar informe PDF</button>
                     <a class="btn transactions-action-btn" href="?controller=tool&action=mostrarHerramientas">Volver a herramientas</a>
                 </div>
             </div>
@@ -113,7 +114,7 @@
         </section>
     </div>
 
-    <div id="graphics-data" data-payload='<?= htmlspecialchars($datosGraficosJson, ENT_QUOTES, 'UTF-8') ?>' hidden></div>
+    <div id="graphics-data"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="./js/graphics.js" defer></script>

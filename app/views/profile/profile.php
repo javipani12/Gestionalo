@@ -3,15 +3,6 @@
 ?>
 
     <div class="dashboard-page profile-page">
-
-        <?php if(isset($_SESSION['correcto'])): ?>
-            <div class="alert success"><?= htmlspecialchars($_SESSION['correcto']) ?></div>
-        <?php unset($_SESSION['correcto']); endif; ?>
-
-        <?php if(isset($_SESSION['error'])): ?>
-            <div class="alert error"><?= htmlspecialchars($_SESSION['error']) ?></div>
-        <?php unset($_SESSION['error']); endif; ?>
-
         <section class="dashboard-card dashboard-card--main profile-card">
             <div class="transactions-toolbar">
                 <h1>Estos son tus datos de perfil <?= htmlspecialchars($_SESSION['usuario']['nombre'] ?? '') ?></h1>
@@ -53,7 +44,7 @@
 
                         <div class="profile-field profile-field--full">
                             <label for="passwd">Nueva contraseña</label>
-                            <input id="passwd" name="passwd" type="password" placeholder="Introduce la nueva contraseña" disabled required>
+                            <input id="passwd" name="passwd" type="password" minlength="8" placeholder="Introduce la nueva contraseña" disabled required>
                             <p class="muted">Solo se actualizará la contraseña si introduces una distinta a la actual.</p>
                         </div>
                     </div>

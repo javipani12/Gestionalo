@@ -1,5 +1,10 @@
 <?php
 	require_once './../app/views/layout/header.php';
+
+	$estadoHipoteca = $_SESSION['estado_hipoteca'] ?? [];
+	$valorEstado = function (string $clave, string $defecto) use ($estadoHipoteca) {
+		return htmlspecialchars((string)($estadoHipoteca[$clave] ?? $defecto), ENT_QUOTES, 'UTF-8');
+	};
 ?>
 
 	<div class="dashboard-page mortgage-page">
@@ -7,6 +12,10 @@
 			<div class="tools-hero mortgage-hero">
 				<h1 id="mortgage-title">Calculadora de hipoteca</h1>
 				<p class="dashboard-lead">Simula tu hipoteca con distintos escenarios y analiza cuota, intereses, esfuerzo y amortización.</p>
+				<div class="graphics-actions">
+					<button type="button" class="btn transactions-action-btn" id="mortgage-save-report">Guardar informe PDF</button>
+					<a class="btn transactions-action-btn" href="?controller=tool&action=mostrarHerramientas">Volver a herramientas</a>
+				</div>
 			</div>
 
 			<div class="mortgage-layout">
@@ -19,15 +28,15 @@
 							<div class="mortgage-grid mortgage-grid--three">
 								<div class="mortgage-field">
 									<label for="precioVivienda" title="Precio total de compra de la vivienda.">Precio</label>
-									<input type="number" id="precioVivienda" name="precioVivienda" min="0" step="1000" value="220000" required>
+									<input type="number" id="precioVivienda" name="precioVivienda" min="0" step="1000" value="<?= $valorEstado('precioVivienda', '220000') ?>" required>
 								</div>
 								<div class="mortgage-field">
 									<label for="entradaInicial" title="Cantidad que aportas con tus ahorros y no financias con la hipoteca.">Entrada</label>
-									<input type="number" id="entradaInicial" name="entradaInicial" min="0" step="1000" value="40000" required>
+									<input type="number" id="entradaInicial" name="entradaInicial" min="0" step="1000" value="<?= $valorEstado('entradaInicial', '40000') ?>" required>
 								</div>
 								<div class="mortgage-field">
 									<label for="gastosCompra" title="Costes iniciales de la compra, como notaría, tasación, gestoría o impuestos.">Gastos</label>
-									<input type="number" id="gastosCompra" name="gastosCompra" min="0" step="100" value="20000" required>
+									<input type="number" id="gastosCompra" name="gastosCompra" min="0" step="100" value="<?= $valorEstado('gastosCompra', '20000') ?>" required>
 								</div>
 							</div>
 						</fieldset>
@@ -37,18 +46,18 @@
 							<div class="mortgage-grid mortgage-grid--three">
 								<div class="mortgage-field">
 									<label for="plazoAnos" title="Número de años en los que devolverás el préstamo.">Plazo (años)</label>
-									<input type="number" id="plazoAnos" name="plazoAnos" min="1" max="45" step="1" value="30" required>
+										<input type="number" id="plazoAnos" name="plazoAnos" min="1" max="45" step="1" value="<?= $valorEstado('plazoAnos', '30') ?>" required>
 								</div>
 								<div class="mortgage-field">
 									<label for="interesAnual" title="Porcentaje de interés anual que aplica el banco sobre el capital prestado.">Interés nominal anual (TIN) (%)</label>
-									<input type="number" id="interesAnual" name="interesAnual" min="0" step="0.01" value="3.2" required>
+										<input type="number" id="interesAnual" name="interesAnual" min="0" step="0.01" value="<?= $valorEstado('interesAnual', '3.2') ?>" required>
 								</div>
 								<div class="mortgage-field">
 									<label for="tipoHipoteca" title="Modalidad de la hipoteca: fija, variable o mixta.">Tipo de interés</label>
 									<select id="tipoHipoteca" name="tipoHipoteca">
-										<option value="fija" selected>Fija</option>
-										<option value="variable">Variable</option>
-										<option value="mixta">Mixta</option>
+											<option value="fija" <?= (($estadoHipoteca['tipoHipoteca'] ?? 'fija') === 'fija') ? 'selected' : '' ?>>Fija</option>
+											<option value="variable" <?= (($estadoHipoteca['tipoHipoteca'] ?? '') === 'variable') ? 'selected' : '' ?>>Variable</option>
+											<option value="mixta" <?= (($estadoHipoteca['tipoHipoteca'] ?? '') === 'mixta') ? 'selected' : '' ?>>Mixta</option>
 									</select>
 								</div>
 							</div>
@@ -59,11 +68,11 @@
 							<div class="mortgage-grid mortgage-grid--two">
 								<div class="mortgage-field">
 									<label for="ingresosMensuales" title="Dinero que ingresas cada mes después de impuestos.">Ingresos mensuales netos</label>
-									<input type="number" id="ingresosMensuales" name="ingresosMensuales" min="0" step="10" value="2600" required>
+										<input type="number" id="ingresosMensuales" name="ingresosMensuales" min="0" step="10" value="<?= $valorEstado('ingresosMensuales', '2600') ?>" required>
 								</div>
 								<div class="mortgage-field">
 									<label for="deudasMensuales" title="Pagos fijos mensuales que ya tienes, como préstamos o financiación.">Deudas mensuales</label>
-									<input type="number" id="deudasMensuales" name="deudasMensuales" min="0" step="10" value="180" required>
+										<input type="number" id="deudasMensuales" name="deudasMensuales" min="0" step="10" value="<?= $valorEstado('deudasMensuales', '180') ?>" required>
 								</div>
 							</div>
 						</fieldset>
@@ -73,15 +82,15 @@
 							<div class="mortgage-grid mortgage-grid--three">
 								<div class="mortgage-field">
 									<label for="extraMensual" title="Cantidad adicional que quieres pagar cada mes para reducir deuda antes de tiempo.">Aporte extra mensual</label>
-									<input type="number" id="extraMensual" name="extraMensual" min="0" step="10" value="0">
+										<input type="number" id="extraMensual" name="extraMensual" min="0" step="10" value="<?= $valorEstado('extraMensual', '0') ?>">
 								</div>
 								<div class="mortgage-field">
 									<label for="pagoUnico" title="Ingreso puntual que quieres destinar a amortizar parte de la hipoteca.">Pago único extraordinario</label>
-									<input type="number" id="pagoUnico" name="pagoUnico" min="0" step="100" value="0">
+										<input type="number" id="pagoUnico" name="pagoUnico" min="0" step="100" value="<?= $valorEstado('pagoUnico', '0') ?>">
 								</div>
 								<div class="mortgage-field">
 									<label for="mesPagoUnico" title="Mes en el que se aplicará ese pago extraordinario.">Mes del pago único</label>
-									<input type="number" id="mesPagoUnico" name="mesPagoUnico" min="1" step="1" value="24">
+										<input type="number" id="mesPagoUnico" name="mesPagoUnico" min="1" step="1" value="<?= $valorEstado('mesPagoUnico', '24') ?>">
 								</div>
 							</div>
 						</fieldset>
@@ -91,15 +100,15 @@
 							<div class="mortgage-grid mortgage-grid--three">
 								<div class="mortgage-field">
 									<label for="variacionInteresBaja" title="Variación del interés para simular un escenario más favorable.">Interés escenario bajo (%)</label>
-									<input type="number" id="variacionInteresBaja" name="variacionInteresBaja" step="0.01" value="-0.5">
+										<input type="number" id="variacionInteresBaja" name="variacionInteresBaja" step="0.01" value="<?= $valorEstado('variacionInteresBaja', '-0.5') ?>">
 								</div>
 								<div class="mortgage-field">
 									<label for="variacionInteresAlta" title="Variación del interés para simular un escenario menos favorable.">Interés escenario alto (%)</label>
-									<input type="number" id="variacionInteresAlta" name="variacionInteresAlta" step="0.01" value="0.75">
+										<input type="number" id="variacionInteresAlta" name="variacionInteresAlta" step="0.01" value="<?= $valorEstado('variacionInteresAlta', '0.75') ?>">
 								</div>
 								<div class="mortgage-field">
 									<label for="variacionPlazo" title="Cambio en la duración de la hipoteca para comparar como afecta a la cuota e intereses.">Variación plazo (años)</label>
-									<input type="number" id="variacionPlazo" name="variacionPlazo" step="1" value="-5">
+										<input type="number" id="variacionPlazo" name="variacionPlazo" step="1" value="<?= $valorEstado('variacionPlazo', '-5') ?>">
 								</div>
 							</div>
 						</fieldset>

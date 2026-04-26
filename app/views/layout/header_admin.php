@@ -31,6 +31,11 @@
                             </a>
                         </li>
                         <li>
+                            <a href="?controller=legal&action=descargarManualAdmin" class="navbar__dropdown-link">
+                                Descargar Manual de Administrador
+                            </a>
+                        </li>
+                        <li>
                             <a href="?controller=auth&action=cerrarSesion" class="navbar__dropdown-link">
                                 Cerrar Sesión
                             </a>
@@ -40,3 +45,11 @@
             </ul>
         </nav>
     </header>
+
+    <?php if(isset($_SESSION['correcto'])): ?>
+			<div class="alert success"><?= htmlspecialchars($_SESSION['correcto']) ?></div>
+		<?php unset($_SESSION['correcto']); endif; ?>
+
+		<?php if(isset($_SESSION['error'])): ?>
+			<div class="alert error"><?= htmlspecialchars($_SESSION['error']) ?></div>
+		<?php unset($_SESSION['error']); endif; ?>

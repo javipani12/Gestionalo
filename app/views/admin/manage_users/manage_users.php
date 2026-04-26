@@ -3,15 +3,6 @@
 ?>
 
 	<div class="dashboard-page">
-
-		<?php if(isset($_SESSION['correcto'])): ?>
-			<div class="alert success"><?= htmlspecialchars($_SESSION['correcto']) ?></div>
-		<?php unset($_SESSION['correcto']); endif; ?>
-
-		<?php if(isset($_SESSION['error'])): ?>
-			<div class="alert error"><?= htmlspecialchars($_SESSION['error']) ?></div>
-		<?php unset($_SESSION['error']); endif; ?>
-
 		<section class="dashboard-card dashboard-card--main">
 			<div class="transactions-toolbar">
 				<h1>Gestión de usuarios</h1>
@@ -19,7 +10,7 @@
 
 			<div class="transactions-table-wrap">
 				<?php
-					$hayFiltroCorreo = !empty($filtroCorreo ?? '');
+					$resumenUsuarios = $resumenUsuarios ?? ['total' => 0, 'activos' => 0, 'inactivos' => 0];
 					$queryBase = [
 						'controller' => 'admin',
 						'action' => 'mostrarGestionUsuarios',
@@ -37,14 +28,19 @@
 					};
 				?>
 				<div class="transactions-summary-bar">
-					<div class="transactions-summary-head">
-						<p class="transactions-summary-text">
-							<?php if ($hayFiltroCorreo): ?>
-								Total de usuarios con coincidencias: <?= (int)($totalUsuarios ?? count($usuarios ?? [])) ?>
-							<?php else: ?>
-								Total de usuarios activos: <?= (int)($totalUsuarios ?? count($usuarios ?? [])) ?>
-							<?php endif; ?>
-						</p>
+					<div class="transactions-summary-head manage-users-kpis" aria-label="Resumen de usuarios">
+						<article class="manage-users-kpi manage-users-kpi--total">
+							<p class="manage-users-kpi__label">Total usuarios</p>
+							<p class="manage-users-kpi__value"><?= (int)($resumenUsuarios['total'] ?? 0) ?></p>
+						</article>
+						<article class="manage-users-kpi manage-users-kpi--active">
+							<p class="manage-users-kpi__label">Usuarios activos</p>
+							<p class="manage-users-kpi__value"><?= (int)($resumenUsuarios['activos'] ?? 0) ?></p>
+						</article>
+						<article class="manage-users-kpi manage-users-kpi--inactive">
+							<p class="manage-users-kpi__label">Usuarios inactivos</p>
+							<p class="manage-users-kpi__value"><?= (int)($resumenUsuarios['inactivos'] ?? 0) ?></p>
+						</article>
 					</div>
 
 					<form class="transaction-search transaction-search--compact" action="index.php" method="get">
@@ -72,7 +68,7 @@
 				</div>
 
 				<?php if (!empty($usuarios)): ?>
-					<table class="transactions-table">
+					<table class="transactions-table manage-users-table">
 						<thead>
 							<tr>
 								<th>Nombre y Apellidos</th>
@@ -85,7 +81,8 @@
 						</thead>
 						<tbody>
 							<?php foreach ($usuarios as $usuario): ?>
-								<tr>
+								<?php $estaInactivo = (int)($usuario['eliminado'] ?? 0) === 1; ?>
+								<tr class="<?= $estaInactivo ? 'manage-users-row--inactive' : '' ?>">
 									<td><?= htmlspecialchars(trim(($usuario['nombre'] ?? '') . ' ' . ($usuario['apellido1'] ?? '') . ' ' . ($usuario['apellido2'] ?? ''))) ?></td>
 									<td><?= htmlspecialchars($usuario['email'] ?? '') ?></td>
 									<td><?= htmlspecialchars($usuario['localidad'] ?? '-') ?></td>
@@ -95,23 +92,25 @@
 									<td><?= htmlspecialchars(ucfirst($usuario['rol'] ?? '')) ?></td>
 									<td>
 										<div class="transactions-actions">
-											<a
-												href="<?= htmlspecialchars($buildGestionUsuariosUrl([
-													'action' => 'mostrarEditarUsuario',
-													'id_usuario' => (int)($usuario['id_usuario'] ?? 0),
-													'pagina' => $paginaActual ?? 1,
-													'return_to' => 'gestionUsuarios'
-												])) ?>"
-												class="tx-icon-btn tx-icon-btn--edit"
-												aria-label="Editar usuario"
-												title="Editar usuario"
-											>
-												<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-													<path d="M3 17.25V21h3.75l11-11-3.75-3.75-11 11Zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0l-1.96 1.96 3.75 3.75 2.13-1.79Z"/>
-												</svg>
-											</a>
+											<?php if (!$estaInactivo): ?>
+												<a
+													href="<?= htmlspecialchars($buildGestionUsuariosUrl([
+														'action' => 'mostrarEditarUsuario',
+														'id_usuario' => (int)($usuario['id_usuario'] ?? 0),
+														'pagina' => $paginaActual ?? 1,
+														'return_to' => 'gestionUsuarios'
+													])) ?>"
+													class="tx-icon-btn tx-icon-btn--edit"
+													aria-label="Editar usuario"
+													title="Editar usuario"
+												>
+													<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+														<path d="M3 17.25V21h3.75l11-11-3.75-3.75-11 11Zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0l-1.96 1.96 3.75 3.75 2.13-1.79Z"/>
+													</svg>
+												</a>
+											<?php endif; ?>
 
-											<?php if ((int)($usuario['id_usuario'] ?? 0) !== (int)($_SESSION['usuario']['id_usuario'] ?? 0)): ?>
+											<?php if ((int)($usuario['id_usuario'] ?? 0) !== (int)($_SESSION['usuario']['id_usuario'] ?? 0) && !$estaInactivo): ?>
 												<a
 													href="<?= htmlspecialchars($buildGestionUsuariosUrl([
 														'action' => 'eliminarUsuario',
@@ -125,6 +124,22 @@
 												>
 													<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
 														<path d="M6 7h12v2H6V7Zm2 3h8l-.7 9.2c-.04.46-.42.8-.88.8H9.58c-.46 0-.84-.34-.88-.8L8 10Zm3-5h2c.55 0 1 .45 1 1v1h-4V6c0-.55.45-1 1-1Z"/>
+													</svg>
+												</a>
+											<?php elseif ((int)($usuario['id_usuario'] ?? 0) !== (int)($_SESSION['usuario']['id_usuario'] ?? 0) && $estaInactivo): ?>
+												<a
+													href="<?= htmlspecialchars($buildGestionUsuariosUrl([
+														'action' => 'reactivarUsuario',
+														'id_usuario' => (int)($usuario['id_usuario'] ?? 0),
+														'pagina' => $paginaActual ?? 1
+													])) ?>"
+													class="tx-icon-btn tx-icon-btn--reactivate"
+													aria-label="Reactivar usuario"
+													title="Reactivar usuario"
+													onclick="return confirm('¿Quieres reactivar este usuario?');"
+												>
+													<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+														<path d="M12 5a7 7 0 1 1-6.32 4H3l3.5-3.5L10 9H7.74A5 5 0 1 0 12 7c-.8 0-1.56.19-2.24.52l-1.46-1.46A6.95 6.95 0 0 1 12 5Z"/>
 													</svg>
 												</a>
 											<?php endif; ?>

@@ -69,6 +69,12 @@
                 }
             }
 
+            if ($passwd !== '' && strlen($passwd) < 8) {
+                $_SESSION['error'] = 'La contraseña debe tener al menos 8 caracteres.';
+                header('Location: ?controller=profile&action=mostrarPerfil');
+                exit();
+            }
+
             if($userModel->comprobarContrasennaActual($id_usuario, $passwd) || $passwd === '') {
                 // Si es la misma contraseña o esta está vacía, no actualizamos el hash, solo los datos del usuario
                 if($userModel->actualizarUsuarioConEmail(

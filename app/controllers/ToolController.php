@@ -38,10 +38,8 @@
          * consultar y descargar informes de sus movimientos y resultados financieros.
          */
         public function mostrarInformesGenerados() {
-            $titulo = 'Gestionalo | Informes generados';
-            $nombreHerramienta = 'Informes generados';
-            $descripcionHerramienta = 'Consulta y descarga informes para revisar tus movimientos y resultados financieros.';
-            require_once './../app/views/tools/tool_detail.php';
+            $reportController = new ReportController();
+            $reportController->mostrarInformesGenerados();
         }
 
     }

@@ -41,7 +41,7 @@
                             </ul>
                         </div>
                     <?php else: ?>
-                        <p>No se han registrado transacciones aún.</p>
+                        <p class="muted">No se han registrado transacciones aún.</p>
                     <?php endif; ?>
                 </section>
 

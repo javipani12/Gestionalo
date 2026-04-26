@@ -35,7 +35,6 @@
                     </ul>
                 </li>
                 <li><a href="?controller=tool&action=mostrarHerramientas" class="navbar__link">Herramientas</a></li>
-                <li><a href="#" class="navbar__link">Agente IA</a></li>
                 <li><a href="?controller=about&action=mostrarSobreNosotros" class="navbar__link">Sobre nosotros</a></li>
                 <li class="navbar__item navbar__item--dropdown">
                     <a href="?controller=contact&action=mostrarMisConsultas" class="navbar__link navbar__link--dropdown" aria-haspopup="true">
@@ -65,6 +64,11 @@
                             </a>
                         </li>
                         <li>
+                            <a href="?controller=legal&action=descargarManualUsuario" class="navbar__dropdown-link">
+                                Descargar Manual de Usuario
+                            </a>
+                        </li>
+                        <li>
                             <a href="?controller=auth&action=cerrarSesion" class="navbar__dropdown-link">
                                 Cerrar Sesión
                             </a>
@@ -74,3 +78,15 @@
             </ul>
         </nav>
     </header>
+
+    <?php if(isset($_SESSION['correcto'])): ?>
+        <div class="alert success"><?= htmlspecialchars($_SESSION['correcto']) ?></div>
+    <?php unset($_SESSION['correcto']); endif; ?>
+
+    <?php if(isset($_SESSION['error'])): ?>
+        <div class="alert error"><?= htmlspecialchars($_SESSION['error']) ?></div>
+    <?php unset($_SESSION['error']); endif; ?>
+
+    <?php if (!empty($consultasHoy) && isset($limiteDiarioConsultas) && $consultasHoy >= $limiteDiarioConsultas): ?>
+        <div class="alert error">Has alcanzado el límite diario de <?= (int)$limiteDiarioConsultas ?> consultas. Podrás enviar más mañana.</div>
+    <?php endif; ?>

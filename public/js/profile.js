@@ -49,6 +49,22 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  formulario.addEventListener('submit', function (event) {
+    var campoContrasena = formulario.querySelector('input[name="passwd"]');
+    if (!campoContrasena) {
+      return;
+    }
+
+    campoContrasena.setCustomValidity('');
+    var nuevaContrasena = campoContrasena.value.trim();
+    if (nuevaContrasena !== '' && nuevaContrasena.length < 8) {
+      campoContrasena.setCustomValidity('La contraseña debe tener al menos 8 caracteres.');
+      campoContrasena.reportValidity();
+      event.preventDefault();
+      return;
+    }
+  });
+
   botonEditar.addEventListener('click', function () {
     if (estaEnEdicion) {
       restaurarValoresIniciales();

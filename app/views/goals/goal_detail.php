@@ -56,14 +56,6 @@
 ?>
 
     <div class="dashboard-page">
-        <?php if(isset($_SESSION['correcto'])): ?>
-            <div class="alert success"><?= htmlspecialchars($_SESSION['correcto']) ?></div>
-        <?php unset($_SESSION['correcto']); endif; ?>
-
-        <?php if(isset($_SESSION['error'])): ?>
-            <div class="alert error"><?= htmlspecialchars($_SESSION['error']) ?></div>
-        <?php unset($_SESSION['error']); endif; ?>
-
         <section class="dashboard-card dashboard-card--main" aria-labelledby="goal-detail-title">
             <div class="transactions-toolbar">
                 <div>

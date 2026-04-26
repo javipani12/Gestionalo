@@ -11,7 +11,7 @@
         /**
          * Función para contar el total de usuarios registrados en el sistema excluyendo los eliminados
          */
-        public function contarUsuariosTotales() {
+        public function contarUsuariosActivos() {
             $sql = "SELECT COUNT(*) AS total
                 FROM usuarios
                 WHERE eliminado = 0

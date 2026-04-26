@@ -135,7 +135,7 @@
 
             $titulo = "Gestionalo | Dashboard Admin";
             $dashboardStats = [
-                'usuarios_totales' => $adminModel->contarUsuariosTotales(),
+                'usuarios_activos' => $adminModel->contarUsuariosActivos(),
                 'consultas_totales' => $adminModel->contarConsultasTotales(),
                 'consultas_pendientes' => $adminModel->contarConsultasPendientes(),
                 'transacciones_totales' => $adminModel->contarTransaccionesTotales(),
@@ -216,6 +216,7 @@
             $filtroCorreo = trim($_GET['correo'] ?? '');
             $paginaActual = max(1, (int)($_GET['pagina'] ?? 1));
             $limitePorPagina = 10;
+            $resumenUsuarios = $userModel->contarUsuariosPorEstado();
 
             $totalUsuarios = $userModel->contarUsuariosFiltrados($filtroCorreo);
             $totalPaginas = max(1, (int)ceil($totalUsuarios / $limitePorPagina));
@@ -392,6 +393,30 @@
                 $_SESSION['correcto'] = 'Usuario eliminado correctamente.';
             } else {
                 $_SESSION['error'] = 'Error al eliminar el usuario.';
+            }
+
+            header('Location: ' . $this->construirUrlGestionUsuarios());
+            exit();
+        }
+
+        /**
+         * Reactiva un usuario inactivo desde el panel admin.
+         */
+        public function reactivarUsuario() {
+            $this->requerirAdmin();
+
+            $idUsuario = (int)($_GET['id_usuario'] ?? 0);
+            if ($idUsuario <= 0) {
+                $_SESSION['error'] = 'Usuario no válido.';
+                header('Location: ' . $this->construirUrlGestionUsuarios());
+                exit();
+            }
+
+            $userModel = new UserModel();
+            if ($userModel->reactivarUsuario($idUsuario)) {
+                $_SESSION['correcto'] = 'Usuario reactivado correctamente.';
+            } else {
+                $_SESSION['error'] = 'Error al reactivar el usuario.';
             }
 
             header('Location: ' . $this->construirUrlGestionUsuarios());
