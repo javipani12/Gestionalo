@@ -307,7 +307,7 @@
                 } else {
                     $_SESSION['error'] = "Error al modificar la transacción.";
                     header('Location: ' . $urlRedireccionExito);
-                    echo "Error al modificar la transacción.";
+                    exit();
                 }
             } else {
                 // Agregamos una nueva transacción para el usuario
@@ -322,7 +322,7 @@
                 } else {
                     $_SESSION['error'] = "Error al agregar la transacción.";
                     header('Location: ' . $urlRedireccionExito);
-                    echo "Error al agregar la transacción.";
+                    exit();
                 }
             }
         }
@@ -387,7 +387,7 @@
             } else {
                 $_SESSION['error'] = "Error al eliminar la transacción.";
                 header('Location: index.php?controller=transaction&action=mostrarTransaccionesUsuario');
-                echo "Error al eliminar la transacción.";
+                exit();
             }
         }
     }

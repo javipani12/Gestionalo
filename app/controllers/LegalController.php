@@ -18,8 +18,7 @@
             $rutaReal = realpath($rutaManual);
 
             if (!$rutaReal || !is_file($rutaReal)) {
-                http_response_code(404);
-                die('No se encontró el manual de usuario.');
+                $this->redirigirConErrorLegal('No se encontró el manual de usuario.');
             }
 
             header('Content-Type: application/pdf');
@@ -39,8 +38,7 @@
             $rutaReal = realpath($rutaManual);
 
             if (!$rutaReal || !is_file($rutaReal)) {
-                http_response_code(404);
-                die('No se encontró el manual de administrador.');
+                $this->redirigirConErrorLegal('No se encontró el manual de administrador.');
             }
 
             header('Content-Type: application/pdf');
@@ -57,6 +55,15 @@
         public function mostrarPrivacidad() {
             $titulo = "Gestionalo | Política de Privacidad";
             require_once './../app/views/legal/privacy.php';
+        }
+
+        /**
+         * Redirige a una vista legal con mensaje de error en sesión.
+         */
+        private function redirigirConErrorLegal($mensaje) {
+            $_SESSION['error'] = $mensaje;
+            header('Location: index.php?controller=legal&action=mostrarConsentimiento');
+            exit();
         }
     }
 ?>

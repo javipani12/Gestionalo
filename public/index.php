@@ -1,5 +1,5 @@
 <?php
-    ini_set('display_errors',1);
+    ini_set('display_errors',0);
     error_reporting(E_ALL);
     session_start();
 
@@ -16,16 +16,27 @@
 
     $controllerClass = ucfirst($controllerParam) . "Controller";
 
-    if(class_exists($controllerClass)) {
-        $controller = new $controllerClass();
-        if(method_exists($controller, $action)) {
-            $controller->$action();
+    try {
+        if(class_exists($controllerClass)) {
+            $controller = new $controllerClass();
+            if(method_exists($controller, $action)) {
+                $controller->$action();
+            } else {
+                error_log("Acción no encontrada: " . $action);
+                $_SESSION['error'] = 'La acción solicitada no está disponible.';
+                header('Location: index.php?controller=home&action=mostrarHome');
+                exit();
+            }
         } else {
-            error_log("Acción no encontrada: " . $action);
-            die("Acción no encontrada: " . htmlspecialchars($action));
+            error_log("Controlador no encontrado: " . $controllerParam);
+            $_SESSION['error'] = 'La sección solicitada no está disponible.';
+            header('Location: index.php?controller=home&action=mostrarHome');
+            exit();
         }
-    } else {
-        error_log("Controlador no encontrado: " . $controllerParam);
-        die("Controlador no encontrado: " . htmlspecialchars($controllerParam));
+    } catch (Throwable $e) {
+        error_log('Error no controlado en index.php: ' . $e->getMessage());
+        $_SESSION['error'] = 'Ha ocurrido un error interno. Inténtalo de nuevo en unos minutos.';
+        header('Location: index.php?controller=home&action=mostrarHome');
+        exit();
     }
 ?>

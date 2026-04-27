@@ -14,7 +14,7 @@
                 ]);
             } catch (PDOException $e) {
                 error_log("Error de conexión a la base de datos: " . $e->getMessage());
-                die("Error de conexión a la base de datos. Por favor, inténtelo de nuevo más tarde.");
+                throw new RuntimeException("Error de conexión a la base de datos.", 0, $e);
             }
         }
     }
