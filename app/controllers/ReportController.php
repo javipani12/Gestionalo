@@ -35,8 +35,7 @@
             $idInforme = (int)($_GET['id_informe'] ?? 0);
 
             if ($idUsuario <= 0 || $idInforme <= 0) {
-                header('Location: index.php?controller=report&action=mostrarInformesGenerados');
-                exit();
+                $this->redirigirConErrorInformes('Informe no válido.');
             }
 
             try {
@@ -44,14 +43,12 @@
                 $informe = $reportModel->obtenerInformePorIdYUsuario($idInforme, $idUsuario);
 
                 if (!$informe) {
-                    http_response_code(404);
-                    die('Informe no encontrado.');
+                    $this->redirigirConErrorInformes('El informe no existe o no está disponible.');
                 }
 
                 $rutaRelativa = (string)($informe['ruta_archivo'] ?? '');
                 if ($rutaRelativa === '') {
-                    http_response_code(404);
-                    die('Ruta de informe no valida.');
+                    $this->redirigirConErrorInformes('La ruta del informe no es válida.');
                 }
 
                 $raizProyecto = dirname(__DIR__, 2);
@@ -68,8 +65,7 @@
                     || !$rutaRealBaseReportes
                     || strpos($rutaRealInforme, $rutaRealBaseReportes) !== 0
                 ) {
-                    http_response_code(404);
-                    die('El archivo del informe no existe o no es accesible.');
+                    $this->redirigirConErrorInformes('El archivo del informe no existe o no es accesible.');
                 }
 
                 $nombreDescarga = trim((string)($informe['nombre_informe'] ?? ''));
@@ -86,8 +82,7 @@
                 exit();
             } catch (Throwable $e) {
                 error_log('ReportController::descargarInforme -> ' . $e->getMessage());
-                http_response_code(500);
-                die('No se pudo descargar el informe.');
+                $this->redirigirConErrorInformes('No se pudo descargar el informe.');
             }
         }
 
@@ -186,6 +181,15 @@
         private function sanearNombreArchivo($nombre) {
             $nombre = preg_replace('/[^a-zA-Z0-9_\-.]/', '_', (string)$nombre);
             return $nombre ?: 'informe.pdf';
+        }
+
+        /**
+         * Redirige al listado de informes mostrando un mensaje de error en sesión.
+         */
+        private function redirigirConErrorInformes($mensaje) {
+            $_SESSION['error'] = $mensaje;
+            header('Location: index.php?controller=report&action=mostrarInformesGenerados');
+            exit();
         }
 
         /**
