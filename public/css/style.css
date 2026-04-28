@@ -2561,7 +2561,7 @@ label {
 }
 
 .manage-users-kpi {
-  margin: 0;
+  margin: 5px 0;
   padding: 12px 14px;
   border-radius: 12px;
   border: 1px solid rgba(1, 10, 18, 0.14);
@@ -2609,6 +2609,10 @@ label {
 
 @media (max-width: 932px) and (orientation: landscape),
   (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
+  .manage-users-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .manage-users-kpi--inactive {
     grid-column: 1 / -1;
   }
@@ -4377,6 +4381,36 @@ label {
     gap: 8px;
   }
 
+  .dashboard-page .admin-queries-table td:nth-child(7) {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .manage-users-table td:nth-child(1)::before { content: 'Nombre y Apellidos'; }
+  .manage-users-table td:nth-child(2)::before { content: 'Correo'; }
+  .manage-users-table td:nth-child(3)::before { content: 'Localidad'; }
+  .manage-users-table td:nth-child(4)::before { content: 'Fecha nacimiento'; }
+  .manage-users-table td:nth-child(5)::before { content: 'Rol'; }
+  .manage-users-table td:nth-child(6)::before { content: 'Acciones'; }
+
+  .manage-users-table td:nth-child(2) {
+    word-break: break-all;
+    overflow-wrap: anywhere;
+  }
+
+  .manage-users-table td:nth-child(6) {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .manage-users-table td:nth-child(6) .transactions-actions {
+    justify-content: center;
+  }
+
   .dashboard-page .admin-queries-table td:nth-child(1)::before { content: 'Asunto'; }
   .dashboard-page .admin-queries-table td:nth-child(2)::before { content: 'Usuario'; }
   .dashboard-page .admin-queries-table td:nth-child(3)::before { content: 'Comentario'; }
@@ -4453,6 +4487,8 @@ label {
     flex-direction: column;
     justify-content: center;
     gap: 6px;
+    grid-column: 1 / -1;
+    width: 100%;
   }
 
   .dashboard-page .admin-queries-table td:nth-child(7) .transactions-actions {
@@ -4600,6 +4636,31 @@ label {
 
   .dashboard-page .goals-table tr + tr {
     margin-top: 10px;
+  }
+
+  .manage-users-table td:nth-child(1)::before { content: 'Nombre y Apellidos'; }
+  .manage-users-table td:nth-child(2)::before { content: 'Correo'; }
+  .manage-users-table td:nth-child(3)::before { content: 'Localidad'; }
+  .manage-users-table td:nth-child(4)::before { content: 'Fecha nacimiento'; }
+  .manage-users-table td:nth-child(5)::before { content: 'Rol'; }
+  .manage-users-table td:nth-child(6)::before { content: 'Acciones'; }
+
+  .manage-users-table td:nth-child(2) {
+    word-break: break-all;
+    overflow-wrap: anywhere;
+  }
+
+  .manage-users-table td:nth-child(6) {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .manage-users-table td:nth-child(6) .transactions-actions {
+    justify-content: center;
   }
 }
 
@@ -5219,6 +5280,36 @@ label {
 }
 
 @media (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
+  .dashboard-admin-shell .dashboard-activity-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .manage-users-table td:nth-child(1)::before { content: 'Nombre y Apellidos'; }
+  .manage-users-table td:nth-child(2)::before { content: 'Correo'; }
+  .manage-users-table td:nth-child(3)::before { content: 'Localidad'; }
+  .manage-users-table td:nth-child(4)::before { content: 'Fecha nacimiento'; }
+  .manage-users-table td:nth-child(5)::before { content: 'Rol'; }
+  .manage-users-table td:nth-child(6)::before { content: 'Acciones'; }
+
+  .manage-users-table td:nth-child(2) {
+    word-break: break-all;
+    overflow-wrap: anywhere;
+  }
+
+  .manage-users-table td:nth-child(6) {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .manage-users-table td:nth-child(6) .transactions-actions {
+    justify-content: center;
+  }
+
   .dashboard-page .dashboard-tx-head--goals {
     display: grid;
     grid-template-columns: minmax(150px, 1.7fr) minmax(92px, 1fr) minmax(92px, 1fr) minmax(82px, 0.8fr) minmax(112px, 1fr);
@@ -5389,6 +5480,15 @@ label {
     gap: 12px;
   }
 
+  .dashboard-admin-shell .dashboard-table--recent-pair tbody tr {
+    height: auto;
+  }
+
+  .dashboard-admin-shell .dashboard-table--recent-pair tbody td {
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+
   .dashboard-admin-shell .dashboard-table-wrap {
     overflow-x: hidden;
   }
@@ -5458,6 +5558,7 @@ label {
     white-space: normal;
     overflow: visible;
     text-overflow: clip;
+    line-height: 1.35;
   }
 
   .master-table-list-wrap .transactions-table.master-table-records tr {

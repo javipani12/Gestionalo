@@ -215,7 +215,7 @@
 
             $filtroCorreo = trim($_GET['correo'] ?? '');
             $paginaActual = max(1, (int)($_GET['pagina'] ?? 1));
-            $limitePorPagina = 10;
+            $limitePorPagina = 5;
             $resumenUsuarios = $userModel->contarUsuariosPorEstado();
 
             $totalUsuarios = $userModel->contarUsuariosFiltrados($filtroCorreo);
@@ -431,7 +431,7 @@
 
             $titulo = 'Gestionalo | Consultas de usuarios';
             $contactModel = new ContactModel();
-            $limitePorPagina = 10;
+            $limitePorPagina = 5;
             $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
             $paginaActual = max(1, $paginaActual);
 
