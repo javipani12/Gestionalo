@@ -1,5 +1,7 @@
 <?php
     require_once './../app/views/layout/header.php';
+    $paginaActual = $paginaActual ?? 1;
+    $totalPaginas = $totalPaginas ?? 1;
 ?>
 
     <div class="dashboard-page">
@@ -67,13 +69,18 @@
 
                                             if ($estadoObjetivo === 'en curso') {
                                                 $claseEstadoObjetivo .= ' objective-state--curso';
+                                                $claseFilaObjetivo = 'goal-row goal-row--curso';
                                             } elseif ($estadoObjetivo === 'completado') {
                                                 $claseEstadoObjetivo .= ' objective-state--completado';
+                                                $claseFilaObjetivo = 'goal-row goal-row--completado';
                                             } elseif ($estadoObjetivo === 'cancelado') {
                                                 $claseEstadoObjetivo .= ' objective-state--cancelado';
+                                                $claseFilaObjetivo = 'goal-row goal-row--cancelado';
+                                            } else {
+                                                $claseFilaObjetivo = 'goal-row goal-row--default';
                                             }
                                         ?>
-                                        <tr>
+                                        <tr class="<?= htmlspecialchars($claseFilaObjetivo) ?>">
                                             <td><?= htmlspecialchars((string)($objetivo['nombre_objetivo'] ?? '')) ?></td>
                                             <td><?= number_format($meta, 2, ',', '.') ?> €</td>
                                             <td><?= number_format($apartado, 2, ',', '.') ?> €</td>

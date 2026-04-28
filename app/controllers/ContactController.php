@@ -9,7 +9,7 @@
             $titulo = 'Gestionalo | Mis consultas';
             $contactModel = new ContactModel();
             $idUsuario = (int)$_SESSION['usuario']['id_usuario'];
-            $limitePorPagina = 10;
+            $limitePorPagina = 5;
             $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
             $paginaActual = max(1, $paginaActual);
 

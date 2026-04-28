@@ -46,16 +46,22 @@
                                 <?php
                                     $estadoConsulta = strtolower(trim((string)($consulta['estado'] ?? '')));
                                     $claseEstadoConsulta = 'query-state';
+                                    $claseFilaConsulta = 'query-row';
 
                                     if ($estadoConsulta === 'enviada') {
                                         $claseEstadoConsulta .= ' query-state--enviada';
+                                        $claseFilaConsulta .= ' query-row--enviada';
                                     } elseif ($estadoConsulta === 'en curso') {
                                         $claseEstadoConsulta .= ' query-state--curso';
+                                        $claseFilaConsulta .= ' query-row--curso';
                                     } elseif ($estadoConsulta === 'finalizada') {
                                         $claseEstadoConsulta .= ' query-state--finalizada';
+                                        $claseFilaConsulta .= ' query-row--finalizada';
+                                    } else {
+                                        $claseFilaConsulta .= ' query-row--default';
                                     }
                                 ?>
-                                <tr>
+                                <tr class="<?= htmlspecialchars($claseFilaConsulta) ?>">
                                     <td><?= htmlspecialchars($consulta['asunto'] ?? '') ?></td>
                                     <td class="tx-concepto query-text-cell" title="<?= htmlspecialchars($consulta['comentario'] ?? '') ?>">
                                         <?= htmlspecialchars($consulta['comentario'] ?? '') ?>

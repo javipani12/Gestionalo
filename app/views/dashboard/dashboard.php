@@ -5,6 +5,13 @@
     <div class="dashboard-page">
         <section class="dashboard-card dashboard-card--main">
             <h1>Bienvenido al panel de control <?= $_SESSION['usuario']['nombre'] ?></h1>
+            <?php if (empty($ultimasTransacciones)): ?>
+                <p class="muted">
+                    Todavía no tienes transacciones registradas. Puedes descargar el manual de usuario desde el menú Perfil > Descargar manual de usuario,
+                    o hacerlo directamente aquí:
+                    <a class="link" href="?controller=legal&action=descargarManualUsuario">Descargar manual de usuario</a>.
+                </p>
+            <?php endif; ?>
 
             <!-- Contenedor grid con tres columnas -->
             <div class="dashboard-grid"> 
@@ -81,12 +88,23 @@
                             </div>
 
                             <ul class="transaction-list transaction-list--goals">
-                                <?php foreach ($ultimosObjetivos as $objetivo): ?>
+                                <?php foreach ($ultimosObjetivos as $indice => $objetivo): ?>
                                     <?php
                                         $cantidadMeta = (float)($objetivo['cantidad_meta'] ?? 0);
                                         $saldoApartado = (float)($objetivo['saldo_apartado'] ?? 0);
                                         $progreso = max(0, min(100, (float)($objetivo['progreso_pct'] ?? 0)));
                                         $claseProgresoObjetivo = 'objective-progress';
+                                        $claseFilaObjetivo = 'dashboard-goal-item dashboard-goal-item--' . (
+                                            $progreso >= 100 ? 'full' : (
+                                                $progreso >= 70 ? 'high' : (
+                                                    $progreso >= 30 ? 'medium' : 'low'
+                                                )
+                                            )
+                                        );
+
+                                        if (($indice % 2) === 1) {
+                                            $claseFilaObjetivo .= ' dashboard-goal-item--alt';
+                                        }
 
                                         if ($progreso >= 100) {
                                             $claseProgresoObjetivo .= ' objective-progress--full';
@@ -102,7 +120,7 @@
                                             ? date('d/m/Y', strtotime($objetivo['fecha_limite']))
                                             : '-';
                                     ?>
-                                    <li>
+                                    <li class="<?= htmlspecialchars($claseFilaObjetivo) ?>">
                                         <span class="tx-cell tx-cell--goal-name"><?= htmlspecialchars((string)($objetivo['nombre_objetivo'] ?? '')) ?></span>
                                         <span class="tx-cell tx-cell--goal-saved is-right"><?= number_format($saldoApartado, 2) ?> €</span>
                                         <span class="tx-cell tx-cell--goal-target is-right"><?= number_format($cantidadMeta, 2) ?> €</span>

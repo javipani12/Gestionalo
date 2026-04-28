@@ -72,12 +72,12 @@
             <div class="checkboxes">
               <label>
                 <input name="privacidad" type="checkbox" value="1" required tabindex="9">
-                Acepto la <a href="?controller=legal&action=mostrarPrivacidad" target="_blank">política de privacidad</a>
+                <span>Acepto la <a href="?controller=legal&action=mostrarPrivacidad" target="_blank">política de privacidad</a>.</span>
               </label>
               
               <label>
                 <input name="consentimiento" type="checkbox" value="1" required tabindex="10">
-                <a href="?controller=legal&action=mostrarConsentimiento" target="_blank">Consiento</a> el tratamiento de mis datos para la creación de mi cuenta y el envío de correos relacionados con el servicio.
+                <span><a href="?controller=legal&action=mostrarConsentimiento" target="_blank">Consiento</a> el tratamiento de mis datos para la creación de mi cuenta y el envío de correos relacionados con el servicio.</span>
               </label>
             </div>
           </div>

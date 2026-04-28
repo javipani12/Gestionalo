@@ -11,6 +11,10 @@
             $titulo = 'Gestionalo | Informes generados';
             $idUsuario = (int)($_SESSION['usuario']['id_usuario'] ?? 0);
             $informes = [];
+            $paginaActual = max(1, (int)($_GET['pagina'] ?? 1));
+            $limitePorPagina = 5;
+            $totalInformes = 0;
+            $totalPaginas = 1;
 
             if ($idUsuario <= 0) {
                 header('Location: index.php?controller=dashboard&action=mostrarDashboard');
@@ -19,7 +23,15 @@
 
             try {
                 $reportModel = new ReportModel();
-                $informes = $reportModel->obtenerInformesPorUsuario($idUsuario);
+                $totalInformes = $reportModel->contarInformesPorUsuario($idUsuario);
+                $totalPaginas = max(1, (int)ceil($totalInformes / $limitePorPagina));
+
+                if ($paginaActual > $totalPaginas) {
+                    $paginaActual = $totalPaginas;
+                }
+
+                $offset = ($paginaActual - 1) * $limitePorPagina;
+                $informes = $reportModel->obtenerInformesPaginadosPorUsuario($idUsuario, $limitePorPagina, $offset);
             } catch (Throwable $e) {
                 error_log('ReportController::mostrarInformesGenerados -> ' . $e->getMessage());
             }

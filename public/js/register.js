@@ -10,6 +10,26 @@ const pasosProgreso = document.querySelectorAll('.progress-step');
 let pasoActual = 0;
 const pasos = document.querySelectorAll('.step');
 const ultimoPaso = pasos.length - 1;
+const campoContrasena = formulario ? formulario.querySelector('input[name="contrasena"]') : null;
+const campoContrasenaConfirmacion = formulario ? formulario.querySelector('input[name="contrasena2"]') : null;
+
+function validarCoincidenciaContrasenas() {
+	if (!campoContrasena || !campoContrasenaConfirmacion) {
+		return true;
+	}
+
+	const contrasena = campoContrasena.value;
+	const confirmacion = campoContrasenaConfirmacion.value;
+
+	campoContrasenaConfirmacion.setCustomValidity('');
+
+	if (contrasena !== '' && confirmacion !== '' && contrasena !== confirmacion) {
+		campoContrasenaConfirmacion.setCustomValidity('Las contrasenas no coinciden.');
+		return false;
+	}
+
+	return true;
+}
 
 /**
  * Actualiza el progreso de la barra de progreso
@@ -44,13 +64,8 @@ function validarPaso(indicePaso) {
 
 	// En el ultimo paso se comprueba que ambas contrasenas coincidan.
 	if (indicePaso === 2) {
-		const contrasena = formulario.querySelector('input[name="contrasena"]');
-		const contrasenaConfirmacion = formulario.querySelector('input[name="contrasena2"]');
-
-		if (contrasena && contrasenaConfirmacion && contrasena.value !== contrasenaConfirmacion.value) {
-			contrasenaConfirmacion.setCustomValidity('Las contrasenas no coinciden.');
-			contrasenaConfirmacion.reportValidity();
-			contrasenaConfirmacion.setCustomValidity('');
+		if (!validarCoincidenciaContrasenas()) {
+			campoContrasenaConfirmacion.reportValidity();
 			return false;
 		}
 	}
@@ -111,5 +126,21 @@ botonAnterior.addEventListener('click', () => {
 	pasoActual -= 1;
 	mostrarPaso(pasoActual);
 });
+
+if (campoContrasena && campoContrasenaConfirmacion) {
+	campoContrasenaConfirmacion.addEventListener('blur', () => {
+		if (!validarCoincidenciaContrasenas()) {
+			campoContrasenaConfirmacion.reportValidity();
+		}
+	});
+
+	campoContrasena.addEventListener('input', () => {
+		validarCoincidenciaContrasenas();
+	});
+
+	campoContrasenaConfirmacion.addEventListener('input', () => {
+		validarCoincidenciaContrasenas();
+	});
+}
 
 mostrarPaso(pasoActual);

@@ -127,6 +127,23 @@ textarea {
   transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
 }
 
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 44px;
+  line-height: 1.2;
+  color-scheme: light;
+}
+
+input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.75;
+}
+
 textarea {
   resize: vertical;
   overflow-y: auto;
@@ -416,6 +433,10 @@ label {
   text-decoration-thickness: 1.5px;
   text-underline-offset: 2px;
   text-decoration-color: rgba(1, 10, 18, 0.55);
+
+.checkboxes label span {
+  display: inline;
+}
   transition: color 160ms ease, text-decoration-color 160ms ease;
 }
 
@@ -607,31 +628,45 @@ label {
   .split.split--landing {
     flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 40px);
-    padding-top: 1.25rem;
-    padding-bottom: 1.25rem;
-    gap: 0.75rem;
+    min-height: calc(100vh - 24px);
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    gap: 1rem;
   }
 
   .split.split--landing .left.left--landing,
   .split.split--landing .right.right--landing {
     flex: 0 1 auto;
-    width: min(760px, 100%);
-    padding: 0.85rem 1.75rem;
+    width: min(880px, 100%);
+    padding: 1.1rem 2rem;
     justify-content: center;
     align-items: center;
     text-align: center;
   }
 
   .split.split--landing .left.left--landing .logo {
-    width: min(360px, 52vw);
+    width: min(440px, 58vw);
+  }
+
+  .split.split--landing .left.left--landing .lead {
+    font-size: 1.12rem;
+    line-height: 1.45;
+    max-width: 28ch;
+  }
+
+  .split.split--landing .right.right--landing .lead {
+    font-size: 1.15rem;
+    max-width: 30ch;
   }
 
   .split.split--landing .right.right--landing .card.cta-box {
-    width: min(460px, 100%);
-    max-width: min(460px, 100%);
+    width: min(560px, 100%);
+    max-width: min(560px, 100%);
+    margin: 10px 0;
+    padding: 16px 20px;
+    font-size: 1rem;
   }
 }
 
@@ -1558,11 +1593,12 @@ label {
 }
 
 .goals-summary {
-  grid-column: span 2;
+  grid-column: 2 / span 2;
 }
 
 .goals-status {
-  grid-column: span 1;
+  grid-column: 1;
+  grid-row: 1;
 }
 
 .goals-status-grid {
@@ -1840,6 +1876,15 @@ label {
   flex-basis: 100%;
 }
 
+.mortgage-page .mortgage-hero h1 {
+  min-width: 0;
+  flex: 1 1 100%;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.05;
+}
+
 .mortgage-hero .graphics-actions {
   order: 2;
   display: flex;
@@ -1856,8 +1901,8 @@ label {
 }
 
 .tool-card {
-  display: grid;
-  grid-template-rows: clamp(200px, 24vw, 260px) 1fr;
+  display: flex;
+  flex-direction: column;
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid rgba(1, 10, 18, 0.14);
   border-radius: 14px;
@@ -1873,7 +1918,8 @@ label {
 
 .tool-card__image {
   width: 100%;
-  height: 100%;
+  height: clamp(200px, 24vw, 260px);
+  flex: 0 0 auto;
   object-fit: cover;
   object-position: center;
   display: block;
@@ -1908,6 +1954,8 @@ label {
   flex-direction: column;
   gap: 10px;
   padding: 14px;
+  flex: 1 1 auto;
+  min-height: 1px;
 }
 
 .tool-card__content h2 {
@@ -1924,6 +1972,27 @@ label {
 .tool-card__content .btn {
   margin-top: auto;
   width: fit-content;
+}
+
+/* Fallback especifico para Safari/iPad: evita que el contenido del card se colapse. */
+@media (hover: none) and (pointer: coarse) and (min-width: 768px) and (max-width: 1366px) {
+  .tools-page .tool-card {
+    display: block;
+    height: auto;
+  }
+
+  .tools-page .tool-card__image {
+    height: clamp(200px, 24vw, 260px);
+  }
+
+  .tools-page .tool-card__content {
+    display: flex !important;
+    flex-direction: column;
+    visibility: visible;
+    opacity: 1;
+    max-height: none;
+    overflow: visible;
+  }
 }
 
 .tool-detail-card {
@@ -3044,23 +3113,23 @@ label {
 
 .transactions-table--goal-history th:nth-child(1),
 .transactions-table--goal-history td:nth-child(1) {
-  width: 25%;
+  width: 18%;
 }
 
 .transactions-table--goal-history th:nth-child(2),
 .transactions-table--goal-history td:nth-child(2) {
-  width: 22%;
+  width: 26%;
 }
 
 .transactions-table--goal-history th:nth-child(3),
 .transactions-table--goal-history td:nth-child(3) {
-  width: 14%;
+  width: 15%;
   white-space: nowrap;
 }
 
 .transactions-table--goal-history th:nth-child(4),
 .transactions-table--goal-history td:nth-child(4) {
-  width: 14%;
+  width: 15%;
 }
 
 .transactions-table--goal-history th:nth-child(5),
@@ -3070,7 +3139,7 @@ label {
 
 .transactions-table--goal-history th:nth-child(6),
 .transactions-table--goal-history td:nth-child(6) {
-  width: 12%;
+  width: 13%;
 }
 
 .transactions-table--goal-history th:nth-child(4),
@@ -3298,6 +3367,50 @@ label {
 
 .transaction-list--goals li {
   grid-template-columns: minmax(150px, 1.7fr) minmax(92px, 1fr) minmax(92px, 1fr) minmax(82px, 0.8fr) minmax(112px, 1fr);
+}
+
+.transaction-list--goals li.dashboard-goal-item {
+  position: relative;
+  background: rgba(255, 255, 255, 0.94);
+  border-top: 1px solid rgba(1, 10, 18, 0.2);
+  border-bottom: 1px solid rgba(1, 10, 18, 0.2);
+}
+
+.transaction-list--goals li.dashboard-goal-item::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: rgba(255, 138, 48, 0.9);
+}
+
+.transaction-list--goals li.dashboard-goal-item--low::before {
+  background: rgba(239, 84, 93, 0.9);
+}
+
+.transaction-list--goals li.dashboard-goal-item--medium::before {
+  background: rgba(255, 190, 64, 0.95);
+}
+
+.transaction-list--goals li.dashboard-goal-item--high::before {
+  background: rgba(48, 165, 255, 0.95);
+}
+
+.transaction-list--goals li.dashboard-goal-item--full::before {
+  background: rgba(44, 196, 134, 0.95);
+}
+
+.transaction-list--goals li.dashboard-goal-item--alt {
+  background: rgba(246, 251, 255, 0.96);
+}
+
+.transaction-list--goals li.dashboard-goal-item .tx-cell--goal-name {
+  font-weight: 700;
+}
+
+.transaction-list--goals li.dashboard-goal-item .tx-cell--goal-progress .objective-progress {
+  min-width: 72px;
+  justify-content: center;
 }
 
 .transaction-list--goal-summary li {
@@ -3536,6 +3649,30 @@ label {
 }
 
 @media (max-width: 600px) {
+  .dashboard-page .dashboard-card--main {
+    padding: 14px;
+  }
+
+  .dashboard-page .dashboard-grid {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .dashboard-page .dashboard-card--transactions,
+  .dashboard-page .dashboard-card--balance,
+  .dashboard-page .dashboard-card--goals {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .dashboard-page .dashboard-tx-wrap {
+    max-width: 100%;
+  }
+
+  .mortgage-page .mortgage-hero h1 {
+    font-size: clamp(1.9rem, 8vw, 2.6rem);
+  }
+
   .manage-users-kpis {
     grid-template-columns: 1fr;
   }
@@ -3696,6 +3833,60 @@ label {
   }
 }
 
+@media (min-width: 768px) and (max-width: 1366px) {
+  .goals-shell .dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .goals-shell .dashboard-grid > * {
+    min-width: 0;
+  }
+
+  .goals-shell .goals-status {
+    order: -1;
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .goals-shell .goals-summary {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .goals-shell .transactions-table-wrap {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1400px) and (orientation: landscape) {
+  .goals-shell .dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .goals-shell .dashboard-grid > * {
+    min-width: 0;
+  }
+
+  .goals-shell .goals-status {
+    order: -1;
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .goals-shell .goals-summary {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .goals-shell .transactions-table-wrap {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+
 @media (min-width: 1024px) {
   .goals-status-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -3703,7 +3894,7 @@ label {
 }
 
 /* Ajuste táctil (móvil horizontal + tablet): escalar contenido común */
-@media (hover: none) and (pointer: coarse) and (max-width: 1366px) {
+@media (max-width: 1366px) {
   html,
   body {
     overflow-x: hidden;
@@ -3818,7 +4009,7 @@ label {
 }
 
 /* Corrección de simetría lateral en móvil horizontal y tablet vertical */
-@media (hover: none) and (pointer: coarse) and (max-width: 932px) and (orientation: landscape) {
+@media (max-width: 932px) and (orientation: landscape) {
   body {
     padding: 8px;
   }
@@ -3836,8 +4027,8 @@ label {
   }
 }
 
-@media (hover: none) and (pointer: coarse) and (min-width: 768px) and (max-width: 1366px) and (orientation: portrait),
-       (hover: none) and (pointer: coarse) and (max-width: 932px) and (orientation: landscape) {
+@media (min-width: 768px) and (max-width: 1366px) and (orientation: portrait),
+       (max-width: 932px) and (orientation: landscape) {
   body {
     padding: 10px;
   }
@@ -3864,6 +4055,51 @@ label {
   }
 }
 
+@media (min-width: 768px) and (max-width: 1366px) and (orientation: portrait),
+       (max-width: 932px) and (orientation: landscape) {
+  .dashboard-page .dashboard-tx-head {
+    display: none;
+  }
+
+  .dashboard-page .transaction-list li {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-page .tx-cell {
+    padding: 8px 12px;
+  }
+
+  .dashboard-page .tx-cell::before {
+    display: inline-block;
+    min-width: 110px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: rgba(1, 10, 18, 0.62);
+    margin-right: 6px;
+  }
+
+  .dashboard-page .transaction-list--transactions .tx-cell--categoria::before { content: 'Categoría:'; }
+  .dashboard-page .transaction-list--transactions .tx-cell:nth-child(2)::before { content: 'Subcategoría:'; }
+  .dashboard-page .transaction-list--transactions .tx-cell--concepto::before { content: 'Concepto:'; }
+  .dashboard-page .transaction-list--transactions .tx-cell--fecha::before { content: 'Fecha:'; }
+  .dashboard-page .transaction-list--transactions .tx-cell--importe::before { content: 'Importe:'; }
+
+  .dashboard-page .transaction-list--goals .tx-cell--goal-name::before { content: 'Objetivo:'; }
+  .dashboard-page .transaction-list--goals .tx-cell--goal-saved::before { content: 'Ahorrado:'; }
+  .dashboard-page .transaction-list--goals .tx-cell--goal-target::before { content: 'Meta:'; }
+  .dashboard-page .transaction-list--goals .tx-cell--goal-progress::before { content: 'Progreso:'; }
+  .dashboard-page .transaction-list--goals .tx-cell--goal-deadline::before { content: 'Fecha límite:'; }
+
+  .dashboard-page .tx-cell--concepto {
+    white-space: normal;
+    overflow: visible;
+  }
+
+  .dashboard-page .tx-cell--importe.is-right {
+    text-align: left;
+  }
+}
+
 @media (max-width: 932px) and (orientation: portrait) {
   .transaction-search.transaction-search--graphics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3879,6 +4115,89 @@ label {
   .dashboard-page .dashboard-tx-head,
   .dashboard-page .transaction-list {
     min-width: 0;
+  }
+
+  .dashboard-page .transaction-list--transactions li,
+  .dashboard-page .transaction-list--goals li {
+    grid-template-columns: 1fr;
+    gap: 0;
+    align-items: stretch;
+  }
+
+  .dashboard-page .tx-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 8px 12px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .dashboard-page .tx-cell::before {
+    display: block;
+    min-width: 0;
+    margin-right: 0;
+    margin-bottom: 2px;
+  }
+
+  .dashboard-page .tx-cell--goal-progress {
+    justify-content: flex-start;
+  }
+
+  .dashboard-page .transaction-list--goals .tx-cell.is-right,
+  .dashboard-page .tx-cell--importe.is-right {
+    text-align: left;
+  }
+
+  .dashboard-page .tx-cell--concepto {
+    white-space: normal;
+    overflow: visible;
+  }
+
+  .dashboard-page .transaction-list--goals li {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    padding: 8px 0;
+    align-items: stretch;
+  }
+
+  .dashboard-page .transaction-list--goals .tx-cell::before {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(1, 10, 18, 0.62);
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .dashboard-page .transaction-list--goals .tx-cell:nth-child(1)::before { content: 'Objetivo'; }
+  .dashboard-page .transaction-list--goals .tx-cell:nth-child(2)::before { content: 'Ahorrado'; }
+  .dashboard-page .transaction-list--goals .tx-cell:nth-child(3)::before { content: 'Meta'; }
+  .dashboard-page .transaction-list--goals .tx-cell:nth-child(4)::before { content: 'Progreso'; }
+  .dashboard-page .transaction-list--goals .tx-cell:nth-child(5)::before { content: 'Fecha límite'; }
+
+  .dashboard-page .transaction-list--goals .tx-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 64px;
+    padding: 8px 10px;
+    border: 1px solid rgba(1, 10, 18, 0.08);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.94);
+  }
+
+  .dashboard-page .transaction-list--goals .tx-cell--goal-deadline {
+    grid-column: 1 / -1;
+  }
+
+  .dashboard-page .transaction-list--goals .tx-cell--goal-progress {
+    justify-content: center;
   }
 
   .dashboard-page .queries-table {
@@ -3943,6 +4262,13 @@ label {
     align-items: center;
   }
 
+  .dashboard-page .queries-table td:nth-child(4) > .query-state,
+  .dashboard-page .admin-queries-table td:nth-child(5) > .query-state {
+    justify-self: start;
+    width: fit-content;
+    max-width: 100%;
+  }
+
   .profile-actions {
     display: flex;
     flex-wrap: nowrap;
@@ -3960,8 +4286,7 @@ label {
   }
 }
 
-@media (hover: none) and (pointer: coarse) and (max-width: 1366px) and (orientation: portrait),
-       (hover: none) and (pointer: coarse) and (max-width: 932px) and (orientation: landscape) {
+@media (max-width: 1366px) {
   .transactions-table-wrap {
     overflow-x: hidden;
     padding: 0;
@@ -4069,6 +4394,26 @@ label {
   .dashboard-page .goals-table td:nth-child(7)::before { content: 'Fecha límite'; }
   .dashboard-page .goals-table td:nth-child(8)::before { content: 'Acciones'; }
 
+  .dashboard-page .goals-table tr {
+    border-left: 5px solid rgba(143, 154, 166, 0.9);
+  }
+
+  .dashboard-page .goals-table tr.goal-row--curso {
+    border-left-color: rgba(255, 138, 48, 0.95);
+  }
+
+  .dashboard-page .goals-table tr.goal-row--completado {
+    border-left-color: rgba(34, 160, 107, 0.95);
+  }
+
+  .dashboard-page .goals-table tr.goal-row--cancelado {
+    border-left-color: rgba(214, 69, 69, 0.95);
+  }
+
+  .dashboard-page .goals-table tr + tr {
+    margin-top: 10px;
+  }
+
   .dashboard-page .goals-table td:nth-child(8) {
     display: flex;
     align-items: center;
@@ -4115,18 +4460,353 @@ label {
   }
 }
 
+@media (max-width: 767px) and (orientation: portrait),
+       (max-width: 932px) and (orientation: landscape) {
+  .dashboard-page .queries-table {
+    min-width: 0;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    background: transparent;
+  }
+
+  .dashboard-page .queries-table thead {
+    display: none;
+  }
+
+  .dashboard-page .queries-table,
+  .dashboard-page .queries-table tbody,
+  .dashboard-page .queries-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .dashboard-page .queries-table tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    border: 1px solid rgba(1, 10, 18, 0.16);
+    border-left: 5px solid rgba(143, 154, 166, 0.9);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    padding: 8px;
+    overflow: hidden;
+  }
+
+  .dashboard-page .queries-table tr.query-row--enviada {
+    border-left-color: rgba(48, 165, 255, 0.95);
+  }
+
+  .dashboard-page .queries-table tr.query-row--curso {
+    border-left-color: rgba(255, 138, 48, 0.95);
+  }
+
+  .dashboard-page .queries-table tr.query-row--finalizada {
+    border-left-color: rgba(44, 196, 134, 0.95);
+  }
+
+  .dashboard-page .queries-table tr + tr {
+    margin-top: 10px;
+  }
+
+  .dashboard-page .queries-table td {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 64px;
+    padding: 8px;
+    border: 1px solid rgba(1, 10, 18, 0.08);
+    border-radius: 10px;
+    text-align: center;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .dashboard-page .queries-table td::before {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(1, 10, 18, 0.62);
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .dashboard-page .queries-table td:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .dashboard-page .queries-table td:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .dashboard-page .queries-table td:nth-child(3) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .dashboard-page .queries-table td:nth-child(4) {
+    grid-column: 2;
+    grid-row: 2;
+    align-items: center;
+  }
+
+  .dashboard-page .queries-table td:nth-child(5) {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    min-height: 60px;
+  }
+
+  .dashboard-page .queries-table td:nth-child(1)::before { content: 'Asunto'; }
+  .dashboard-page .queries-table td:nth-child(2)::before { content: 'Comentario'; }
+  .dashboard-page .queries-table td:nth-child(3)::before { content: 'Respuesta'; }
+  .dashboard-page .queries-table td:nth-child(4)::before { content: 'Estado'; }
+  .dashboard-page .queries-table td:nth-child(5)::before { content: 'Fecha'; }
+
+  .dashboard-page .queries-table td:nth-child(2),
+  .dashboard-page .queries-table td:nth-child(3) {
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .dashboard-page .queries-table td.query-text-cell {
+    width: 100%;
+    max-width: none;
+  }
+
+  .dashboard-page .queries-table td:nth-child(4) > .query-state {
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  .dashboard-page .goals-table tr {
+    border-left: 5px solid rgba(143, 154, 166, 0.9);
+  }
+
+  .dashboard-page .goals-table tr.goal-row--curso {
+    border-left-color: rgba(255, 138, 48, 0.95);
+  }
+
+  .dashboard-page .goals-table tr.goal-row--completado {
+    border-left-color: rgba(34, 160, 107, 0.95);
+  }
+
+  .dashboard-page .goals-table tr.goal-row--cancelado {
+    border-left-color: rgba(214, 69, 69, 0.95);
+  }
+
+  .dashboard-page .goals-table tr + tr {
+    margin-top: 10px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
+  .dashboard-page .queries-table {
+    min-width: 0;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    background: transparent;
+  }
+
+  .dashboard-page .queries-table thead {
+    display: none;
+  }
+
+  .dashboard-page .queries-table,
+  .dashboard-page .queries-table tbody,
+  .dashboard-page .queries-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .dashboard-page .queries-table tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    border: 1px solid rgba(1, 10, 18, 0.16);
+    border-left: 5px solid rgba(143, 154, 166, 0.9);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    padding: 8px;
+    overflow: hidden;
+  }
+
+  .dashboard-page .queries-table tr.query-row--enviada {
+    border-left-color: rgba(48, 165, 255, 0.95);
+  }
+
+  .dashboard-page .queries-table tr.query-row--curso {
+    border-left-color: rgba(255, 138, 48, 0.95);
+  }
+
+  .dashboard-page .queries-table tr.query-row--finalizada {
+    border-left-color: rgba(44, 196, 134, 0.95);
+  }
+
+  .dashboard-page .queries-table tr + tr {
+    margin-top: 10px;
+  }
+
+  .dashboard-page .queries-table td {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 72px;
+    padding: 8px;
+    border: 1px solid rgba(1, 10, 18, 0.08);
+    border-radius: 10px;
+    text-align: center;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .dashboard-page .queries-table td::before {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(1, 10, 18, 0.62);
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .dashboard-page .queries-table td:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .dashboard-page .queries-table td:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .dashboard-page .queries-table td:nth-child(3) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .dashboard-page .queries-table td:nth-child(4) {
+    grid-column: 2;
+    grid-row: 2;
+    align-items: center;
+  }
+
+  .dashboard-page .queries-table td:nth-child(5) {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    min-height: 64px;
+  }
+
+  .dashboard-page .queries-table td:nth-child(1)::before { content: 'Asunto'; }
+  .dashboard-page .queries-table td:nth-child(2)::before { content: 'Comentario'; }
+  .dashboard-page .queries-table td:nth-child(3)::before { content: 'Respuesta'; }
+  .dashboard-page .queries-table td:nth-child(4)::before { content: 'Estado'; }
+  .dashboard-page .queries-table td:nth-child(5)::before { content: 'Fecha'; }
+
+  .dashboard-page .queries-table td:nth-child(2),
+  .dashboard-page .queries-table td:nth-child(3) {
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .dashboard-page .queries-table td.query-text-cell {
+    width: 100%;
+    max-width: none;
+  }
+
+  .dashboard-page .queries-table td:nth-child(4) > .query-state {
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  .dashboard-page .goals-table tr {
+    border-left: 5px solid rgba(143, 154, 166, 0.9);
+  }
+
+  .dashboard-page .goals-table tr.goal-row--curso {
+    border-left-color: rgba(255, 138, 48, 0.95);
+  }
+
+  .dashboard-page .goals-table tr.goal-row--completado {
+    border-left-color: rgba(34, 160, 107, 0.95);
+  }
+
+  .dashboard-page .goals-table tr.goal-row--cancelado {
+    border-left-color: rgba(214, 69, 69, 0.95);
+  }
+
+  .dashboard-page .goals-table tr + tr {
+    margin-top: 10px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1400px) and (orientation: landscape) {
+  .dashboard-page .goals-table tr {
+    border-left: 5px solid rgba(143, 154, 166, 0.9);
+  }
+
+  .dashboard-page .goals-table tr.goal-row--curso {
+    border-left-color: rgba(255, 138, 48, 0.95);
+  }
+
+  .dashboard-page .goals-table tr.goal-row--completado {
+    border-left-color: rgba(34, 160, 107, 0.95);
+  }
+
+  .dashboard-page .goals-table tr.goal-row--cancelado {
+    border-left-color: rgba(214, 69, 69, 0.95);
+  }
+
+  .dashboard-page .goals-table tr + tr {
+    margin-top: 10px;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 1366px) and (orientation: portrait),
        (max-width: 932px) and (orientation: landscape) {
-  .dashboard-tx-head--goal-summary {
+  .dashboard-grid--goal-detail .dashboard-tx-wrap {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  .dashboard-grid--goal-detail .dashboard-tx-head--goal-summary {
     display: grid;
-    grid-template-columns: repeat(3, minmax(86px, 1fr)) minmax(82px, 0.8fr) minmax(98px, 0.9fr) minmax(120px, 1.1fr);
+    width: 100%;
+    min-width: 0;
+    grid-template-columns: minmax(140px, 1.5fr) repeat(5, minmax(0, 1fr));
   }
 
-  .transaction-list--goal-summary li {
-    grid-template-columns: repeat(3, minmax(86px, 1fr)) minmax(82px, 0.8fr) minmax(98px, 0.9fr) minmax(120px, 1.1fr);
+  .dashboard-grid--goal-detail .transaction-list--goal-summary {
+    width: 100%;
+    min-width: 0;
   }
 
-  .transaction-list--goal-summary .tx-cell::before {
+  .dashboard-grid--goal-detail .transaction-list--goal-summary li {
+    display: grid;
+    width: 100%;
+    gap: 0;
+    align-items: center;
+    grid-template-columns: minmax(140px, 1.5fr) repeat(5, minmax(0, 1fr));
+  }
+
+  .dashboard-grid--goal-detail .transaction-list--goal-summary .tx-cell {
+    display: block;
+    min-height: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dashboard-grid--goal-detail .transaction-list--goal-summary .tx-cell::before {
     display: none;
     min-width: 0;
     margin-right: 0;
@@ -4177,13 +4857,13 @@ label {
     border: 0;
     border-bottom: 1px solid rgba(1, 10, 18, 0.08);
     border-radius: 0;
-    text-align: left;
+    text-align: center;
     white-space: normal;
   }
 
   .transactions-table.transactions-table--goal-history th:nth-child(1),
   .transactions-table.transactions-table--goal-history td:nth-child(1) {
-    width: 30%;
+    width: 18%;
   }
 
   .transactions-table.transactions-table--goal-history th:nth-child(2),
@@ -4198,17 +4878,17 @@ label {
 
   .transactions-table.transactions-table--goal-history th:nth-child(4),
   .transactions-table.transactions-table--goal-history td:nth-child(4) {
-    width: 14%;
+    width: 18%;
   }
 
   .transactions-table.transactions-table--goal-history th:nth-child(5),
   .transactions-table.transactions-table--goal-history td:nth-child(5) {
-    width: 11%;
+    width: 13%;
   }
 
   .transactions-table.transactions-table--goal-history th:nth-child(6),
   .transactions-table.transactions-table--goal-history td:nth-child(6) {
-    width: 11%;
+    width: 15%;
   }
 
   .transactions-table.transactions-table--goal-history th:nth-child(n+2),
@@ -4224,6 +4904,17 @@ label {
   .transactions-table.transactions-table--goal-history .tx-actions-cell,
   .transactions-table.transactions-table--goal-history td:nth-child(6) {
     text-align: center;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
+  .dashboard-grid--goal-detail {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .dashboard-grid--goal-detail > .dashboard-card {
+    grid-column: 1 / -1;
   }
 }
 
@@ -4285,6 +4976,56 @@ label {
     display: none;
   }
 
+  .dashboard-page .transaction-list--goals li.dashboard-goal-item {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    padding: 8px 0;
+    align-items: stretch;
+  }
+
+  .dashboard-page .transaction-list--goals li.dashboard-goal-item::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+  }
+
+  .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell::before {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(1, 10, 18, 0.62);
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell:nth-child(1)::before { content: 'Objetivo'; }
+  .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell:nth-child(2)::before { content: 'Ahorrado'; }
+  .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell:nth-child(3)::before { content: 'Meta'; }
+  .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell:nth-child(4)::before { content: 'Progreso'; }
+  .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell:nth-child(5)::before { content: 'Fecha límite'; }
+
+  .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 64px;
+    padding: 8px 10px;
+    border: 1px solid rgba(1, 10, 18, 0.08);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.94);
+  }
+
+  .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell--goal-deadline {
+    grid-column: 1 / -1;
+  }
+
+  .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell--goal-progress {
+    justify-content: center;
+  }
+
   .dashboard-page .transaction-list--goals .tx-cell,
   .dashboard-page .transaction-list--goals .tx-cell.is-right {
     text-align: left;
@@ -4334,6 +5075,17 @@ label {
   .transactions-table.transactions-table--goal-history tr {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: stretch;
+    margin: 0;
+    padding: 8px;
+    border: 1px solid rgba(1, 10, 18, 0.16);
+    border-left: 5px solid rgba(143, 154, 166, 0.9);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    overflow: hidden;
+  }
+
+  .transactions-table.transactions-table--goal-history tr + tr {
+    margin-top: 10px;
   }
 
   .transactions-table.transactions-table--goal-history td {
@@ -4430,6 +5182,25 @@ label {
 
   .dashboard-page .transaction-list--goals .tx-cell--goal-progress {
     justify-content: flex-start;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1400px) and (orientation: landscape) {
+  .dashboard-grid--goal-detail {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .dashboard-grid--goal-detail > .dashboard-card {
+    grid-column: 1 / -1;
+  }
+
+  .dashboard-grid--goal-detail .dashboard-tx-wrap,
+  .dashboard-grid--goal-detail .dashboard-tx-head--goal-summary,
+  .dashboard-grid--goal-detail .transaction-list--goal-summary,
+  .dashboard-grid--goal-detail .transaction-list--goal-summary li {
+    width: 100%;
+    min-width: 0;
   }
 }
 
@@ -4740,6 +5511,213 @@ label {
   }
 }
 
+
+@media (hover: none) and (pointer: coarse) and (max-width: 767px) and (orientation: portrait) {
+  .reports-page .reports-table,
+  .reports-page .reports-table tbody,
+  .reports-page .reports-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .reports-page .reports-table {
+    min-width: 0;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    background: transparent;
+  }
+
+  .reports-page .reports-table thead {
+    display: none;
+  }
+
+  .reports-page .reports-table tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+    padding: 8px;
+    border: 1px solid rgba(1, 10, 18, 0.16);
+    border-left: 5px solid rgba(143, 154, 166, 0.9);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    overflow: hidden;
+  }
+
+  .reports-page .reports-table tr + tr {
+    margin-top: 10px;
+  }
+
+  .reports-page .reports-table tr > td {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 64px;
+    padding: 8px;
+    border: 1px solid rgba(1, 10, 18, 0.08);
+    border-radius: 10px;
+    text-align: center;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .reports-page .reports-table tr > td:nth-child(1) { grid-column: 1; grid-row: 1; }
+  .reports-page .reports-table tr > td:nth-child(2) { grid-column: 2; grid-row: 1; }
+  .reports-page .reports-table tr > td:nth-child(3) { grid-column: 1; grid-row: 2; }
+  .reports-page .reports-table tr > td:nth-child(4) { grid-column: 2; grid-row: 2; }
+  .reports-page .reports-table tr > td:nth-child(5) { grid-column: 1 / -1; grid-row: 3; min-height: 60px; }
+
+  .reports-page .reports-table tr > td:nth-child(1)::before { content: 'Nombre'; }
+  .reports-page .reports-table tr > td:nth-child(2)::before { content: 'Tipo'; }
+  .reports-page .reports-table tr > td:nth-child(3)::before { content: 'Fecha de generación'; }
+  .reports-page .reports-table tr > td:nth-child(4)::before { content: 'Archivo'; }
+  .reports-page .reports-table tr > td:nth-child(5)::before { content: 'Acciones'; }
+
+  .reports-page .reports-table tr > td:nth-child(5) .transactions-action-btn {
+    width: fit-content;
+    max-width: 100%;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) and (max-width: 932px) and (orientation: landscape) {
+  .reports-page .reports-table,
+  .reports-page .reports-table tbody,
+  .reports-page .reports-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .reports-page .reports-table {
+    min-width: 0;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    background: transparent;
+  }
+
+  .reports-page .reports-table thead {
+    display: none;
+  }
+
+  .reports-page .reports-table tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+    padding: 8px;
+    border: 1px solid rgba(1, 10, 18, 0.16);
+    border-left: 5px solid rgba(143, 154, 166, 0.9);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    overflow: hidden;
+  }
+
+  .reports-page .reports-table tr + tr {
+    margin-top: 10px;
+  }
+
+  .reports-page .reports-table tr > td {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 64px;
+    padding: 8px;
+    border: 1px solid rgba(1, 10, 18, 0.08);
+    border-radius: 10px;
+    text-align: center;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .reports-page .reports-table tr > td:nth-child(1) { grid-column: 1; grid-row: 1; }
+  .reports-page .reports-table tr > td:nth-child(2) { grid-column: 2; grid-row: 1; }
+  .reports-page .reports-table tr > td:nth-child(3) { grid-column: 1; grid-row: 2; }
+  .reports-page .reports-table tr > td:nth-child(4) { grid-column: 2; grid-row: 2; }
+  .reports-page .reports-table tr > td:nth-child(5) { grid-column: 1 / -1; grid-row: 3; min-height: 60px; }
+
+  .reports-page .reports-table tr > td:nth-child(1)::before { content: 'Nombre'; }
+  .reports-page .reports-table tr > td:nth-child(2)::before { content: 'Tipo'; }
+  .reports-page .reports-table tr > td:nth-child(3)::before { content: 'Fecha de generación'; }
+  .reports-page .reports-table tr > td:nth-child(4)::before { content: 'Archivo'; }
+  .reports-page .reports-table tr > td:nth-child(5)::before { content: 'Acciones'; }
+
+  .reports-page .reports-table tr > td:nth-child(5) .transactions-action-btn {
+    width: fit-content;
+    max-width: 100%;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) and (min-width: 768px) and (max-width: 1366px) and (orientation: portrait) {
+  .reports-page .reports-table,
+  .reports-page .reports-table tbody,
+  .reports-page .reports-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .reports-page .reports-table {
+    min-width: 0;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    background: transparent;
+  }
+
+  .reports-page .reports-table thead {
+    display: none;
+  }
+
+  .reports-page .reports-table tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+    padding: 8px;
+    border: 1px solid rgba(1, 10, 18, 0.16);
+    border-left: 5px solid rgba(143, 154, 166, 0.9);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    overflow: hidden;
+  }
+
+  .reports-page .reports-table tr + tr {
+    margin-top: 10px;
+  }
+
+  .reports-page .reports-table tr > td {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 72px;
+    padding: 8px;
+    border: 1px solid rgba(1, 10, 18, 0.08);
+    border-radius: 10px;
+    text-align: center;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .reports-page .reports-table tr > td:nth-child(1) { grid-column: 1; grid-row: 1; }
+  .reports-page .reports-table tr > td:nth-child(2) { grid-column: 2; grid-row: 1; }
+  .reports-page .reports-table tr > td:nth-child(3) { grid-column: 1; grid-row: 2; }
+  .reports-page .reports-table tr > td:nth-child(4) { grid-column: 2; grid-row: 2; }
+  .reports-page .reports-table tr > td:nth-child(5) { grid-column: 1 / -1; grid-row: 3; min-height: 60px; }
+
+  .reports-page .reports-table tr > td:nth-child(1)::before { content: 'Nombre'; }
+  .reports-page .reports-table tr > td:nth-child(2)::before { content: 'Tipo'; }
+  .reports-page .reports-table tr > td:nth-child(3)::before { content: 'Fecha de generación'; }
+  .reports-page .reports-table tr > td:nth-child(4)::before { content: 'Archivo'; }
+  .reports-page .reports-table tr > td:nth-child(5)::before { content: 'Acciones'; }
+
+  .reports-page .reports-table tr > td:nth-child(5) .transactions-action-btn {
+    width: fit-content;
+    max-width: 100%;
+  }
+}
 
 /* -----------------------------------------
    FOOTER

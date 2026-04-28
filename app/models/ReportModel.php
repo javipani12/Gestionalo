@@ -30,6 +30,47 @@
         }
 
         /**
+         * Cuenta los informes de un usuario.
+         */
+        public function contarInformesPorUsuario($idUsuario) {
+            $sql = "SELECT COUNT(*) AS total
+                    FROM informes
+                    WHERE id_usuario = :id_usuario";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id_usuario', (int)$idUsuario, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+            return (int)($resultado['total'] ?? 0);
+        }
+
+        /**
+         * Devuelve los informes de un usuario paginados ordenados por fecha de generacion descendente.
+         */
+        public function obtenerInformesPaginadosPorUsuario($idUsuario, $limite, $offset) {
+            $sql = "SELECT
+                        i.id_informe,
+                        i.nombre_informe,
+                        i.ruta_archivo,
+                        i.fecha_generacion,
+                        ti.nombre AS tipo_informe
+                    FROM informes i
+                    LEFT JOIN tipos_informe ti ON ti.id_tipo_informe = i.id_tipo_informe
+                    WHERE i.id_usuario = :id_usuario
+                    ORDER BY i.fecha_generacion DESC, i.id_informe DESC
+                    LIMIT :limite OFFSET :offset";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':id_usuario', (int)$idUsuario, PDO::PARAM_INT);
+            $stmt->bindValue(':limite', (int)$limite, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        /**
          * Recupera un informe concreto de un usuario para validar descarga segura.
          */
         public function obtenerInformePorIdYUsuario($idInforme, $idUsuario) {
