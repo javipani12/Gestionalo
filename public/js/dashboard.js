@@ -41,18 +41,18 @@ function renderizarBalanceChart() {
     
     try {
         const balanceData = JSON.parse(dataJson);
-        const ingresos = parseFloat(balanceData.ingresos) || 0;
-        const gastos = parseFloat(balanceData.gastos) || 0;
+        const ingresos = Math.round((parseFloat(balanceData.ingresos) || 0) * 100) / 100;
+        const gastos = Math.round((parseFloat(balanceData.gastos) || 0) * 100) / 100;
+        const ahorro = Math.round(Math.max(0, ingresos - gastos) * 100) / 100;
         
-        // Calcular el porcentaje de ingresos/gastos
-        const total = ingresos + gastos;
-        if (total === 0) {
+        // Sin movimientos no se pinta el gráfico
+        if (ingresos === 0 && gastos === 0) {
             chartContainer.innerHTML = '<p style="text-align: center; color: rgba(1, 10, 18, 0.5); padding: 40px 0;">Sin movimientos este mes</p>';
             return;
         }
         
         const options = {
-            series: [ingresos, gastos],
+            series: [gastos, ahorro],
             chart: {
                 type: 'pie',
                 height: 280,
@@ -60,8 +60,8 @@ function renderizarBalanceChart() {
                     show: false,
                 },
             },
-            labels: ['Ingresos', 'Gastos'],
-            colors: ['#22A06B', '#D64545'],
+            labels: ['Gastos', 'Ahorro'],
+            colors: ['#D64545', '#22A06B'],
             dataLabels: {
                 enabled: true,
                 formatter(val) {

@@ -116,10 +116,9 @@
                 return;
             }
 
-            $nombreInforme = trim((string)($body['nombreInforme'] ?? ''));
-            if ($nombreInforme === '') {
-                $nombreInforme = 'Informe hipoteca ' . date('d-m-Y H:i');
-            }
+            // Use server-generated name + timestamp (minus 3 hours) to ensure consistent times
+            $ts = (new DateTimeImmutable())->modify('-3 hours');
+            $nombreInforme = 'Informe hipoteca ' . $ts->format('d/m/Y H:i');
 
             $html = $this->renderHtmlInformeHipoteca($datos);
 
@@ -164,10 +163,9 @@
                 return;
             }
 
-            $nombreInforme = trim((string)($body['nombreInforme'] ?? ''));
-            if ($nombreInforme === '') {
-                $nombreInforme = 'Informe graficos ' . date('d-m-Y H:i');
-            }
+            // Use server-generated name + timestamp (minus 3 hours) to ensure consistent times
+            $ts = (new DateTimeImmutable())->modify('-3 hours');
+            $nombreInforme = 'Graficos ' . $ts->format('d/m/Y H:i');
 
             $html = $this->renderHtmlInformeGraficos($datos);
 
@@ -302,13 +300,15 @@
                 $imgHtml = '<h2>Grafico de amortizacion</h2><img src="' . htmlspecialchars($graficoBase64) . '" style="width:100%;max-width:740px;" alt="Grafico">';
             }
 
+            $ts = (new DateTimeImmutable())->modify('-3 hours');
+
             $html = '<!doctype html><html lang="es"><head><meta charset="utf-8"><style>'
                 . 'body{font-family:DejaVu Sans,sans-serif;font-size:12px;color:#111;} h1{font-size:20px;} h2{font-size:16px;margin-top:18px;} '
                 . '.grid{width:100%;border-collapse:collapse;} .grid td,.grid th{border:1px solid #ddd;padding:6px;vertical-align:top;} .kpi td{padding:4px 8px;} '
                 . '.page-break{page-break-before:always;} thead{display:table-header-group;} tr{page-break-inside:avoid;}'
                 . '</style></head><body>'
                 . '<h1>Informe de hipoteca</h1>'
-                . '<p>Generado: ' . date('d/m/Y H:i') . '</p>'
+                . '<p>Generado: ' . $ts->format('d/m/Y H:i') . '</p>'
                 . '<h2>Resumen</h2>'
                 . '<table class="kpi">'
                 . '<tr><td>Cuota mensual</td><td><strong>' . htmlspecialchars((string)($resumen['cuota'] ?? '-')) . '</strong></td></tr>'
@@ -360,11 +360,13 @@
                     . '<img src="' . htmlspecialchars($img) . '" style="width:100%;max-width:740px;" alt="' . htmlspecialchars($titulo) . '">';
             }
 
+            $ts = (new DateTimeImmutable())->modify('-3 hours');
+
             $html = '<!doctype html><html lang="es"><head><meta charset="utf-8"><style>'
                 . 'body{font-family:DejaVu Sans,sans-serif;font-size:12px;color:#111;} h1{font-size:20px;} h2{font-size:16px;margin-top:18px;} .kpi td{padding:4px 8px;}'
                 . '</style></head><body>'
                 . '<h1>Informe de graficos personalizados</h1>'
-                . '<p>Generado: ' . date('d/m/Y H:i') . '</p>'
+                . '<p>Generado: ' . $ts->format('d/m/Y H:i') . '</p>'
                 . '<h2>Filtros aplicados</h2>'
                 . '<table class="kpi">'
                 . '<tr><td>Tipo</td><td>' . htmlspecialchars((string)($filtros['tipo'] ?? 'Todos')) . '</td></tr>'

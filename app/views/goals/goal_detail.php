@@ -39,20 +39,18 @@
         $claseEstadoObjetivo .= ' objective-state--curso';
     } elseif ($estadoObjetivo === 'completado') {
         $claseEstadoObjetivo .= ' objective-state--completado';
-    } elseif ($estadoObjetivo === 'cancelado') {
+    } elseif ($estadoObjetivo === 'no completado') {
         $claseEstadoObjetivo .= ' objective-state--cancelado';
     }
 
-    $claseProgresoObjetivo = 'objective-progress';
-    if ($progreso >= 100) {
-        $claseProgresoObjetivo .= ' objective-progress--full';
-    } elseif ($progreso >= 70) {
-        $claseProgresoObjetivo .= ' objective-progress--high';
-    } elseif ($progreso >= 30) {
-        $claseProgresoObjetivo .= ' objective-progress--medium';
-    } else {
-        $claseProgresoObjetivo .= ' objective-progress--low';
+    // Mapear estado del objetivo a clase CSS del progreso
+    $sufijo = 'medium'; // Valor por defecto
+    if (in_array($estadoObjetivo, ['completado', 'completada'], true)) {
+        $sufijo = 'full';
+    } elseif (in_array($estadoObjetivo, ['cancelado', 'cancelada', 'no completado', 'no completada'], true)) {
+        $sufijo = 'low';
     }
+    $claseProgresoObjetivo = 'objective-progress objective-progress--' . $sufijo;
 ?>
 
     <div class="dashboard-page">

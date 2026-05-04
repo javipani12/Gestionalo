@@ -116,9 +116,9 @@
         type: "donut",
         height: 320,
       },
-      labels: ["Ingresos", "Gastos"],
+      labels: ["Gastos", "Ahorro"],
       series: [0, 0],
-      colors: ["#22A06B", "#D64545"],
+      colors: ["#D64545", "#22A06B"],
       legend: {
         position: "bottom",
       },
@@ -353,7 +353,7 @@
           });
 
           const payload = {
-            nombreInforme: `Graficos ${new Date().toLocaleString("es-ES")}`,
+            nombreInforme: '',
             datos: {
               filtros: estadoReporteActual.filtros,
               resumen: estadoReporteActual.resumen,
@@ -510,7 +510,9 @@
         },
       };
 
-      chartBalance.updateSeries([totales.ingresos, Math.abs(totales.gastos)]);
+      const gastos = Math.round(Math.abs(totales.gastos) * 100) / 100;
+      const ahorro = Math.round(Math.max(0, totales.ingresos - gastos) * 100) / 100;
+      chartBalance.updateSeries([gastos, ahorro]);
 
       const evolucion = agruparPorMes(transaccionesFiltradas);
 
@@ -727,7 +729,7 @@
     }
 
     function calcularTotales(transacciones) {
-      return transacciones.reduce(
+      const resultado = transacciones.reduce(
         (acumulado, tx) => {
           const tipo = normalizarTipo(tx.tipo_movimiento);
           const importe = Number.parseFloat(tx.importe) || 0;
@@ -748,12 +750,17 @@
           balance: 0,
         },
       );
+      return {
+        ingresos: Math.round(resultado.ingresos * 100) / 100,
+        gastos: Math.round(resultado.gastos * 100) / 100,
+        balance: 0,
+      };
     }
 
     function pintarKpis(totalesBase) {
       const ingresos = totalesBase.ingresos;
       const gastos = Math.abs(totalesBase.gastos);
-      const balance = ingresos - gastos;
+      const balance = Math.round((ingresos - gastos) * 100) / 100;
 
       if (kpis.ingresos) {
         kpis.ingresos.textContent = formatearMoneda(ingresos);
@@ -806,6 +813,8 @@
           actual.gastos += importe;
         }
 
+        actual.ingresos = Math.round(actual.ingresos * 100) / 100;
+        actual.gastos = Math.round(actual.gastos * 100) / 100;
         mapa.set(llave, actual);
       });
 
@@ -850,6 +859,8 @@
           actual.retiro += importe;
         }
 
+        actual.aporte = Math.round(actual.aporte * 100) / 100;
+        actual.retiro = Math.round(actual.retiro * 100) / 100;
         mapa.set(llave, actual);
       });
 
@@ -900,7 +911,8 @@
 
         const importe = Number.parseFloat(tx.importe) || 0;
         const acumulado = mapa.get(llave) || 0;
-        mapa.set(llave, acumulado + importe);
+        const total = Math.round((acumulado + importe) * 100) / 100;
+        mapa.set(llave, total);
       });
 
       const ordenado = Array.from(mapa.entries())
@@ -945,7 +957,8 @@
 
         const importe = Number.parseFloat(tx.importe) || 0;
         const acumulado = mapa.get(llave) || 0;
-        mapa.set(llave, acumulado + importe);
+        const total = Math.round((acumulado + importe) * 100) / 100;
+        mapa.set(llave, total);
       });
 
       const ordenado = Array.from(mapa.entries())

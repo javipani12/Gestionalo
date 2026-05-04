@@ -586,7 +586,7 @@
                 if ($hoy >= $fechaLimite) {
                     $debeActualizarCantidadFinal = true;
                     $nuevaCantidadFinal = $saldoApartado;
-                    $nuevoEstado = $progresoPct >= 100 ? 'completado' : 'cancelado';
+                    $nuevoEstado = $progresoPct >= 100 ? 'completado' : 'no completado';
                 } elseif ($progresoPct >= 100) {
                     $nuevoEstado = 'completado';
                 }

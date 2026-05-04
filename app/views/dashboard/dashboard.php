@@ -53,7 +53,7 @@
                 </section>
 
                 <section class="dashboard-card dashboard-card--balance">
-                    <h2>Balance mensual</h2>
+                    <h2>Balance mensual sobre el total de ingresos</h2>
                     <div 
                         class="dashboard-balance-chart"
                         id="dashboard-balance-chart"
@@ -84,6 +84,7 @@
                                 <span class="is-right">Ahorrado</span>
                                 <span class="is-right">Meta</span>
                                 <span class="is-right">Progreso</span>
+                                <span>Estado</span>
                                 <span>Fecha límite</span>
                             </div>
 
@@ -93,27 +94,22 @@
                                         $cantidadMeta = (float)($objetivo['cantidad_meta'] ?? 0);
                                         $saldoApartado = (float)($objetivo['saldo_apartado'] ?? 0);
                                         $progreso = max(0, min(100, (float)($objetivo['progreso_pct'] ?? 0)));
-                                        $claseProgresoObjetivo = 'objective-progress';
-                                        $claseFilaObjetivo = 'dashboard-goal-item dashboard-goal-item--' . (
-                                            $progreso >= 100 ? 'full' : (
-                                                $progreso >= 70 ? 'high' : (
-                                                    $progreso >= 30 ? 'medium' : 'low'
-                                                )
-                                            )
-                                        );
+                                        
+                                        // Mapear estado del objetivo a clase CSS
+                                        $estadoObjetivo = strtolower(trim((string)($objetivo['estado_objetivo'] ?? 'en progreso')));
+                                        $sufijo = 'medium'; // Valor por defecto
+                                        
+                                        if (in_array($estadoObjetivo, ['completado', 'completada'], true)) {
+                                            $sufijo = 'full';
+                                        } elseif (in_array($estadoObjetivo, ['cancelado', 'cancelada', 'no completado', 'no completada'], true)) {
+                                            $sufijo = 'low';
+                                        }
+                                        
+                                        $claseProgresoObjetivo = 'objective-progress objective-progress--' . $sufijo;
+                                        $claseFilaObjetivo = 'dashboard-goal-item dashboard-goal-item--' . $sufijo;
 
                                         if (($indice % 2) === 1) {
                                             $claseFilaObjetivo .= ' dashboard-goal-item--alt';
-                                        }
-
-                                        if ($progreso >= 100) {
-                                            $claseProgresoObjetivo .= ' objective-progress--full';
-                                        } elseif ($progreso >= 70) {
-                                            $claseProgresoObjetivo .= ' objective-progress--high';
-                                        } elseif ($progreso >= 30) {
-                                            $claseProgresoObjetivo .= ' objective-progress--medium';
-                                        } else {
-                                            $claseProgresoObjetivo .= ' objective-progress--low';
                                         }
 
                                         $fechaLimite = !empty($objetivo['fecha_limite'])
@@ -125,6 +121,7 @@
                                         <span class="tx-cell tx-cell--goal-saved is-right"><?= number_format($saldoApartado, 2) ?> €</span>
                                         <span class="tx-cell tx-cell--goal-target is-right"><?= number_format($cantidadMeta, 2) ?> €</span>
                                         <span class="tx-cell tx-cell--goal-progress is-right"><span class="<?= htmlspecialchars($claseProgresoObjetivo) ?>"><?= number_format($progreso, 2) ?>%</span></span>
+                                        <span class="tx-cell tx-cell--goal-status"><span class="<?= htmlspecialchars($claseProgresoObjetivo) ?>"><?= htmlspecialchars(ucfirst((string)($objetivo['estado_objetivo'] ?? '-'))) ?></span></span>
                                         <span class="tx-cell tx-cell--goal-deadline"><?= htmlspecialchars($fechaLimite) ?></span>
                                     </li>
                                 <?php endforeach; ?>

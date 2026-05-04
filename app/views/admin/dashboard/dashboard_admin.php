@@ -123,7 +123,7 @@
                     <article class="dashboard-card dashboard-activity-card">
                         <div class="transactions-toolbar">
                             <h3>Últimos 10 usuarios registrados</h3>
-                            <a class="btn transactions-action-btn" href="#">Ir a gestión usuarios</a>
+                            <a class="btn transactions-action-btn" href="?controller=admin&action=mostrarGestionUsuarios">Ir a gestión usuarios</a>
                         </div>
                         <?php if (!empty($ultimosUsuarios)): ?>
                             <div class="dashboard-table-wrap">

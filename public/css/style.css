@@ -1713,7 +1713,7 @@ label {
 }
 
 .dashboard-tx-head--goals {
-  grid-template-columns: minmax(150px, 1.7fr) minmax(92px, 1fr) minmax(92px, 1fr) minmax(82px, 0.8fr) minmax(112px, 1fr);
+  grid-template-columns: minmax(120px, 1.3fr) minmax(85px, 0.9fr) minmax(85px, 0.9fr) minmax(75px, 0.8fr) minmax(85px, 0.9fr) minmax(100px, 1fr);
 }
 
 .dashboard-tx-head--goal-summary {
@@ -3052,11 +3052,6 @@ label {
   color: #8b5a00;
 }
 
-.objective-progress--high {
-  background: rgba(48, 165, 255, 0.14);
-  color: #1157b7;
-}
-
 .objective-progress--full {
   background: rgba(44, 196, 134, 0.14);
   color: #0c5132;
@@ -3370,7 +3365,7 @@ label {
 }
 
 .transaction-list--goals li {
-  grid-template-columns: minmax(150px, 1.7fr) minmax(92px, 1fr) minmax(92px, 1fr) minmax(82px, 0.8fr) minmax(112px, 1fr);
+  grid-template-columns: minmax(120px, 1.3fr) minmax(85px, 0.9fr) minmax(85px, 0.9fr) minmax(75px, 0.8fr) minmax(85px, 0.9fr) minmax(100px, 1fr);
 }
 
 .transaction-list--goals li.dashboard-goal-item {
@@ -3635,6 +3630,7 @@ label {
   .transaction-list--goals .tx-cell--goal-saved::before { content: 'Ahorrado:'; }
   .transaction-list--goals .tx-cell--goal-target::before { content: 'Meta:'; }
   .transaction-list--goals .tx-cell--goal-progress::before { content: 'Progreso:'; }
+  .transaction-list--goals .tx-cell--goal-status::before { content: 'Estado:'; }
   .transaction-list--goals .tx-cell--goal-deadline::before { content: 'Fecha límite:'; }
 
   .tx-cell--concepto {
@@ -4092,6 +4088,7 @@ label {
   .dashboard-page .transaction-list--goals .tx-cell--goal-saved::before { content: 'Ahorrado:'; }
   .dashboard-page .transaction-list--goals .tx-cell--goal-target::before { content: 'Meta:'; }
   .dashboard-page .transaction-list--goals .tx-cell--goal-progress::before { content: 'Progreso:'; }
+  .dashboard-page .transaction-list--goals .tx-cell--goal-status::before { content: 'Estado:'; }
   .dashboard-page .transaction-list--goals .tx-cell--goal-deadline::before { content: 'Fecha límite:'; }
 
   .dashboard-page .tx-cell--concepto {
@@ -4161,7 +4158,7 @@ label {
   }
 
   .dashboard-page .transaction-list--goals li {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 6px;
     padding: 8px 0;
     align-items: stretch;
@@ -4181,7 +4178,8 @@ label {
   .dashboard-page .transaction-list--goals .tx-cell:nth-child(2)::before { content: 'Ahorrado'; }
   .dashboard-page .transaction-list--goals .tx-cell:nth-child(3)::before { content: 'Meta'; }
   .dashboard-page .transaction-list--goals .tx-cell:nth-child(4)::before { content: 'Progreso'; }
-  .dashboard-page .transaction-list--goals .tx-cell:nth-child(5)::before { content: 'Fecha límite'; }
+  .dashboard-page .transaction-list--goals .tx-cell:nth-child(5)::before { content: 'Estado'; }
+  .dashboard-page .transaction-list--goals .tx-cell:nth-child(6)::before { content: 'Fecha límite'; }
 
   .dashboard-page .transaction-list--goals .tx-cell {
     display: flex;
@@ -4194,10 +4192,6 @@ label {
     border: 1px solid rgba(1, 10, 18, 0.08);
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.94);
-  }
-
-  .dashboard-page .transaction-list--goals .tx-cell--goal-deadline {
-    grid-column: 1 / -1;
   }
 
   .dashboard-page .transaction-list--goals .tx-cell--goal-progress {
@@ -5038,7 +5032,7 @@ label {
   }
 
   .dashboard-page .transaction-list--goals li.dashboard-goal-item {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 6px;
     padding: 8px 0;
     align-items: stretch;
@@ -5064,7 +5058,8 @@ label {
   .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell:nth-child(2)::before { content: 'Ahorrado'; }
   .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell:nth-child(3)::before { content: 'Meta'; }
   .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell:nth-child(4)::before { content: 'Progreso'; }
-  .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell:nth-child(5)::before { content: 'Fecha límite'; }
+  .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell:nth-child(5)::before { content: 'Estado'; }
+  .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell:nth-child(6)::before { content: 'Fecha límite'; }
 
   .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell {
     display: flex;
@@ -5077,10 +5072,6 @@ label {
     border: 1px solid rgba(1, 10, 18, 0.08);
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.94);
-  }
-
-  .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell--goal-deadline {
-    grid-column: 1 / -1;
   }
 
   .dashboard-page .transaction-list--goals li.dashboard-goal-item .tx-cell--goal-progress {
@@ -5231,8 +5222,13 @@ label {
     justify-content: flex-start;
   }
 
+  .dashboard-page .transaction-list--goals .tx-cell--goal-status {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
   .dashboard-page .transaction-list--goals .tx-cell--goal-deadline {
-    grid-column: 2 / span 2;
+    grid-column: 3;
     grid-row: 2;
   }
 
@@ -5312,11 +5308,11 @@ label {
 
   .dashboard-page .dashboard-tx-head--goals {
     display: grid;
-    grid-template-columns: minmax(150px, 1.7fr) minmax(92px, 1fr) minmax(92px, 1fr) minmax(82px, 0.8fr) minmax(112px, 1fr);
+    grid-template-columns: minmax(120px, 1.3fr) minmax(85px, 0.9fr) minmax(85px, 0.9fr) minmax(75px, 0.8fr) minmax(85px, 0.9fr) minmax(100px, 1fr);
   }
 
   .dashboard-page .transaction-list--goals li {
-    grid-template-columns: minmax(150px, 1.7fr) minmax(92px, 1fr) minmax(92px, 1fr) minmax(82px, 0.8fr) minmax(112px, 1fr);
+    grid-template-columns: minmax(120px, 1.3fr) minmax(85px, 0.9fr) minmax(85px, 0.9fr) minmax(75px, 0.8fr) minmax(85px, 0.9fr) minmax(100px, 1fr);
   }
 
   .dashboard-page .transaction-list--goals .tx-cell::before {

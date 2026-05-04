@@ -83,7 +83,7 @@
                 </article>
 
                 <article class="dashboard-card graphics-chart-card graphics-chart-card--donut">
-                    <h2>Ingresos vs gastos (periodo filtrado)</h2>
+                    <h2>Ahorro vs Gastos sobre el total de ingresos (periodo filtrado)</h2>
                     <div id="graphics-balance-donut" class="graphics-chart" aria-label="Gráfico de balance"></div>
                 </article>
 

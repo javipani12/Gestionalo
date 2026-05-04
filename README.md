@@ -74,34 +74,8 @@ composer dump-autoload -o
 2. **Iniciar sesión**: Accede con tus credenciales
 3. **Dashboard**: Ve tus transacciones recientes y resumen
 4. **Crear transacción**: Registra un nuevo movimiento económico
-5. **Perfil**: Actualiza tu información personal y contraseña
-
-### Crear una transacción
-
-1. Ve a "Transacciones" en el menú
-2. Haz clic en "Crear transacción"
-3. Completa los campos:
-   - Tipo de movimiento (Ingreso/Gasto)
-   - Categoría y subcategoría
-   - Concepto/descripción
-   - Importe
-   - Método de pago
-   - Fecha del movimiento
-4. Guarda
-
-### Gestionar perfil
-
-1. Ve a "Mi Perfil"
-2. Haz clic en "Editar"
-3. Modifica tus datos personales o contraseña
-4. Guarda cambios
-
-## 🔐 Seguridad
-
-- Las contraseñas se hashean con `password_hash()` con algoritmo `PASSWORD_DEFAULT`
-- Se utilizan consultas preparadas (prepared statements) contra inyección SQL
-- Las sesiones PHP protegen el acceso a recursos autenticados
-- Los datos sensibles se saneanizan con `htmlspecialchars()` en las vistas
+5. **Uso de herramientas**: Podrás utilizar la calculadora de hipoteca, establecer objetivos y visualizar gráficamente tus transacciones, de manera que puedas tener un mayor control financiero
+6. **Perfil**: Actualiza tu información personal y contraseña
 
 ## 📚 Tecnologías utilizadas
 
@@ -125,4 +99,4 @@ Para reportar problemas o sugerencias, por favor abre un issue en el repositorio
 
 ---
 
-**Última actualización**: Abril 2026
+**Última actualización**: Mayo 2026
